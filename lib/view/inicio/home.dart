@@ -1,9 +1,9 @@
 import 'package:client_service/utils/colors.dart';
-import 'package:client_service/widgets/home/category.dart';
-import 'package:client_service/widgets/shared/search.dart';
-import 'package:client_service/widgets/header.dart';
-import 'package:client_service/widgets/home/section.dart';
-import 'package:client_service/widgets/shared/toolbar.dart';
+import 'package:client_service/view/inicio/widgets/category.dart';
+import 'package:client_service/view/widgets/shared/search.dart';
+import 'package:client_service/view/inicio/widgets/header.dart';
+import 'package:client_service/view/inicio/widgets/section.dart';
+import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

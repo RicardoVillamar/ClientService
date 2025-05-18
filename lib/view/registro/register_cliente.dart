@@ -1,4 +1,5 @@
 import 'package:client_service/utils/colors.dart';
+import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -146,20 +147,7 @@ class _RegistroClientePageState extends State<RegistroClientePage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.btnColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20))),
-                          onPressed: () {},
-                          child: const Text(
-                            'Guardar',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                decoration: TextDecoration.none),
-                          )),
+                      BtnElevated(text: "Guardar", onPressed: () {}),
                     ],
                   ),
                 )),

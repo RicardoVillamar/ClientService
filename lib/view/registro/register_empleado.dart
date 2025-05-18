@@ -1,6 +1,7 @@
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
-import 'package:client_service/widgets/shared/inputs.dart';
+import 'package:client_service/view/widgets/shared/button.dart';
+import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -145,16 +146,10 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                               );
                             }).toList(),
                           ),
-                          ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.btnColor,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20))),
-                              child: Text(
-                                'Registrar',
-                                style: AppFonts.buttonBold,
-                              )),
+                          BtnElevated(text: "Registrar", onPressed: () {}),
+                          const SizedBox(
+                            height: 10,
+                          ),
                         ],
                       ),
                     )),
