@@ -1,4 +1,5 @@
 import 'package:client_service/routes.dart';
+import 'package:client_service/utils/font.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -20,10 +21,7 @@ class _SectionPageState extends State<SectionPage> {
             const SizedBox(height: 20),
             Text(
               widget.selectedCategory,
-              style: GoogleFonts.nunito(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppFonts.subtitleBold,
             ),
             if (widget.selectedCategory == 'Registros') ...[
               blockSections('Nuevos Empleados', 'NuevosEmpleados.png'),

@@ -1,5 +1,5 @@
-import 'package:client_service/pages/registro/register_cliente.dart';
-import 'package:client_service/pages/registro/register_empleado.dart';
+import 'package:client_service/view/registro/register_cliente.dart';
+import 'package:client_service/view/registro/register_empleado.dart';
 import 'package:flutter/cupertino.dart';
 
 final Map<String, WidgetBuilder> routes = {

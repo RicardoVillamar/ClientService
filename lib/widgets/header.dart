@@ -1,5 +1,6 @@
+import 'package:client_service/utils/colors.dart';
+import 'package:client_service/utils/font.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Header extends StatefulWidget {
   const Header({super.key});
@@ -25,48 +26,35 @@ class _HeaderState extends State<Header> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Hola! $nombre',
-                style: GoogleFonts.nunito(
-                    color: Colors.black,
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black.withOpacity(0.1),
-                        offset: const Offset(0, 3),
-                        blurRadius: 5,
-                      )
-                    ]),
-              )
-            ],
+            children: [Text('Hola! $nombre', style: AppFonts.titleBold)],
           ),
           Row(
             children: [
               Container(
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   borderRadius: BorderRadius.circular(50),
-                  border: Border.all(color: Colors.black.withOpacity(0.1)),
+                  border:
+                      Border.all(color: AppColors.blackColor.withOpacity(0.1)),
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.notifications),
-                  color: Colors.black,
+                  color: AppColors.blackColor,
                   iconSize: 25,
                   onPressed: () => {},
                 ),
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   borderRadius: BorderRadius.circular(50),
-                  border: Border.all(color: Colors.black.withOpacity(0.1)),
+                  border:
+                      Border.all(color: AppColors.blackColor.withOpacity(0.1)),
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.settings),
-                  color: Colors.black,
+                  color: AppColors.blackColor,
                   iconSize: 25,
                   onPressed: () => {},
                 ),

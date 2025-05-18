@@ -1,3 +1,4 @@
+import 'package:client_service/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class Toolbar extends StatefulWidget {
@@ -15,7 +16,7 @@ class _ToolbarState extends State<Toolbar> {
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        color: Color(0xff474E95),
+        color: AppColors.primaryColor,
       ),
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Row(
@@ -24,24 +25,28 @@ class _ToolbarState extends State<Toolbar> {
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.home, size: 30),
-            color: Colors.white,
+            color: AppColors.whiteColor,
           ),
           IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.calendar_month, size: 30),
-              color: const Color(0xff6273BD)),
+            onPressed: () {},
+            icon: const Icon(Icons.calendar_month, size: 30),
+            color: AppColors.secondaryColor,
+          ),
           IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.search, size: 30),
-              color: const Color(0xff6273BD)),
+            onPressed: () {},
+            icon: const Icon(Icons.search, size: 30),
+            color: AppColors.secondaryColor,
+          ),
           IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.person, size: 30),
-              color: const Color(0xff6273BD)),
+            onPressed: () {},
+            icon: const Icon(Icons.person, size: 30),
+            color: AppColors.secondaryColor,
+          ),
           IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.settings, size: 30),
-              color: const Color(0xff6273BD)),
+            onPressed: () {},
+            icon: const Icon(Icons.settings, size: 30),
+            color: AppColors.secondaryColor,
+          ),
         ],
       ),
     );

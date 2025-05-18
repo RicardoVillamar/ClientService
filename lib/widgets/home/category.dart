@@ -1,3 +1,5 @@
+import 'package:client_service/utils/colors.dart';
+import 'package:client_service/utils/font.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -33,13 +35,7 @@ class _CategoryPageState extends State<CategoryPage> {
       children: [
         Container(
           padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            'Categorías',
-            style: GoogleFonts.nunito(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: Text('Categorías', style: AppFonts.bodyBold),
         ),
         const SizedBox(height: 20),
         Row(
@@ -51,7 +47,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(68),
-                    color: const Color(0xff474E95),
+                    color: AppColors.primaryColor,
                   ),
                   child: IconButton(
                     onPressed: () {
@@ -59,7 +55,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     },
                     icon: Icon(getIconForCategory(categories)),
                     iconSize: 34,
-                    color: Colors.white,
+                    color: AppColors.whiteColor,
                   ),
                 ),
                 Padding(

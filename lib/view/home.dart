@@ -1,8 +1,9 @@
-import 'package:client_service/widgets/category.dart';
-import 'package:client_service/widgets/search.dart';
+import 'package:client_service/utils/colors.dart';
+import 'package:client_service/widgets/home/category.dart';
+import 'package:client_service/widgets/shared/search.dart';
 import 'package:client_service/widgets/header.dart';
-import 'package:client_service/widgets/section.dart';
-import 'package:client_service/widgets/toolbar.dart';
+import 'package:client_service/widgets/home/section.dart';
+import 'package:client_service/widgets/shared/toolbar.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,10 +20,11 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         toolbarHeight: 80,
         title: const Header(),
-        backgroundColor: const Color(0xFFF3F5F8),
+        backgroundColor: AppColors.backgroundColor,
+        surfaceTintColor: AppColors.backgroundColor,
       ),
       body: Container(
-        color: const Color(0xFFF3F5F8),
+        color: AppColors.backgroundColor,
         child: const Column(
           children: <Widget>[
             ContentPage(),

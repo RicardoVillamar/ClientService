@@ -1,3 +1,4 @@
+import 'package:client_service/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class SearchBarPage extends StatefulWidget {
@@ -14,17 +15,17 @@ class _SearchBarPageState extends State<SearchBarPage> {
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
+        color: AppColors.whiteColor,
       ),
       child: const TextField(
         decoration: InputDecoration(
           labelText: 'Buscar',
           labelStyle: TextStyle(
-            color: Color(0xff474E95),
+            color: AppColors.primaryColor,
           ),
           prefixIcon: Icon(
             Icons.search,
-            color: Color(0xff474E95),
+            color: AppColors.primaryColor,
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),

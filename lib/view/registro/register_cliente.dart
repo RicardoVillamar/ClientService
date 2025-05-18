@@ -1,29 +1,19 @@
+import 'package:client_service/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegistroEmpleadoPage extends StatefulWidget {
-  const RegistroEmpleadoPage({super.key});
+class RegistroClientePage extends StatefulWidget {
+  const RegistroClientePage({super.key});
 
   @override
-  State<RegistroEmpleadoPage> createState() => _RegistroEmpleadoPageState();
+  State<RegistroClientePage> createState() => _RegistroClientePageState();
 }
 
-class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
+class _RegistroClientePageState extends State<RegistroClientePage> {
   double heightScreen = 0;
-  final List<String> items = [
-    'Técnico',
-    'Conductor',
-    'Excavador',
-    'Electricista',
-    'Ayudante',
-  ];
-
-  String? selectValue;
-
   @override
   Widget build(BuildContext context) {
     heightScreen = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -53,7 +43,7 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                     iconSize: 18,
                   ),
                 ),
-                Text('Nuevo Empleado',
+                Text('Nuevo cliente',
                     style: GoogleFonts.nunito(
                       color: Colors.black,
                       fontSize: 18,
@@ -78,7 +68,7 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                     children: [
                       TextFormField(
                         decoration: InputDecoration(
-                          labelText: 'Nombres*',
+                          labelText: 'Nombre comercial*',
                           labelStyle: GoogleFonts.nunito(
                             color: Colors.black54,
                             fontSize: 14,
@@ -89,7 +79,7 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          labelText: 'Apellidos*',
+                          labelText: 'RUC*',
                           labelStyle: GoogleFonts.nunito(
                             color: Colors.black54,
                             fontSize: 14,
@@ -100,18 +90,7 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          labelText: 'Numero de Cedula*',
-                          labelStyle: GoogleFonts.nunito(
-                            color: Colors.black54,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.none,
-                          ),
-                        ),
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Direccion*',
+                          labelText: 'Dirección*',
                           labelStyle: GoogleFonts.nunito(
                             color: Colors.black54,
                             fontSize: 14,
@@ -142,34 +121,50 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                           ),
                         ),
                       ),
-                      DropdownButton(
-                        hint: Text(
-                          'Cargo o Puesto',
-                          style: GoogleFonts.nunito(
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Persona de contacto*',
+                          labelStyle: GoogleFonts.nunito(
                             color: Colors.black54,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.none,
                           ),
                         ),
-                        value: selectValue,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectValue = newValue;
-                          });
-                        },
-                        items: items.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
                       ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Cedula de persona de contacto*',
+                          labelStyle: GoogleFonts.nunito(
+                            color: Colors.black54,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.none,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.btnColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20))),
+                          onPressed: () {},
+                          child: const Text(
+                            'Guardar',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                decoration: TextDecoration.none),
+                          )),
                     ],
                   ),
                 )),
               ),
-            ),
+            )
           ],
         ),
       ),
