@@ -23,35 +23,38 @@ class TxtFields extends StatelessWidget {
     this.validator,
     this.inputFormatters = const [],
     this.showCounter = true,
-    this.maxLength = 10,
+    this.maxLength = 100,
     this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      maxLength: maxLength,
-      controller: controller,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
-      validator: validator,
-      decoration: InputDecoration(
-        counterText: showCounter ? null : '',
-        labelText: label,
-        labelStyle: AppFonts.inputtext,
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.colorError),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: AppColors.colorError,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: TextFormField(
+        maxLength: maxLength,
+        controller: controller,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        keyboardType: keyboardType,
+        inputFormatters: inputFormatters,
+        validator: validator,
+        decoration: InputDecoration(
+          counterText: showCounter ? null : '',
+          labelText: label,
+          labelStyle: AppFonts.inputtext,
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: AppColors.colorError),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              color: AppColors.colorError,
+            ),
           ),
         ),
+        onChanged: onChanged,
       ),
-      onChanged: onChanged,
     );
   }
 }

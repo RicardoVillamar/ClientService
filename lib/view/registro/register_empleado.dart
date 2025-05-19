@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
+import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class RegistroEmpleadoPage extends StatefulWidget {
   const RegistroEmpleadoPage({super.key});
@@ -31,6 +36,59 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
   final TextEditingController _correo = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _dateController = TextEditingController();
+
+  //Date picker
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      final formattedDate = DateFormat('dd/MM/yyyy').format(picked);
+      setState(() {
+        _dateController.text = formattedDate;
+      });
+    }
+  }
+
+  //Image picker
+  File? _imageFile;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage(ImageSource source) async {
+    final XFile? pickedFile = await _picker.pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+    Navigator.pop(context);
+  }
+
+  void _showPickerOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Galería'),
+              onTap: () => _pickImage(ImageSource.gallery),
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Cámara'),
+              onTap: () => _pickImage(ImageSource.camera),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +100,10 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
       body: Container(
         decoration: const BoxDecoration(
             color: Color.fromARGB(255, 170, 174, 208),
-            gradient: LinearGradient(
-                colors: [Color.fromARGB(255, 170, 174, 208), Color(0xFFF3F5F8)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter)),
+            gradient: LinearGradient(colors: [
+              Color.fromARGB(255, 170, 174, 208),
+              AppColors.backgroundColor
+            ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: ListView(
           children: [
             Row(
@@ -57,7 +115,7 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                   height: 40,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: const Color(0xFFF3F5F8),
+                    color: AppColors.backgroundColor,
                   ),
                   child: IconButton(
                     onPressed: () {
@@ -67,13 +125,7 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                     iconSize: 18,
                   ),
                 ),
-                Text('Nuevo Empleado',
-                    style: GoogleFonts.nunito(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.none,
-                    )),
+                Text('Nuevo Empleado', style: AppFonts.subtitleBold),
               ],
             ),
             Container(
@@ -86,78 +138,225 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: SingleChildScrollView(
                 child: Form(
-                    key: _formKey,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          TxtFields(
-                            label: 'Nombres*',
-                            controller: _nombre,
-                            screenWidth: screenWidth,
-                            showCounter: false,
+                  key: _formKey,
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        TxtFields(
+                          label: 'Nombres*',
+                          controller: _nombre,
+                          screenWidth: screenWidth,
+                          showCounter: false,
+                          maxLength: 20,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor ingrese su nombre';
+                            }
+                            if (value.length > 20) {
+                              return 'El nombre no puede tener más de 20 caracteres';
+                            }
+                            return null;
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[a-zA-Z\s]+$')),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TxtFields(
+                          label: 'Apellidos*',
+                          controller: _apellido,
+                          screenWidth: screenWidth,
+                          showCounter: false,
+                          maxLength: 20,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor ingrese su apellido';
+                            }
+                            if (value.length > 20) {
+                              return 'El apellido no puede tener más de 20 caracteres';
+                            }
+                            return null;
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[a-zA-Z\s]+$')),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TxtFields(
+                          label: 'Numero de Cedula*',
+                          controller: _cedula,
+                          screenWidth: screenWidth,
+                          showCounter: false,
+                          maxLength: 10,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor ingrese su número de cédula';
+                            }
+                            if (value.length != 10) {
+                              return 'La cédula debe tener 10 dígitos';
+                            }
+                            return null;
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                        ),
+                        TxtFields(
+                          label: 'Direccion*',
+                          controller: _direccion,
+                          screenWidth: screenWidth,
+                          showCounter: false,
+                          maxLength: 50,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor ingrese su dirección';
+                            }
+                            return null;
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[a-zA-Z0-9\s]+$')),
+                          ],
+                        ),
+                        TxtFields(
+                          label: 'Telefono*',
+                          controller: _telefono,
+                          screenWidth: screenWidth,
+                          showCounter: false,
+                          maxLength: 10,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor ingrese su número de teléfono';
+                            }
+                            if (value.length != 10) {
+                              return 'El teléfono debe tener 10 dígitos';
+                            }
+                            return null;
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                        ),
+                        TxtFields(
+                          label: 'Correo Electronico*',
+                          controller: _correo,
+                          screenWidth: screenWidth,
+                          showCounter: false,
+                          maxLength: 50,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor ingrese su correo electrónico';
+                            }
+                            if (!RegExp(
+                                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                                .hasMatch(value)) {
+                              return 'Por favor ingrese un correo electrónico válido';
+                            }
+                            return null;
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[a-zA-Z0-9@._-]+$')),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        DropdownButton(
+                          isExpanded: true,
+                          hint: Text(
+                            'Cargo o Puesto',
+                            style: AppFonts.inputtext,
                           ),
-                          TxtFields(
-                            label: 'Apellidos*',
-                            controller: _apellido,
-                            screenWidth: screenWidth,
-                            showCounter: false,
-                          ),
-                          TxtFields(
-                            label: 'Numero de Cedula*',
-                            controller: _cedula,
-                            screenWidth: screenWidth,
-                            showCounter: false,
-                          ),
-                          TxtFields(
-                            label: 'Direccion*',
-                            controller: _direccion,
-                            screenWidth: screenWidth,
-                            showCounter: false,
-                          ),
-                          TxtFields(
-                            label: 'Telefono*',
-                            controller: _telefono,
-                            screenWidth: screenWidth,
-                            showCounter: false,
-                          ),
-                          TxtFields(
-                            label: 'Correo Electronico*',
-                            controller: _correo,
-                            screenWidth: screenWidth,
-                            showCounter: false,
-                          ),
-                          DropdownButton(
-                            isExpanded: true,
-                            hint: Text(
-                              'Cargo o Puesto',
-                              style: AppFonts.inputtext,
+                          value: selectValue,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectValue = newValue;
+                            });
+                          },
+                          items: items.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: _dateController,
+                          readOnly: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Fecha de contratación*',
+                            labelStyle: TextStyle(
+                              color: AppColors.greyColor,
                             ),
-                            value: selectValue,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectValue = newValue;
-                              });
-                            },
-                            items: items.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
+                            suffixIcon: Icon(Icons.calendar_today),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              borderSide: BorderSide(
+                                color: AppColors.greyColor,
+                              ),
+                            ),
                           ),
-                          BtnElevated(text: "Registrar", onPressed: () {}),
-                          const SizedBox(
-                            height: 10,
+                          onTap: () => _selectDate(context),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        GestureDetector(
+                          onTap: _showPickerOptions,
+                          child: Container(
+                            width: 150,
+                            height: 150,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.greyColor),
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.backgroundColor,
+                            ),
+                            child: _imageFile != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.file(
+                                      _imageFile!,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
+                                  )
+                                : const Center(
+                                    child: Icon(
+                                      Icons.add_a_photo,
+                                      size: 40,
+                                      color: AppColors.greyColor,
+                                    ),
+                                  ),
                           ),
-                        ],
-                      ),
-                    )),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        BtnElevated(text: "Registrar", onPressed: () {}),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: const Toolbar(),
     );
   }
 }
