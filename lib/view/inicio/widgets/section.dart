@@ -33,14 +33,14 @@ class _SectionPageState extends State<SectionPage> {
             ] else if (widget.selectedCategory == 'Servicios') ...[
               blockSections(
                   'Registro de instalación', 'RegistroInstalacion.png'),
-              blockSections('Manteniminto de cámaras', 'Camaras.png'),
+              blockSections('Mantenimiento de cámaras', 'Camaras.png'),
               blockSections('Alquiler vehículos', 'AlquilerVehiculo.png'),
             ] else if (widget.selectedCategory == 'Reportes') ...[
               blockSections('Empleados', 'Empleados.png'),
               blockSections('Clientes', 'Clientes.png'),
               blockSections(
                   'Reporte de instalaciones', 'ReporteInstalacion.png'),
-              blockSections('Manteniminto de cámaras', 'Camaras.png'),
+              blockSections('Mantenimiento de cámaras', 'Camaras.png'),
               blockSections('Alquiler vehículos', 'AlquilerVehiculo.png'),
               const SizedBox(height: 20),
             ]

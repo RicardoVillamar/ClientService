@@ -132,9 +132,9 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.only(
                   top: 20, left: 20, right: 20, bottom: 10),
-              height: heightScreen * 0.70,
+              height: heightScreen * 0.75,
               decoration: const BoxDecoration(
-                  color: Color(0xFFF3F5F8),
+                  color: AppColors.backgroundColor,
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: SingleChildScrollView(
                 child: Form(
