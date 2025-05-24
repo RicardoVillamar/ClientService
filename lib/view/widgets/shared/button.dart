@@ -16,11 +16,11 @@ class BtnElevated extends StatelessWidget {
         backgroundColor: AppColors.btnColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
+      onPressed: onPressed,
       child: Text(
         text,
         style: AppFonts.buttonBold,
       ),
-      onPressed: () {},
     );
   }
 }
@@ -39,7 +39,7 @@ class BtnFloating extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       backgroundColor: AppColors.btnColor,
-      onPressed: () {},
+      onPressed: onPressed,
       label: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -54,6 +54,33 @@ class BtnFloating extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class BtnIcon extends StatelessWidget {
+  final Function() onPressed;
+  final IconData? icon;
+  final Color? bg;
+  final Color? color;
+  const BtnIcon({
+    super.key,
+    required this.onPressed,
+    required this.icon,
+    this.bg,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: onPressed,
+      icon: Icon(
+        icon,
+        size: 18,
+        color: color ?? AppColors.blackColor,
+      ),
+      color: bg ?? AppColors.whiteColor,
     );
   }
 }

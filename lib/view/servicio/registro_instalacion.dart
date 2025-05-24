@@ -125,13 +125,11 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
                       borderRadius: BorderRadius.circular(20),
                       color: AppColors.backgroundColor,
                     ),
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                      iconSize: 18,
-                    ),
+                    child: BtnIcon(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icons.arrow_back_ios_new_rounded),
                   ),
                   Text('Nuevo instalacion', style: AppFonts.subtitleBold),
                 ],

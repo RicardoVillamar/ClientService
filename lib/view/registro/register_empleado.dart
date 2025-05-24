@@ -117,13 +117,11 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                     borderRadius: BorderRadius.circular(20),
                     color: AppColors.backgroundColor,
                   ),
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                    iconSize: 18,
-                  ),
+                  child: BtnIcon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icons.arrow_back_ios_new_rounded),
                 ),
                 Text('Nuevo Empleado', style: AppFonts.subtitleBold),
               ],
@@ -346,7 +344,19 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        BtnElevated(text: "Registrar", onPressed: () {}),
+                        BtnElevated(
+                            text: "Registrar",
+                            onPressed: () {
+                              // if (_formKey.currentState!.validate()) {
+
+                              //   ScaffoldMessenger.of(context).showSnackBar(
+                              //     const SnackBar(
+                              //       content: Text(
+                              //           'Empleado registrado exitosamente'),
+                              //     ),
+                              //   );
+                              // }
+                            }),
                       ],
                     ),
                   ),
