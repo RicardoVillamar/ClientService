@@ -40,8 +40,8 @@ class _SectionPageState extends State<SectionPage> {
               blockSections('Clientes', 'Clientes.png'),
               blockSections(
                   'Reporte de instalaciones', 'ReporteInstalacion.png'),
-              blockSections('Mantenimiento de cámaras', 'Camaras.png'),
-              blockSections('Alquiler vehículos', 'AlquilerVehiculo.png'),
+              blockSections('Reporte de cámaras', 'Camaras.png'),
+              blockSections('Reporte vehículos', 'AlquilerVehiculo.png'),
               const SizedBox(height: 20),
             ]
           ]),

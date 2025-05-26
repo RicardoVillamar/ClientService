@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
+import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
@@ -99,33 +100,14 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 170, 174, 208),
-            gradient: LinearGradient(colors: [
-              Color.fromARGB(255, 170, 174, 208),
-              AppColors.backgroundColor
-            ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+            color: AppColors.accentColor,
+            gradient: LinearGradient(
+                colors: [AppColors.accentColor, AppColors.backgroundColor],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter)),
         child: ListView(
           children: [
-            Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                      top: 10, left: 20, right: 10, bottom: 10),
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: AppColors.backgroundColor,
-                  ),
-                  child: BtnIcon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icons.arrow_back_ios_new_rounded),
-                ),
-                Text('Nuevo Empleado', style: AppFonts.subtitleBold),
-              ],
-            ),
+            const Apptitle(title: 'Nuevo Empleado'),
             Container(
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.only(

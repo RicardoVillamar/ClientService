@@ -11,6 +11,7 @@ class SearchBarPage extends StatefulWidget {
 class _SearchBarPageState extends State<SearchBarPage> {
   @override
   Widget build(BuildContext context) {
+    //searchbar widget de flutter
     return Container(
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
