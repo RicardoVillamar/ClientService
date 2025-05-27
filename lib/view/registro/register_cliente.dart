@@ -5,7 +5,6 @@ import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/models/cliente.dart';
 import 'package:client_service/viewmodel/cliente_viewmodel.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

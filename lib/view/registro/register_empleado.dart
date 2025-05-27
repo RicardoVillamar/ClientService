@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/viewmodel/empleado_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -327,18 +329,57 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                           height: 10,
                         ),
                         BtnElevated(
-                            text: "Registrar",
-                            onPressed: () {
-                              // if (_formKey.currentState!.validate()) {
+                          text: "Registrar",
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate() &&
+                                selectValue != null &&
+                                _dateController.text.isNotEmpty) {
+                              try {
+                                final fecha = DateFormat('dd/MM/yyyy')
+                                    .parse(_dateController.text);
+                                final nuevoEmpleado = Empleado(
+                                  id: '',
+                                  nombre: _nombre.text.trim(),
+                                  apellido: _apellido.text.trim(),
+                                  cedula: _cedula.text.trim(),
+                                  direccion: _direccion.text.trim(),
+                                  telefono: _telefono.text.trim(),
+                                  correo: _correo.text.trim(),
+                                  cargo: selectValue!,
+                                  fechaContratacion: fecha,
+                                  fotoUrl: '',
+                                );
 
-                              //   ScaffoldMessenger.of(context).showSnackBar(
-                              //     const SnackBar(
-                              //       content: Text(
-                              //           'Empleado registrado exitosamente'),
-                              //     ),
-                              //   );
-                              // }
-                            }),
+                                final viewModel = EmpleadoViewmodel();
+                                await viewModel.agregarEmpleado(
+                                    nuevoEmpleado, _imageFile);
+
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Empleado registrado exitosamente')),
+                                  );
+                                  Navigator.pop(context);
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content:
+                                            Text('Error al registrar: $e')),
+                                  );
+                                }
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Completa todos los campos obligatorios')),
+                              );
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),

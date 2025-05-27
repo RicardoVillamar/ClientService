@@ -1,4 +1,5 @@
 class Cliente {
+  final String? id;
   final String nombreComercial;
   final String ruc;
   final String direccion;
@@ -8,6 +9,7 @@ class Cliente {
   final String cedula;
 
   Cliente({
+    this.id,
     required this.nombreComercial,
     required this.ruc,
     required this.direccion,
@@ -29,8 +31,9 @@ class Cliente {
     };
   }
 
-  factory Cliente.fromMap(Map<String, dynamic> map) {
+  factory Cliente.fromMap(Map<String, dynamic> map, String id) {
     return Cliente(
+      id: id,
       nombreComercial: map['nombre_comercial'] ?? '',
       ruc: map['ruc'] ?? '',
       direccion: map['direccion'] ?? '',
