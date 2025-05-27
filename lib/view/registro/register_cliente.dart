@@ -1,9 +1,11 @@
 import 'package:client_service/utils/colors.dart';
-import 'package:client_service/utils/font.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/models/cliente.dart';
+import 'package:client_service/viewmodel/cliente_viewmodel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,14 +20,39 @@ class _RegistroClientePageState extends State<RegistroClientePage> {
   double heightScreen = 0;
   double screenWidth = 0;
   String? selectValue;
-  final TextEditingController _nombreC = TextEditingController();
-  final TextEditingController _ruc = TextEditingController();
-  final TextEditingController _direccion = TextEditingController();
-  final TextEditingController _telefono = TextEditingController();
-  final TextEditingController _correo = TextEditingController();
-  final TextEditingController _personaContacto = TextEditingController();
-  final TextEditingController _cedula = TextEditingController();
+  final _nombreC = TextEditingController();
+  final _ruc = TextEditingController();
+  final _direccion = TextEditingController();
+  final _telefono = TextEditingController();
+  final _correo = TextEditingController();
+  final _personaContacto = TextEditingController();
+  final _cedula = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  final _clienteVM = ClienteViewModel();
+
+  void _guardarCliente() {
+    if (_formKey.currentState!.validate()) {
+      final cliente = Cliente(
+        nombreComercial: _nombreC.text.trim(),
+        ruc: _ruc.text.trim(),
+        direccion: _direccion.text.trim(),
+        telefono: _telefono.text.trim(),
+        correo: _correo.text.trim(),
+        personaContacto: _personaContacto.text.trim(),
+        cedula: _cedula.text.trim(),
+      );
+
+      _clienteVM.guardarCliente(cliente).then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Cliente guardado exitosamente')));
+        _formKey.currentState!.reset();
+      }).catchError((e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error al guardar el cliente: $e')));
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +219,10 @@ class _RegistroClientePageState extends State<RegistroClientePage> {
                           const SizedBox(
                             height: 20,
                           ),
-                          BtnElevated(text: "Guardar", onPressed: () {}),
+                          BtnElevated(
+                            text: "Guardar",
+                            onPressed: _guardarCliente,
+                          ),
                         ],
                       ),
                     )),
@@ -203,5 +233,10 @@ class _RegistroClientePageState extends State<RegistroClientePage> {
       ),
       bottomNavigationBar: const Toolbar(),
     );
+  }
+
+  String? _required(String? value) {
+    if (value == null || value.isEmpty) return 'Campo requerido';
+    return null;
   }
 }

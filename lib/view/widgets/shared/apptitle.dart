@@ -4,9 +4,10 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:flutter/material.dart';
 
 class Apptitle extends StatelessWidget {
+  final bool isVisible;
   final String title;
 
-  const Apptitle({super.key, required this.title});
+  const Apptitle({super.key, required this.title, this.isVisible = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,19 @@ class Apptitle extends StatelessWidget {
               },
               icon: Icons.arrow_back_ios_new_rounded),
         ),
+        const SizedBox(width: 10),
         Text(title, style: AppFonts.subtitleBold),
+        const Spacer(),
+        Visibility(
+          visible: isVisible,
+          child: Container(
+            margin: const EdgeInsets.only(right: 20),
+            child: BtnIcon(
+              onPressed: () {},
+              icon: Icons.delete_rounded,
+            ),
+          ),
+        )
       ],
     );
   }
