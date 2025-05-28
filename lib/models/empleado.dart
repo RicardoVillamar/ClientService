@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Empleado {
   final String? id;
   final String nombre;
@@ -8,7 +10,7 @@ class Empleado {
   final String correo;
   final String cargo;
   final DateTime fechaContratacion;
-  final String? fotoUrl;
+  final String fotoUrl;
 
   Empleado({
     this.id,
@@ -20,7 +22,7 @@ class Empleado {
     required this.correo,
     required this.cargo,
     required this.fechaContratacion,
-    this.fotoUrl,
+    this.fotoUrl = '',
   });
 
   Map<String, dynamic> toMap() {
@@ -47,7 +49,7 @@ class Empleado {
       telefono: map['telefono'] ?? '',
       correo: map['correo'] ?? '',
       cargo: map['cargo'] ?? '',
-      fechaContratacion: map['fechaContratacion'] ?? '',
+      fechaContratacion: (map['fechaContratacion'] as Timestamp).toDate(),
       fotoUrl: map['fotoUrl'],
     );
   }

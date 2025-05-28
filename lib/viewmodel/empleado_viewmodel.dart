@@ -24,6 +24,13 @@ class EmpleadoViewmodel extends ChangeNotifier {
     }
   }
 
+  Future<List<Empleado>> obtenerEmpleados() async {
+    final snapshot = await _firestore.collection('empleados').get();
+    return snapshot.docs
+        .map((doc) => Empleado.fromMap(doc.data(), doc.id))
+        .toList();
+  }
+
   // Registrar nuevo empleado
   Future<void> agregarEmpleado(Empleado empleado, File? imageFile) async {
     try {
