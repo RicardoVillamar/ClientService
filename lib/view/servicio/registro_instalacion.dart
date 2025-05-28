@@ -1,9 +1,11 @@
+import 'package:client_service/models/instalacion.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/viewmodel/instalacion_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -99,6 +101,60 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
 
   String? selectValueDatosTrabajo;
   String? selectValueObservaciones;
+
+  final InstalacionViewModel _instalacionViewModel = InstalacionViewModel();
+
+  void _guardarInstalacion() async {
+    if (_formKey.currentState!.validate()) {
+      if (_dateController.text.isEmpty ||
+          _cedula.text.isEmpty ||
+          _nombreC.text.isEmpty ||
+          _direccion.text.isEmpty ||
+          _item.text.isEmpty ||
+          _descripcion.text.isEmpty ||
+          _timeStartController.text.isEmpty ||
+          _timeEndController.text.isEmpty ||
+          selectValueDatosTrabajo == null ||
+          selectValueObservaciones == null ||
+          _telefono.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Por favor complete todos los campos')),
+        );
+        return;
+      }
+
+      try {
+        final instalacion = Instalacion(
+          id: null,
+          fechaInstalacion:
+              DateFormat('dd/MM/yyyy').parse(_dateController.text),
+          cedula: _cedula.text.trim(),
+          nombreComercial: _nombreC.text.trim(),
+          direccion: _direccion.text.trim(),
+          item: _item.text.trim(),
+          descripcion: _descripcion.text.trim(),
+          horaInicio: _timeStartController.text.trim(),
+          horaFin: _timeEndController.text.trim(),
+          tipoTrabajo: selectValueDatosTrabajo!,
+          cargoPuesto: selectValueObservaciones!,
+          telefono: _telefono.text.trim(),
+          numeroTarea: _numeroTarea.text.trim(),
+        );
+
+        await _instalacionViewModel.guardarInstalacion(instalacion);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Instalación guardada exitosamente')),
+        );
+
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al guardar: $e')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -298,15 +354,7 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
                               child: BtnElevated(
                                   text: 'Guardar',
                                   onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      // Perform save operation
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Instalacion guardada'),
-                                        ),
-                                      );
-                                    }
+                                    _guardarInstalacion();
                                   }),
                             ),
                           ],

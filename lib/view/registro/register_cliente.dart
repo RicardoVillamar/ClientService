@@ -43,13 +43,26 @@ class _RegistroClientePageState extends State<RegistroClientePage> {
       );
 
       _clienteVM.guardarCliente(cliente).then((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Cliente guardado exitosamente')));
-        _formKey.currentState!.reset();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Cliente guardado exitosamente')),
+          );
+          Navigator.pop(context);
+        }
       }).catchError((e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error al guardar el cliente: $e')));
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error al guardar el cliente: $e')),
+          );
+        }
       });
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Completa todos los campos obligatorios')),
+        );
+      }
     }
   }
 

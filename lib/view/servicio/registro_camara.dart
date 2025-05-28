@@ -1,9 +1,11 @@
+import 'package:client_service/models/camara.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/viewmodel/camara_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -53,6 +55,49 @@ class _RegistroCamaraState extends State<RegistroCamara> {
     'Tipo 3',
     'Tipo 4',
   ];
+  final CamaraViewModel _camaraViewModel = CamaraViewModel();
+
+  void _registrarMantenimiento() async {
+    if (_nombreC.text.isEmpty ||
+        _direccion.text.isEmpty ||
+        _dateController.text.isEmpty ||
+        _observaciones.text.isEmpty ||
+        _costo.text.isEmpty ||
+        selectTecnico == null ||
+        selectTipo == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor complete todos los campos')),
+      );
+      return;
+    }
+
+    try {
+      final mantenimiento = Camara(
+        id: null,
+        nombreComercial: _nombreC.text.trim(),
+        direccion: _direccion.text.trim(),
+        tecnico: selectTecnico!,
+        tipo: selectTipo!,
+        fechaMantenimiento:
+            DateFormat('dd/MM/yyyy').parse(_dateController.text),
+        descripcion: _observaciones.text.trim(),
+        costo: double.tryParse(_costo.text.trim()) ?? 0,
+      );
+
+      await _camaraViewModel.guardarCamara(mantenimiento);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Mantenimiento registrado exitosamente')),
+      );
+
+      // Cerrar la pantalla actual
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al guardar: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +213,9 @@ class _RegistroCamaraState extends State<RegistroCamara> {
                           showCounter: false,
                         ),
                         const SizedBox(height: 10),
-                        BtnElevated(text: 'Registrar', onPressed: () {}),
+                        BtnElevated(
+                            text: 'Registrar',
+                            onPressed: _registrarMantenimiento),
                         const SizedBox(height: 5),
                       ],
                     ),

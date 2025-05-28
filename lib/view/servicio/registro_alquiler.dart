@@ -1,9 +1,11 @@
+import 'package:client_service/models/vehiculo.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/viewmodel/vehiculo_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,6 +21,8 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
   final TextEditingController _direccion = TextEditingController();
   final TextEditingController _telefono = TextEditingController();
   final TextEditingController _correo = TextEditingController();
+  final TextEditingController _monto = TextEditingController();
+  final AlquilerViewModel _alquilerVM = AlquilerViewModel();
 
   // Date picker
   final TextEditingController _dateController = TextEditingController();
@@ -51,7 +55,7 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
     if (picked != null) {
       final formattedDate = DateFormat('dd/MM/yyyy').format(picked);
       setState(() {
-        _dateController.text = formattedDate;
+        _dateControllerTrabajo.text = formattedDate;
       });
     }
   }
@@ -63,6 +67,9 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
     'Tipo 3',
     'Tipo 4',
   ];
+
+  List<String> tiposVehiculo = ['Tipo 1', 'Tipo 2', 'Tipo 3', 'Tipo 4'];
+  String tipoVehiculoSeleccionado = 'Tipo 1';
 
   @override
   Widget build(BuildContext context) {
@@ -131,36 +138,25 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
                                 style: AppFonts.bodyNormal,
                               ),
                               const SizedBox(height: 10),
-                              const Row(
-                                children: [
-                                  // radio buttons
-
-                                  Radio(
-                                    value: 1,
-                                    groupValue: 0,
-                                    onChanged: null,
-                                  ),
-                                  Text('Tipo 1'),
-
-                                  SizedBox(width: 20),
-                                  Radio(
-                                    value: 2,
-                                    groupValue: 0,
-                                    onChanged: null,
-                                  ),
-
-                                  Text('Tipo 2'),
-
-                                  SizedBox(width: 20),
-
-                                  Radio(
-                                    value: 3,
-                                    groupValue: 0,
-                                    onChanged: null,
-                                  ),
-
-                                  Text('Tipo 3'),
-                                ],
+                              Wrap(
+                                spacing: 20,
+                                children: tiposVehiculo.map((tipo) {
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Radio<String>(
+                                        value: tipo,
+                                        groupValue: tipoVehiculoSeleccionado,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            tipoVehiculoSeleccionado = value!;
+                                          });
+                                        },
+                                      ),
+                                      Text(tipo),
+                                    ],
+                                  );
+                                }).toList(),
                               )
                             ],
                           ),
@@ -190,7 +186,7 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
                         const SizedBox(height: 20),
                         TxtFields(
                           label: 'Monto alquiler*',
-                          controller: _nombreC,
+                          controller: _monto,
                           screenWidth: screenWidth,
                           showCounter: false,
                         ),
@@ -215,7 +211,57 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
                           }).toList(),
                         ),
                         const SizedBox(height: 20),
-                        BtnElevated(text: 'Registro', onPressed: () {}),
+                        BtnElevated(
+                          text: 'Registro',
+                          onPressed: () async {
+                            if (_nombreC.text.isEmpty ||
+                                _direccion.text.isEmpty ||
+                                _telefono.text.isEmpty ||
+                                _correo.text.isEmpty ||
+                                _monto.text.isEmpty ||
+                                _dateController.text.isEmpty ||
+                                _dateControllerTrabajo.text.isEmpty ||
+                                selectValue == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Por favor llena todos los campos')),
+                              );
+                              return;
+                            }
+
+                            try {
+                              final alquiler = Alquiler(
+                                nombreComercial: _nombreC.text.trim(),
+                                direccion: _direccion.text.trim(),
+                                telefono: _telefono.text.trim(),
+                                correo: _correo.text.trim(),
+                                tipoVehiculo: tipoVehiculoSeleccionado,
+                                fechaReserva: DateFormat('dd/MM/yyyy')
+                                    .parse(_dateController.text),
+                                fechaTrabajo: DateFormat('dd/MM/yyyy')
+                                    .parse(_dateControllerTrabajo.text),
+                                montoAlquiler:
+                                    double.tryParse(_monto.text.trim()) ?? 0,
+                                personalAsistio: selectValue!,
+                              );
+
+                              await _alquilerVM.guardarAlquiler(alquiler);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Alquiler registrado exitosamente')),
+                              );
+
+                              Navigator.pop(context); // cerrar la pantalla
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Error al guardar: $e')),
+                              );
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
