@@ -1,9 +1,12 @@
+import 'package:client_service/models/camara.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/search.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/viewmodel/camara_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ReportCamara extends StatefulWidget {
   const ReportCamara({super.key});
@@ -13,6 +16,7 @@ class ReportCamara extends StatefulWidget {
 }
 
 class _ReportCamaraState extends State<ReportCamara> {
+  final CamaraViewModel viewModel = CamaraViewModel();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,10 +24,106 @@ class _ReportCamaraState extends State<ReportCamara> {
         decoration: const BoxDecoration(
           color: AppColors.backgroundColor,
         ),
-        child: ListView(
+        child: Column(
           children: [
             const Apptitle(title: 'Reporte de Camaras', isVisible: true),
             const SearchBarPage(),
+            Expanded(
+              child: FutureBuilder<List<Camara>>(
+                future: viewModel.obtenerCamaras(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No hay clientes'));
+                  } else {
+                    final camaras = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: camaras.length,
+                      itemBuilder: (context, index) {
+                        final camara = camaras[index];
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: const BoxDecoration(
+                            color: AppColors.whiteColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(camara.nombreComercial),
+                                Text(DateFormat('yyyy-MM-dd')
+                                    .format(camara.fechaMantenimiento)),
+                                Text(camara.direccion),
+                                Text(camara.tecnico),
+                              ],
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('\$${camara.costo.toStringAsFixed(2)}'),
+                              ],
+                            ),
+                            trailing: PopupMenuButton<String>(
+                              color: AppColors.whiteColor,
+                              icon: const Icon(Icons.more_vert),
+                              onSelected: (value) async {
+                                if (value == 'editar') {
+                                  print(
+                                      'Editar cliente: ${camara.nombreComercial}');
+                                } else if (value == 'eliminar') {
+                                  await viewModel.eliminarCamara(camara.id!);
+                                  setState(() {});
+                                }
+                              },
+                              itemBuilder: (context) => [
+                                const PopupMenuItem(
+                                  value: 'editar',
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Editar'),
+                                      Icon(
+                                        Icons.edit,
+                                        size: 18,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const PopupMenuItem(
+                                  value: 'eliminar',
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Eliminar'),
+                                      Icon(
+                                        Icons.delete,
+                                        size: 18,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
           ],
         ),
       ),

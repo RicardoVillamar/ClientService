@@ -20,6 +20,19 @@ class AlquilerViewModel extends ChangeNotifier {
     }
   }
 
+  // Obtener alquileres
+  Future<List<Alquiler>> obtenerAlquileres() async {
+    try {
+      final snapshot = await _firestore.collection('alquileres').get();
+      return snapshot.docs
+          .map((doc) => Alquiler.fromMap(doc.data(), doc.id))
+          .toList();
+    } catch (e) {
+      print('Error al obtener alquileres: $e');
+      return [];
+    }
+  }
+
   // Guardar un nuevo alquiler
   Future<void> guardarAlquiler(Alquiler alquiler) async {
     await _firestore.collection('alquileres').add(alquiler.toMap());

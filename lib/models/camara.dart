@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Camara {
   final String? id;
   final String nombreComercial;
@@ -35,12 +37,19 @@ class Camara {
     return Camara(
       id: id,
       nombreComercial: map['nombreComercial'] ?? '',
-      fechaMantenimiento: DateTime.parse(map['fechaMantenimiento']),
+      fechaMantenimiento: map['fechaMantenimiento'] is Timestamp
+          ? (map['fechaMantenimiento'] as Timestamp).toDate()
+          : DateTime.tryParse(map['fechaMantenimiento'].toString()) ??
+              DateTime.now(),
       direccion: map['direccion'] ?? '',
       tecnico: map['tecnico'] ?? '',
       tipo: map['tipo'] ?? '',
       descripcion: map['descripcion'] ?? '',
-      costo: (map['costo'] ?? 0).toDouble(),
+      costo: map['costo'] is int
+          ? (map['costo'] as int).toDouble()
+          : (map['costo'] is double
+              ? map['costo']
+              : double.tryParse(map['costo'].toString()) ?? 0.0),
     );
   }
 }

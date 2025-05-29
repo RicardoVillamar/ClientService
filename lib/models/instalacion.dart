@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Instalacion {
   final String? id;
   final DateTime fechaInstalacion;
@@ -31,8 +33,7 @@ class Instalacion {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'fechaInstalacion': fechaInstalacion,
+      'fechaInstalacion': Timestamp.fromDate(fechaInstalacion),
       'cedula': cedula,
       'nombreComercial': nombreComercial,
       'direccion': direccion,
@@ -50,18 +51,21 @@ class Instalacion {
   factory Instalacion.fromMap(Map<String, dynamic> map, String id) {
     return Instalacion(
       id: id,
-      fechaInstalacion: map['fechaInstalacion'],
-      cedula: map['cedula'],
-      nombreComercial: map['nombreComercial'],
-      direccion: map['direccion'],
-      item: map['item'],
-      descripcion: map['descripcion'],
-      horaInicio: map['horaInicio'],
-      horaFin: map['horaFin'],
-      tipoTrabajo: map['tipoTrabajo'],
-      cargoPuesto: map['cargoPuesto'],
-      telefono: map['telefono'],
-      numeroTarea: map['numeroTarea'],
+      fechaInstalacion: map['fechaInstalacion'] is Timestamp
+          ? (map['fechaInstalacion'] as Timestamp).toDate()
+          : DateTime.tryParse(map['fechaInstalacion'].toString()) ??
+              DateTime.now(),
+      cedula: map['cedula'] ?? '',
+      nombreComercial: map['nombreComercial'] ?? '',
+      direccion: map['direccion'] ?? '',
+      item: map['item'] ?? '',
+      descripcion: map['descripcion'] ?? '',
+      horaInicio: map['horaInicio'] ?? '',
+      horaFin: map['horaFin'] ?? '',
+      tipoTrabajo: map['tipoTrabajo'] ?? '',
+      cargoPuesto: map['cargoPuesto'] ?? '',
+      telefono: map['telefono'] ?? '',
+      numeroTarea: map['numeroTarea'] ?? '',
     );
   }
 }
