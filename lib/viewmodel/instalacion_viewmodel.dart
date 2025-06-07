@@ -1,4 +1,5 @@
 import 'package:client_service/models/instalacion.dart';
+import 'package:client_service/utils/excel_export_utility.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -54,6 +55,47 @@ class InstalacionViewModel extends ChangeNotifier {
     return snapshot.docs
         .map((doc) => Instalacion.fromMap(doc.data(), doc.id))
         .toList();
+  }
+
+  // Exportar instalaciones a Excel
+  Future<void> exportarInstalaciones() async {
+    await ExcelExportUtility.exportToExcel(
+      collectionName: 'instalaciones',
+      headers: [
+        'ID',
+        'Fecha Instalación',
+        'Cédula',
+        'Nombre Comercial',
+        'Dirección',
+        'Item',
+        'Descripción',
+        'Hora Inicio',
+        'Hora Fin',
+        'Tipo Trabajo',
+        'Cargo Puesto',
+        'Teléfono',
+        'Número Tarea'
+      ],
+      mapper: (data) => [
+        data['id'] ?? '',
+        data['fechaInstalacion'] is Timestamp
+            ? (data['fechaInstalacion'] as Timestamp).toDate().toIso8601String()
+            : data['fechaInstalacion']?.toString() ?? '',
+        data['cedula'] ?? '',
+        data['nombreComercial'] ?? '',
+        data['direccion'] ?? '',
+        data['item'] ?? '',
+        data['descripcion'] ?? '',
+        data['horaInicio'] ?? '',
+        data['horaFin'] ?? '',
+        data['tipoTrabajo'] ?? '',
+        data['cargoPuesto'] ?? '',
+        data['telefono'] ?? '',
+        data['numeroTarea'] ?? ''
+      ],
+      sheetName: 'Instalaciones',
+      fileName: 'reporte_instalaciones.xlsx',
+    );
   }
 
   // Escuchar instalaciones en tiempo real
