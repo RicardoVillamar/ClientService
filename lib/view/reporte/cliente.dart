@@ -142,7 +142,8 @@ class _ReportClienteState extends State<ReportCliente> {
             viewModel.exportarClientes();
           },
           icon: Icons.download_rounded,
-          text: 'Descargar'),
+          text: 'Descargar',
+          isVisible: viewModel.clientes.isNotEmpty),
       bottomNavigationBar: const Toolbar(),
     );
   }

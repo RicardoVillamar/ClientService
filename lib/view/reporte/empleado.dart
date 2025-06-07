@@ -150,7 +150,8 @@ class _ReportEmpleadoState extends State<ReportEmpleado> {
             viewModel.exportEmpleados();
           },
           icon: Icons.download_rounded,
-          text: 'Descargar'),
+          text: 'Descargar',
+          isVisible: viewModel.empleados.isNotEmpty),
       bottomNavigationBar: const Toolbar(),
     );
   }
