@@ -123,7 +123,13 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
         ),
       ),
       floatingActionButton: BtnFloating(
-          onPressed: () {}, icon: Icons.download_rounded, text: 'Descargar'),
+        onPressed: () {
+          viewModel.exportarInstalaciones();
+        },
+        icon: Icons.download_rounded,
+        text: 'Descargar',
+        isActive: this.mounted && viewModel.instalaciones.isNotEmpty,
+      ),
       bottomNavigationBar: const Toolbar(),
     );
   }

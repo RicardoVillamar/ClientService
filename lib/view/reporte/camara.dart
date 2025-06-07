@@ -128,7 +128,13 @@ class _ReportCamaraState extends State<ReportCamara> {
         ),
       ),
       floatingActionButton: BtnFloating(
-          onPressed: () {}, icon: Icons.download_rounded, text: 'Descargar'),
+        onPressed: () {
+          viewModel.exportarCamaras();
+        },
+        icon: Icons.download_rounded,
+        text: 'Descargar',
+        isActive: this.mounted,
+      ),
       bottomNavigationBar: const Toolbar(),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:client_service/models/cliente.dart';
+import 'package:client_service/utils/excel_export_utility.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -30,6 +31,33 @@ class ClienteViewModel extends ChangeNotifier {
     return snapshot.docs
         .map((doc) => Cliente.fromMap(doc.data(), doc.id))
         .toList();
+  }
+
+  // Exportar clientes a Excel
+  Future<void> exportarClientes() async {
+    await ExcelExportUtility.exportToExcel(
+      collectionName: 'clientes',
+      headers: [
+        'ID',
+        'Nombre Comercial',
+        'Correo',
+        'Teléfono',
+        'Dirección',
+        'Persona de Contacto',
+        'Cedula',
+      ],
+      mapper: (data) => [
+        data['id'] ?? '',
+        data['nombreComercial'] ?? '',
+        data['correo'] ?? '',
+        data['telefono'] ?? '',
+        data['direccion'] ?? '',
+        data['personaContacto'] ?? '',
+        data['cedula'] ?? '',
+      ],
+      sheetName: 'Clientes',
+      fileName: 'reporte_clientes.xlsx',
+    );
   }
 
   // Escuchar cambios en tiempo real
