@@ -146,7 +146,11 @@ class _ReportEmpleadoState extends State<ReportEmpleado> {
         ),
       ),
       floatingActionButton: BtnFloating(
-          onPressed: () {}, icon: Icons.download_rounded, text: 'Descargar'),
+          onPressed: () {
+            viewModel.exportEmpleados();
+          },
+          icon: Icons.download_rounded,
+          text: 'Descargar'),
       bottomNavigationBar: const Toolbar(),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:client_service/models/empleado.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:client_service/utils/excel_export_utility.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,11 @@ class EmpleadoViewmodel extends ChangeNotifier {
   // Obtener todos los empleados
   Future<void> fetchEmpleados() async {
     try {
-      final snapshot = await _firestore.collection('empleados').get();
+      // obtener los datos de la colección 'empleados'
+      final snapshot = await _firestore
+          .collection('empleados')
+          .orderBy('date', descending: true)
+          .get();
       _empleados = snapshot.docs.map((doc) {
         return Empleado.fromMap(doc.data(), doc.id);
       }).toList();
@@ -29,6 +34,40 @@ class EmpleadoViewmodel extends ChangeNotifier {
     return snapshot.docs
         .map((doc) => Empleado.fromMap(doc.data(), doc.id))
         .toList();
+  }
+
+  // Exportar empleados en excel
+  Future<void> exportEmpleados() async {
+    await ExcelExportUtility.exportToExcel(
+        sheetName: 'Empleados',
+        collectionName: 'empleados',
+        fileName: 'reporte_empleados.xlsx',
+        headers: [
+          'Nombre',
+          'Apellido',
+          'Cédula',
+          'Dirección',
+          'Teléfono',
+          'Correo',
+          'Cargo',
+          'Fecha Contratación',
+          'Foto URL'
+        ],
+        mapper: (data) => [
+              data['nombre'] ?? '',
+              data['apellido'] ?? '',
+              data['cedula'] ?? '',
+              data['direccion'] ?? '',
+              data['telefono'] ?? '',
+              data['correo'] ?? '',
+              data['cargo'] ?? '',
+              data['fechaContratacion'] != null
+                  ? (data['fechaContratacion'] as Timestamp)
+                      .toDate()
+                      .toIso8601String()
+                  : '',
+              data['fotoUrl'] ?? ''
+            ]);
   }
 
   // Registrar nuevo empleado
