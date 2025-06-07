@@ -133,7 +133,7 @@ class _ReportCamaraState extends State<ReportCamara> {
         },
         icon: Icons.download_rounded,
         text: 'Descargar',
-        isVisible: this.mounted,
+        isActive: this.mounted,
       ),
       bottomNavigationBar: const Toolbar(),
     );

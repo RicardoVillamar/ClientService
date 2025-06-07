@@ -137,7 +137,7 @@ class _ReportVehiculoState extends State<ReportVehiculo> {
         },
         icon: Icons.download_rounded,
         text: 'Descargar',
-        isVisible: this.mounted && viewModel.alquileres.isNotEmpty,
+        isActive: this.mounted && viewModel.alquileres.isNotEmpty,
       ),
       bottomNavigationBar: const Toolbar(),
     );

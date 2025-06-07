@@ -128,7 +128,7 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
         },
         icon: Icons.download_rounded,
         text: 'Descargar',
-        isVisible: this.mounted && viewModel.instalaciones.isNotEmpty,
+        isActive: this.mounted && viewModel.instalaciones.isNotEmpty,
       ),
       bottomNavigationBar: const Toolbar(),
     );

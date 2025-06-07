@@ -29,21 +29,21 @@ class BtnFloating extends StatelessWidget {
   final Function()? onPressed;
   final IconData icon;
   final String text;
-  final bool? isVisible;
+  final bool? isActive;
   const BtnFloating({
     super.key,
     required this.onPressed,
     required this.icon,
     required this.text,
-    this.isVisible = true,
+    this.isActive = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       backgroundColor:
-          isVisible == true ? AppColors.btnColor : AppColors.primaryColor,
-      onPressed: isVisible == true ? onPressed : null,
+          isActive == true ? AppColors.btnColor : AppColors.primaryColor,
+      onPressed: isActive == true ? onPressed : null,
       label: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
