@@ -138,7 +138,11 @@ class _ReportClienteState extends State<ReportCliente> {
         ),
       ),
       floatingActionButton: BtnFloating(
-          onPressed: () {}, icon: Icons.download_rounded, text: 'Descargar'),
+          onPressed: () {
+            viewModel.exportarClientes();
+          },
+          icon: Icons.download_rounded,
+          text: 'Descargar'),
       bottomNavigationBar: const Toolbar(),
     );
   }
