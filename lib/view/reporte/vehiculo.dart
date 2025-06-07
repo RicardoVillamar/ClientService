@@ -132,7 +132,13 @@ class _ReportVehiculoState extends State<ReportVehiculo> {
         ),
       ),
       floatingActionButton: BtnFloating(
-          onPressed: () {}, icon: Icons.download_rounded, text: 'Descargar'),
+        onPressed: () {
+          viewModel.exportAlquileres();
+        },
+        icon: Icons.download_rounded,
+        text: 'Descargar',
+        isActive: this.mounted && viewModel.alquileres.isNotEmpty,
+      ),
       bottomNavigationBar: const Toolbar(),
     );
   }
