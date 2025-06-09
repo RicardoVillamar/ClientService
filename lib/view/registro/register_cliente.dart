@@ -5,6 +5,8 @@ import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/models/cliente.dart';
 import 'package:client_service/viewmodel/cliente_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
+import 'package:client_service/view/widgets/flash_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,7 +30,13 @@ class _RegistroClientePageState extends State<RegistroClientePage> {
   final _cedula = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  final _clienteVM = ClienteViewModel();
+  late final ClienteViewModel _clienteVM;
+
+  @override
+  void initState() {
+    super.initState();
+    _clienteVM = sl<ClienteViewModel>();
+  }
 
   void _guardarCliente() {
     if (_formKey.currentState!.validate()) {
@@ -44,23 +52,25 @@ class _RegistroClientePageState extends State<RegistroClientePage> {
 
       _clienteVM.guardarCliente(cliente).then((_) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Cliente guardado exitosamente')),
+          FlashMessages.showSuccess(
+            context: context,
+            message: 'Cliente guardado exitosamente',
           );
           Navigator.pop(context);
         }
       }).catchError((e) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error al guardar el cliente: $e')),
+          FlashMessages.showError(
+            context: context,
+            message: 'Error al guardar el cliente: $e',
           );
         }
       });
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Completa todos los campos obligatorios')),
+        FlashMessages.showWarning(
+          context: context,
+          message: 'Completa todos los campos obligatorios',
         );
       }
     }

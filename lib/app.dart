@@ -1,4 +1,6 @@
 import 'package:client_service/view/inicio/home.dart';
+import 'package:client_service/services/navigation_service.dart';
+import 'package:client_service/routes.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -6,10 +8,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Client Service',
-      home: HomePage(),
+      navigatorKey: NavigationService.navigatorKey,
+      home: const HomePage(),
+      routes: routes,
     );
   }
 }

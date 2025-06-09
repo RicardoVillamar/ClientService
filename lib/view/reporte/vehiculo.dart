@@ -5,6 +5,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/search.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/vehiculo_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +17,7 @@ class ReportVehiculo extends StatefulWidget {
 }
 
 class _ReportVehiculoState extends State<ReportVehiculo> {
-  AlquilerViewModel viewModel = AlquilerViewModel();
+  AlquilerViewModel viewModel = sl<AlquilerViewModel>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,7 +138,6 @@ class _ReportVehiculoState extends State<ReportVehiculo> {
         },
         icon: Icons.download_rounded,
         text: 'Descargar',
-        isActive: this.mounted && viewModel.alquileres.isNotEmpty,
       ),
       bottomNavigationBar: const Toolbar(),
     );

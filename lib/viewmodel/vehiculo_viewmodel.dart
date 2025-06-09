@@ -1,46 +1,41 @@
 import 'package:client_service/models/vehiculo.dart';
 import 'package:client_service/utils/excel_export_utility.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:client_service/repositories/vehiculo_repository.dart';
+import 'package:client_service/viewmodel/base_viewmodel.dart';
 
-class AlquilerViewModel extends ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+class AlquilerViewModel extends BaseViewModel {
+  final VehiculoRepository _repository;
+
+  AlquilerViewModel(this._repository);
+
   List<Alquiler> _alquileres = [];
   List<Alquiler> get alquileres => _alquileres;
 
-  // Obtener alquileres una vez
+  // Obtener alquileres y actualizar lista local
   Future<void> fetchAlquileres() async {
-    try {
-      final snapshot = await _firestore.collection('alquileres').get();
-      _alquileres = snapshot.docs
-          .map((doc) => Alquiler.fromMap(doc.data(), doc.id))
-          .toList();
+    final result = await handleAsyncOperation(() => _repository.getAll());
+    if (result != null) {
+      _alquileres = result;
       notifyListeners();
-    } catch (e) {
-      print('Error al obtener alquileres: $e');
     }
   }
 
-  // Obtener alquileres
+  // Obtener alquileres (sin actualizar lista local)
   Future<List<Alquiler>> obtenerAlquileres() async {
-    try {
-      final snapshot = await _firestore.collection('alquileres').get();
-      return snapshot.docs
-          .map((doc) => Alquiler.fromMap(doc.data(), doc.id))
-          .toList();
-    } catch (e) {
-      print('Error al obtener alquileres: $e');
-      return [];
-    }
+    final result = await executeOperation(() => _repository.getAll());
+    return result ?? [];
   }
 
   // Exportar alquileres a Excel
   Future<void> exportAlquileres() async {
-    try {
+    final data =
+        await handleAsyncOperation(() => _repository.getAllForExport());
+
+    if (data != null) {
       await ExcelExportUtility.exportToExcel(
         collectionName: 'alquileres',
         headers: [
-          'id',
+          'ID',
           'Cliente',
           'Fecha Registro Reserva',
           'Fecha Trabajo',
@@ -51,51 +46,98 @@ class AlquilerViewModel extends ChangeNotifier {
           'Monto Total',
           'Personal Asignado',
         ],
-        mapper: (data) => [
-          data['id'] ?? '',
-          data['nombreComercial'] ?? '',
-          data['fechaReserva']?.toDate()?.toString() ?? '',
-          data['fechaTrabajo']?.toDate()?.toString() ?? '',
-          data['correo'] ?? '',
-          data['telefono'] ?? '',
-          data['direccion'] ?? '',
-          data['tipoVehiculo'] ?? '',
-          data['montoAlquiler']?.toString() ?? '',
-          data['personalAsistio'] ?? '',
+        mapper: (dataItem) => [
+          dataItem['id'] ?? '',
+          dataItem['nombreComercial'] ?? '',
+          dataItem['fechaReserva']?.toDate()?.toString() ?? '',
+          dataItem['fechaTrabajo']?.toDate()?.toString() ?? '',
+          dataItem['correo'] ?? '',
+          dataItem['telefono'] ?? '',
+          dataItem['direccion'] ?? '',
+          dataItem['tipoVehiculo'] ?? '',
+          dataItem['montoAlquiler']?.toString() ?? '',
+          dataItem['personalAsistio'] ?? '',
         ],
         sheetName: 'Alquileres',
         fileName: 'reporte_alquileres.xlsx',
       );
-    } catch (e) {
-      print('Error al exportar alquileres: $e');
     }
   }
 
   // Guardar un nuevo alquiler
-  Future<void> guardarAlquiler(Alquiler alquiler) async {
-    await _firestore.collection('alquileres').add(alquiler.toMap());
+  Future<bool> guardarAlquiler(Alquiler alquiler) async {
+    final id = await handleAsyncOperation(() => _repository.create(alquiler));
+
+    if (id != null) {
+      // Actualizar la lista local
+      final newAlquiler = Alquiler(
+        id: id,
+        nombreComercial: alquiler.nombreComercial,
+        fechaReserva: alquiler.fechaReserva,
+        fechaTrabajo: alquiler.fechaTrabajo,
+        correo: alquiler.correo,
+        telefono: alquiler.telefono,
+        direccion: alquiler.direccion,
+        tipoVehiculo: alquiler.tipoVehiculo,
+        montoAlquiler: alquiler.montoAlquiler,
+        personalAsistio: alquiler.personalAsistio,
+      );
+
+      _alquileres.add(newAlquiler);
+      notifyListeners();
+      return true;
+    }
+    return false;
   }
 
   // Escuchar cambios en tiempo real
   Stream<List<Alquiler>> escucharAlquileres() {
-    return _firestore.collection('alquileres').snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => Alquiler.fromMap(doc.data(), doc.id))
-          .toList();
-    });
+    return _repository.watchAll();
   }
 
   // Eliminar alquiler
-  Future<void> eliminarAlquiler(String id) async {
-    await _firestore.collection('alquileres').doc(id).delete();
+  Future<bool> eliminarAlquiler(String id) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.delete(id);
+
+      // Remover de la lista local
+      _alquileres.removeWhere((a) => a.id == id);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
   }
 
   // Actualizar alquiler
-  Future<void> actualizarAlquiler(Alquiler alquiler) async {
-    if (alquiler.id == null) throw Exception("Alquiler sin ID");
-    await _firestore
-        .collection('alquileres')
-        .doc(alquiler.id)
-        .update(alquiler.toMap());
+  Future<bool> actualizarAlquiler(Alquiler alquiler) async {
+    if (alquiler.id == null) {
+      setError('Alquiler sin ID');
+      return false;
+    }
+
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.update(alquiler.id!, alquiler);
+
+      // Actualizar en la lista local
+      final index = _alquileres.indexWhere((a) => a.id == alquiler.id);
+      if (index != -1) {
+        _alquileres[index] = alquiler;
+        notifyListeners();
+      }
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
   }
 }
