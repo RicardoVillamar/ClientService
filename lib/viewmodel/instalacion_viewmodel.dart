@@ -1,35 +1,37 @@
 import 'package:client_service/models/instalacion.dart';
 import 'package:client_service/utils/excel_export_utility.dart';
+import 'package:client_service/repositories/instalacion_repository.dart';
+import 'package:client_service/viewmodel/base_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
-class InstalacionViewModel extends ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+class InstalacionViewModel extends BaseViewModel {
+  final InstalacionRepository _repository;
+
+  InstalacionViewModel(this._repository);
 
   List<Instalacion> _instalaciones = [];
   List<Instalacion> get instalaciones => _instalaciones;
 
-  // Obtener instalaciones desde Firestore y actualizar lista local
+  // Obtener instalaciones desde el repositorio y actualizar lista local
   Future<void> fetchInstalaciones() async {
-    try {
-      final snapshot = await _firestore.collection('instalaciones').get();
-      _instalaciones = snapshot.docs
-          .map((doc) => Instalacion.fromMap(doc.data(), doc.id))
-          .toList();
+    final result = await handleAsyncOperation(() async {
+      _instalaciones = await _repository.getAll();
       notifyListeners();
-    } catch (e) {
-      print('Error al obtener instalaciones: $e');
+    });
+
+    if (result == null && errorMessage != null) {
+      print("Error al obtener instalaciones: $errorMessage");
     }
   }
 
   // Guardar una nueva instalacion
-  Future<void> guardarInstalacion(Instalacion instalacion) async {
-    try {
-      final docRef =
-          await _firestore.collection('instalaciones').add(instalacion.toMap());
-      // Opcional: actualizar la lista local
-      _instalaciones.add(Instalacion(
-        id: docRef.id,
+  Future<bool> guardarInstalacion(Instalacion instalacion) async {
+    final result = await handleAsyncOperation(() async {
+      final id = await _repository.create(instalacion);
+
+      // Actualizar la lista local
+      final newInstalacion = Instalacion(
+        id: id,
         fechaInstalacion: instalacion.fechaInstalacion,
         cedula: instalacion.cedula,
         nombreComercial: instalacion.nombreComercial,
@@ -42,103 +44,113 @@ class InstalacionViewModel extends ChangeNotifier {
         cargoPuesto: instalacion.cargoPuesto,
         telefono: instalacion.telefono,
         numeroTarea: instalacion.numeroTarea,
-      ));
+      );
+
+      _instalaciones.add(newInstalacion);
       notifyListeners();
-    } catch (e) {
-      print('Error al guardar instalación: $e');
-    }
+      return true;
+    });
+
+    return result ?? false;
   }
 
   // Obtener todas las instalaciones (sin actualizar la lista local)
   Future<List<Instalacion>> obtenerInstalaciones() async {
-    final snapshot = await _firestore.collection('instalaciones').get();
-    return snapshot.docs
-        .map((doc) => Instalacion.fromMap(doc.data(), doc.id))
-        .toList();
+    final result = await executeOperation(() => _repository.getAll());
+    return result ?? [];
   }
 
   // Exportar instalaciones a Excel
   Future<void> exportarInstalaciones() async {
-    await ExcelExportUtility.exportToExcel(
-      collectionName: 'instalaciones',
-      headers: [
-        'ID',
-        'Fecha Instalación',
-        'Cédula',
-        'Nombre Comercial',
-        'Dirección',
-        'Item',
-        'Descripción',
-        'Hora Inicio',
-        'Hora Fin',
-        'Tipo Trabajo',
-        'Cargo Puesto',
-        'Teléfono',
-        'Número Tarea'
-      ],
-      mapper: (data) => [
-        data['id'] ?? '',
-        data['fechaInstalacion'] is Timestamp
-            ? (data['fechaInstalacion'] as Timestamp).toDate().toIso8601String()
-            : data['fechaInstalacion']?.toString() ?? '',
-        data['cedula'] ?? '',
-        data['nombreComercial'] ?? '',
-        data['direccion'] ?? '',
-        data['item'] ?? '',
-        data['descripcion'] ?? '',
-        data['horaInicio'] ?? '',
-        data['horaFin'] ?? '',
-        data['tipoTrabajo'] ?? '',
-        data['cargoPuesto'] ?? '',
-        data['telefono'] ?? '',
-        data['numeroTarea'] ?? ''
-      ],
-      sheetName: 'Instalaciones',
-      fileName: 'reporte_instalaciones.xlsx',
-    );
-  }
+    await handleAsyncOperation(() async {
+      final data = await _repository.getAllForExport();
 
-  // Escuchar instalaciones en tiempo real
-  Stream<List<Instalacion>> escucharInstalaciones() {
-    return _firestore.collection('instalaciones').snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => Instalacion.fromMap(doc.data(), doc.id))
-          .toList();
+      await ExcelExportUtility.exportToExcel(
+        collectionName: 'instalaciones',
+        headers: [
+          'ID',
+          'Fecha Instalación',
+          'Cédula',
+          'Nombre Comercial',
+          'Dirección',
+          'Item',
+          'Descripción',
+          'Hora Inicio',
+          'Hora Fin',
+          'Tipo Trabajo',
+          'Cargo Puesto',
+          'Teléfono',
+          'Número Tarea'
+        ],
+        mapper: (data) => [
+          data['id'] ?? '',
+          data['fechaInstalacion'] is Timestamp
+              ? (data['fechaInstalacion'] as Timestamp)
+                  .toDate()
+                  .toIso8601String()
+              : data['fechaInstalacion']?.toString() ?? '',
+          data['cedula'] ?? '',
+          data['nombreComercial'] ?? '',
+          data['direccion'] ?? '',
+          data['item'] ?? '',
+          data['descripcion'] ?? '',
+          data['horaInicio'] ?? '',
+          data['horaFin'] ?? '',
+          data['tipoTrabajo'] ?? '',
+          data['cargoPuesto'] ?? '',
+          data['telefono'] ?? '',
+          data['numeroTarea'] ?? ''
+        ],
+        sheetName: 'Instalaciones',
+        fileName: 'reporte_instalaciones.xlsx',
+      );
     });
   }
 
+  // Escuchar instalaciones en tiempo real
+  void listenToInstalaciones() {
+    _repository.watchAll().listen(
+      (instalaciones) {
+        _instalaciones = instalaciones;
+        notifyListeners();
+      },
+      onError: (error) {
+        setError("Error al escuchar instalaciones: $error");
+      },
+    );
+  }
+
   // Eliminar instalación por ID
-  Future<void> eliminarInstalacion(String id) async {
-    try {
-      await _firestore.collection('instalaciones').doc(id).delete();
-      // Quitar de la lista local si existe
+  Future<bool> eliminarInstalacion(String id) async {
+    final result = await handleAsyncOperation(() async {
+      await _repository.delete(id);
       _instalaciones.removeWhere((inst) => inst.id == id);
       notifyListeners();
-    } catch (e) {
-      print('Error al eliminar instalación: $e');
-    }
+      return true;
+    });
+
+    return result ?? false;
   }
 
   // Actualizar instalación
-  Future<void> actualizarInstalacion(Instalacion instalacion) async {
+  Future<bool> actualizarInstalacion(Instalacion instalacion) async {
     if (instalacion.id == null) {
-      throw Exception('La instalación no tiene ID');
+      setError("Error: La instalación no tiene ID");
+      return false;
     }
-    try {
-      await _firestore
-          .collection('instalaciones')
-          .doc(instalacion.id)
-          .update(instalacion.toMap());
 
-      // Actualizar en la lista local
+    final result = await handleAsyncOperation(() async {
+      await _repository.update(instalacion.id!, instalacion);
+
       final index =
           _instalaciones.indexWhere((inst) => inst.id == instalacion.id);
       if (index != -1) {
         _instalaciones[index] = instalacion;
         notifyListeners();
       }
-    } catch (e) {
-      print('Error al actualizar instalación: $e');
-    }
+      return true;
+    });
+
+    return result ?? false;
   }
 }
