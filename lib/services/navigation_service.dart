@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../view/widgets/flash_messages.dart';
 
 class NavigationService {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -43,34 +44,41 @@ class NavigationService {
     );
   }
 
-  static void showSnackBar(
+  static void showFlashMessage(
     String message, {
-    Color? backgroundColor,
+    FlashMessageType type = FlashMessageType.info,
     Duration duration = const Duration(seconds: 3),
   }) {
     final context = currentContext;
     if (context != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: backgroundColor,
-          duration: duration,
-        ),
+      FlashMessages.show(
+        context: context,
+        message: message,
+        type: type,
+        duration: duration,
       );
     }
   }
 
-  static void showErrorSnackBar(String message) {
-    showSnackBar(
+  static void showErrorFlash(String message) {
+    showFlashMessage(
       message,
-      backgroundColor: Colors.red,
+      type: FlashMessageType.error,
+      duration: const Duration(seconds: 4),
     );
   }
 
-  static void showSuccessSnackBar(String message) {
-    showSnackBar(
+  static void showSuccessFlash(String message) {
+    showFlashMessage(
       message,
-      backgroundColor: Colors.green,
+      type: FlashMessageType.success,
+    );
+  }
+
+  static void showWarningFlash(String message) {
+    showFlashMessage(
+      message,
+      type: FlashMessageType.warning,
     );
   }
 
