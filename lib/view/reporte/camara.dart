@@ -5,6 +5,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/search.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/camara_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +17,7 @@ class ReportCamara extends StatefulWidget {
 }
 
 class _ReportCamaraState extends State<ReportCamara> {
-  final CamaraViewModel viewModel = CamaraViewModel();
+  final CamaraViewModel viewModel = sl<CamaraViewModel>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,7 +134,6 @@ class _ReportCamaraState extends State<ReportCamara> {
         },
         icon: Icons.download_rounded,
         text: 'Descargar',
-        isActive: this.mounted,
       ),
       bottomNavigationBar: const Toolbar(),
     );

@@ -5,6 +5,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/search.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/cliente_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 
 class ReportCliente extends StatefulWidget {
@@ -15,7 +16,7 @@ class ReportCliente extends StatefulWidget {
 }
 
 class _ReportClienteState extends State<ReportCliente> {
-  final ClienteViewModel viewModel = ClienteViewModel();
+  final ClienteViewModel viewModel = sl<ClienteViewModel>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
