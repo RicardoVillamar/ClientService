@@ -5,6 +5,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/search.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/empleado_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 
 class ReportEmpleado extends StatefulWidget {
@@ -16,7 +17,7 @@ class ReportEmpleado extends StatefulWidget {
 
 class _ReportEmpleadoState extends State<ReportEmpleado> {
   double heightScreen = 0;
-  final EmpleadoViewmodel viewModel = EmpleadoViewmodel();
+  final EmpleadoViewmodel viewModel = sl<EmpleadoViewmodel>();
 
   @override
   Widget build(BuildContext context) {
@@ -146,12 +147,12 @@ class _ReportEmpleadoState extends State<ReportEmpleado> {
         ),
       ),
       floatingActionButton: BtnFloating(
-          onPressed: () {
-            viewModel.exportEmpleados();
-          },
-          icon: Icons.download_rounded,
-          text: 'Descargar',
-          isActive: viewModel.empleados.isNotEmpty),
+        onPressed: () {
+          viewModel.exportEmpleados();
+        },
+        icon: Icons.download_rounded,
+        text: 'Descargar',
+      ),
       bottomNavigationBar: const Toolbar(),
     );
   }

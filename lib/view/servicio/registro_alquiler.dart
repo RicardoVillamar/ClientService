@@ -6,6 +6,8 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/vehiculo_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
+import 'package:client_service/view/widgets/flash_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +24,7 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
   final TextEditingController _telefono = TextEditingController();
   final TextEditingController _correo = TextEditingController();
   final TextEditingController _monto = TextEditingController();
-  final AlquilerViewModel _alquilerVM = AlquilerViewModel();
+  final AlquilerViewModel _alquilerVM = sl<AlquilerViewModel>();
 
   // Date picker
   final TextEditingController _dateController = TextEditingController();
@@ -222,10 +224,9 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
                                 _dateController.text.isEmpty ||
                                 _dateControllerTrabajo.text.isEmpty ||
                                 selectValue == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Por favor llena todos los campos')),
+                              FlashMessages.showWarning(
+                                context: context,
+                                message: 'Por favor llena todos los campos',
                               );
                               return;
                             }
@@ -248,16 +249,16 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
 
                               await _alquilerVM.guardarAlquiler(alquiler);
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Alquiler registrado exitosamente')),
+                              FlashMessages.showSuccess(
+                                context: context,
+                                message: 'Alquiler registrado exitosamente',
                               );
 
                               Navigator.pop(context); // cerrar la pantalla
                             } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Error al guardar: $e')),
+                              FlashMessages.showError(
+                                context: context,
+                                message: 'Error al guardar: $e',
                               );
                             }
                           },

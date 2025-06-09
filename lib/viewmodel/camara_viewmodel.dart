@@ -1,83 +1,147 @@
 import 'package:client_service/models/camara.dart';
 import 'package:client_service/utils/excel_export_utility.dart';
+import 'package:client_service/repositories/camara_repository.dart';
+import 'package:client_service/viewmodel/base_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
-class CamaraViewModel extends ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String _collection = 'camaras';
+class CamaraViewModel extends BaseViewModel {
+  final CamaraRepository _repository;
 
-  // Guardar nuevo registro
-  Future<void> guardarCamara(Camara camara) async {
-    await _firestore.collection(_collection).add(camara.toMap());
+  CamaraViewModel(this._repository);
+
+  List<Camara> _camaras = [];
+  List<Camara> get camaras => _camaras;
+
+  // Obtener todas las cámaras y actualizar lista local
+  Future<void> fetchCamaras() async {
+    final result = await handleAsyncOperation(() => _repository.getAll());
+    if (result != null) {
+      _camaras = result;
+      notifyListeners();
+    }
   }
 
-  // Obtener lista de registros
+  // Guardar nueva cámara
+  Future<bool> guardarCamara(Camara camara) async {
+    final id = await handleAsyncOperation(() => _repository.create(camara));
+
+    if (id != null) {
+      // Actualizar la lista local
+      final newCamara = Camara(
+        id: id,
+        nombreComercial: camara.nombreComercial,
+        fechaMantenimiento: camara.fechaMantenimiento,
+        direccion: camara.direccion,
+        tecnico: camara.tecnico,
+        tipo: camara.tipo,
+        descripcion: camara.descripcion,
+        costo: camara.costo,
+      );
+
+      _camaras.add(newCamara);
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
+  // Obtener lista de registros (sin actualizar lista local)
   Future<List<Camara>> obtenerCamaras() async {
-    final snapshot = await _firestore.collection(_collection).get();
-    return snapshot.docs
-        .map((doc) => Camara.fromMap(doc.data(), doc.id))
-        .toList();
+    final result = await executeOperation(() => _repository.getAll());
+    return result ?? [];
   }
 
-  // exportar a Excel
+  // Exportar cámaras a Excel
   Future<void> exportarCamaras() async {
-    await ExcelExportUtility.exportToExcel(
-      collectionName: _collection,
-      headers: [
-        'id',
-        'Nombre Comercial',
-        'Fecha Mantenimiento',
-        'Dirección',
-        'Técnico',
-        'Tipo',
-        'Descripción',
-        'Costo',
-      ],
-      mapper: (data) => [
-        data['id'] ?? '',
-        data['nombreComercial'] ?? '',
-        data['fechaMantenimiento'] is Timestamp
-            ? (data['fechaMantenimiento'] as Timestamp)
-                .toDate()
-                .toIso8601String()
-            : data['fechaMantenimiento']?.toString() ?? '',
-        data['direccion'] ?? '',
-        data['tecnico'] ?? '',
-        data['tipo'] ?? '',
-        data['descripcion'] ?? '',
-        (data['costo'] is int
-                ? (data['costo'] as int).toDouble()
-                : (data['costo'] is double
-                    ? data['costo']
-                    : double.tryParse(data['costo'].toString()) ?? 0.0))
-            .toString(),
-      ],
-      sheetName: 'Camaras',
-      fileName: 'reporte_camaras.xlsx',
-    );
+    final data =
+        await handleAsyncOperation(() => _repository.getAllForExport());
+
+    if (data != null) {
+      await ExcelExportUtility.exportToExcel(
+        collectionName: 'camaras',
+        headers: [
+          'ID',
+          'Nombre Comercial',
+          'Fecha Mantenimiento',
+          'Dirección',
+          'Técnico',
+          'Tipo',
+          'Descripción',
+          'Costo',
+        ],
+        mapper: (dataItem) => [
+          dataItem['id'] ?? '',
+          dataItem['nombreComercial'] ?? '',
+          dataItem['fechaMantenimiento'] is Timestamp
+              ? (dataItem['fechaMantenimiento'] as Timestamp)
+                  .toDate()
+                  .toIso8601String()
+              : dataItem['fechaMantenimiento']?.toString() ?? '',
+          dataItem['direccion'] ?? '',
+          dataItem['tecnico'] ?? '',
+          dataItem['tipo'] ?? '',
+          dataItem['descripcion'] ?? '',
+          (dataItem['costo'] is int
+                  ? (dataItem['costo'] as int).toDouble()
+                  : (dataItem['costo'] is double
+                      ? dataItem['costo']
+                      : double.tryParse(dataItem['costo'].toString()) ?? 0.0))
+              .toString(),
+        ],
+        sheetName: 'Camaras',
+        fileName: 'reporte_camaras.xlsx',
+      );
+    }
   }
 
-  // Escuchar en tiempo real
+  // Escuchar cambios en tiempo real
   Stream<List<Camara>> escucharCamaras() {
-    return _firestore.collection(_collection).snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => Camara.fromMap(doc.data(), doc.id))
-          .toList();
-    });
+    return _repository.watchAll();
   }
 
   // Actualizar registro
-  Future<void> actualizarCamara(Camara camara) async {
-    if (camara.id == null) throw Exception('ID requerido');
-    await _firestore
-        .collection(_collection)
-        .doc(camara.id)
-        .update(camara.toMap());
+  Future<bool> actualizarCamara(Camara camara) async {
+    if (camara.id == null) {
+      setError('ID requerido para actualizar');
+      return false;
+    }
+
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.update(camara.id!, camara);
+
+      // Actualizar en la lista local
+      final index = _camaras.indexWhere((c) => c.id == camara.id);
+      if (index != -1) {
+        _camaras[index] = camara;
+        notifyListeners();
+      }
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
   }
 
   // Eliminar registro
-  Future<void> eliminarCamara(String id) async {
-    await _firestore.collection(_collection).doc(id).delete();
+  Future<bool> eliminarCamara(String id) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.delete(id);
+
+      // Remover de la lista local
+      _camaras.removeWhere((c) => c.id == id);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/search.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/instalacion_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +17,14 @@ class ReportInstalacion extends StatefulWidget {
 }
 
 class _ReportInstalacionState extends State<ReportInstalacion> {
-  final InstalacionViewModel viewModel = InstalacionViewModel();
+  late final InstalacionViewModel viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = sl<InstalacionViewModel>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,7 +136,6 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
         },
         icon: Icons.download_rounded,
         text: 'Descargar',
-        isActive: this.mounted && viewModel.instalaciones.isNotEmpty,
       ),
       bottomNavigationBar: const Toolbar(),
     );

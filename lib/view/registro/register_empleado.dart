@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
@@ -8,6 +7,8 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/empleado_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
+import 'package:client_service/view/widgets/flash_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -350,32 +351,29 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                                   fotoUrl: '',
                                 );
 
-                                final viewModel = EmpleadoViewmodel();
+                                final viewModel = sl<EmpleadoViewmodel>();
                                 await viewModel.agregarEmpleado(
                                     nuevoEmpleado, _imageFile);
 
                                 if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'Empleado registrado exitosamente')),
+                                  FlashMessages.showSuccess(
+                                    context: context,
+                                    message: 'Empleado registrado exitosamente',
                                   );
                                   Navigator.pop(context);
                                 }
                               } catch (e) {
                                 if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text('Error al registrar: $e')),
+                                  FlashMessages.showError(
+                                    context: context,
+                                    message: 'Error al registrar: $e',
                                   );
                                 }
                               }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Completa todos los campos obligatorios')),
+                              FlashMessages.showWarning(
+                                context: context,
+                                message: 'Completa todos los campos obligatorios',
                               );
                             }
                           },

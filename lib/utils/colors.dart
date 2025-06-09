@@ -18,4 +18,10 @@ class AppColors {
   static const Color colorSuccess = Color(0xFF27AE60);
   static const Color colorWarning = Color(0xFFFFC107);
   static const Color colorInfo = Color(0xFF2D9CDB);
+
+  // Flash message colors
+  static const Color flashSuccess = Color(0xFF70E9B9);
+  static const Color flashError = Color(0xFFE11D48);
+  static const Color flashWarning = Color(0xFFFACC15);
+  static const Color flashInfo = Color(0xFFE879F9);
 }
