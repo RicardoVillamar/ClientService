@@ -8,6 +8,7 @@ import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/empleado_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
+import 'package:client_service/view/widgets/flash_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -355,27 +356,24 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                                     nuevoEmpleado, _imageFile);
 
                                 if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'Empleado registrado exitosamente')),
+                                  FlashMessages.showSuccess(
+                                    context: context,
+                                    message: 'Empleado registrado exitosamente',
                                   );
                                   Navigator.pop(context);
                                 }
                               } catch (e) {
                                 if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text('Error al registrar: $e')),
+                                  FlashMessages.showError(
+                                    context: context,
+                                    message: 'Error al registrar: $e',
                                   );
                                 }
                               }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Completa todos los campos obligatorios')),
+                              FlashMessages.showWarning(
+                                context: context,
+                                message: 'Completa todos los campos obligatorios',
                               );
                             }
                           },

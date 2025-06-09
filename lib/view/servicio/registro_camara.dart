@@ -7,6 +7,7 @@ import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/camara_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
+import 'package:client_service/view/widgets/flash_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -66,8 +67,9 @@ class _RegistroCamaraState extends State<RegistroCamara> {
         _costo.text.isEmpty ||
         selectTecnico == null ||
         selectTipo == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor complete todos los campos')),
+      FlashMessages.showWarning(
+        context: context,
+        message: 'Por favor complete todos los campos',
       );
       return;
     }
@@ -87,15 +89,17 @@ class _RegistroCamaraState extends State<RegistroCamara> {
 
       await _camaraViewModel.guardarCamara(mantenimiento);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Mantenimiento registrado exitosamente')),
+      FlashMessages.showSuccess(
+        context: context,
+        message: 'Mantenimiento registrado exitosamente',
       );
 
       // Cerrar la pantalla actual
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al guardar: $e')),
+      FlashMessages.showError(
+        context: context,
+        message: 'Error al guardar: $e',
       );
     }
   }
