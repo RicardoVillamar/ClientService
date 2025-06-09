@@ -5,6 +5,7 @@ import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/models/cliente.dart';
 import 'package:client_service/viewmodel/cliente_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,7 +29,13 @@ class _RegistroClientePageState extends State<RegistroClientePage> {
   final _cedula = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  final _clienteVM = ClienteViewModel();
+  late final ClienteViewModel _clienteVM;
+
+  @override
+  void initState() {
+    super.initState();
+    _clienteVM = sl<ClienteViewModel>();
+  }
 
   void _guardarCliente() {
     if (_formKey.currentState!.validate()) {
