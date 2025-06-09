@@ -6,6 +6,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/vehiculo_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +23,7 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
   final TextEditingController _telefono = TextEditingController();
   final TextEditingController _correo = TextEditingController();
   final TextEditingController _monto = TextEditingController();
-  final AlquilerViewModel _alquilerVM = AlquilerViewModel();
+  final AlquilerViewModel _alquilerVM = sl<AlquilerViewModel>();
 
   // Date picker
   final TextEditingController _dateController = TextEditingController();

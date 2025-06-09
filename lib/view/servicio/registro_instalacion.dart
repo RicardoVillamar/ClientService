@@ -6,6 +6,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/instalacion_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -102,7 +103,13 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
   String? selectValueDatosTrabajo;
   String? selectValueObservaciones;
 
-  final InstalacionViewModel _instalacionViewModel = InstalacionViewModel();
+  late final InstalacionViewModel _instalacionViewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _instalacionViewModel = sl<InstalacionViewModel>();
+  }
 
   void _guardarInstalacion() async {
     if (_formKey.currentState!.validate()) {

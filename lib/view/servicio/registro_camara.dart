@@ -6,6 +6,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/camara_viewmodel.dart';
+import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -55,7 +56,7 @@ class _RegistroCamaraState extends State<RegistroCamara> {
     'Tipo 3',
     'Tipo 4',
   ];
-  final CamaraViewModel _camaraViewModel = CamaraViewModel();
+  final CamaraViewModel _camaraViewModel = sl<CamaraViewModel>();
 
   void _registrarMantenimiento() async {
     if (_nombreC.text.isEmpty ||
