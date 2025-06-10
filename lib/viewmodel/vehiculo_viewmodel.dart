@@ -140,4 +140,118 @@ class AlquilerViewModel extends BaseViewModel {
       setLoading(false);
     }
   }
+
+  /// Obtener alquileres filtrados por rango de fechas de reserva
+  Future<List<Alquiler>> obtenerAlquileresFiltradosPorReserva({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final result =
+        await executeOperation(() => _repository.getAllByReservaDateRange(
+              startDate: startDate,
+              endDate: endDate,
+            ));
+    return result ?? [];
+  }
+
+  /// Obtener alquileres filtrados por rango de fechas de trabajo
+  Future<List<Alquiler>> obtenerAlquileresFiltradosPorTrabajo({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final result =
+        await executeOperation(() => _repository.getAllByTrabajoDateRange(
+              startDate: startDate,
+              endDate: endDate,
+            ));
+    return result ?? [];
+  }
+
+  /// Exportar alquileres con filtro de fecha de reserva
+  Future<void> exportarAlquileresFiltradosPorReserva({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final data = await handleAsyncOperation(
+        () => _repository.getAllForExportWithReservaDateFilter(
+              startDate: startDate,
+              endDate: endDate,
+            ));
+
+    if (data != null) {
+      await ExcelExportUtility.exportToExcel(
+        collectionName: 'alquileres_reserva',
+        headers: [
+          'ID',
+          'Nombre Comercial',
+          'Dirección',
+          'Teléfono',
+          'Correo',
+          'Tipo Vehículo',
+          'Fecha Reserva',
+          'Fecha Trabajo',
+          'Monto Alquiler',
+          'Personal Asistió',
+        ],
+        mapper: (dataItem) => [
+          dataItem['id'] ?? '',
+          dataItem['nombreComercial'] ?? '',
+          dataItem['direccion'] ?? '',
+          dataItem['telefono'] ?? '',
+          dataItem['correo'] ?? '',
+          dataItem['tipoVehiculo'] ?? '',
+          dataItem['fechaReserva'] ?? '',
+          dataItem['fechaTrabajo'] ?? '',
+          dataItem['montoAlquiler']?.toString() ?? '0',
+          dataItem['personalAsistio'] ?? '',
+        ],
+        sheetName: 'Alquileres por Reserva',
+        fileName: 'reporte_alquileres_reserva_filtrado.xlsx',
+      );
+    }
+  }
+
+  /// Exportar alquileres con filtro de fecha de trabajo
+  Future<void> exportarAlquileresFiltradosPorTrabajo({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final data = await handleAsyncOperation(
+        () => _repository.getAllForExportWithTrabajoDateFilter(
+              startDate: startDate,
+              endDate: endDate,
+            ));
+
+    if (data != null) {
+      await ExcelExportUtility.exportToExcel(
+        collectionName: 'alquileres_trabajo',
+        headers: [
+          'ID',
+          'Nombre Comercial',
+          'Dirección',
+          'Teléfono',
+          'Correo',
+          'Tipo Vehículo',
+          'Fecha Reserva',
+          'Fecha Trabajo',
+          'Monto Alquiler',
+          'Personal Asistió',
+        ],
+        mapper: (dataItem) => [
+          dataItem['id'] ?? '',
+          dataItem['nombreComercial'] ?? '',
+          dataItem['direccion'] ?? '',
+          dataItem['telefono'] ?? '',
+          dataItem['correo'] ?? '',
+          dataItem['tipoVehiculo'] ?? '',
+          dataItem['fechaReserva'] ?? '',
+          dataItem['fechaTrabajo'] ?? '',
+          dataItem['montoAlquiler']?.toString() ?? '0',
+          dataItem['personalAsistio'] ?? '',
+        ],
+        sheetName: 'Alquileres por Trabajo',
+        fileName: 'reporte_alquileres_trabajo_filtrado.xlsx',
+      );
+    }
+  }
 }
