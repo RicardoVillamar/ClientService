@@ -107,6 +107,67 @@ class InstalacionViewModel extends BaseViewModel {
     });
   }
 
+  /// Obtener instalaciones filtradas por rango de fechas
+  Future<List<Instalacion>> obtenerInstalacionesFiltradas({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final result = await executeOperation(() => _repository.getAllByDateRange(
+          startDate: startDate,
+          endDate: endDate,
+        ));
+    return result ?? [];
+  }
+
+  /// Exportar instalaciones con filtro de fecha
+  Future<void> exportarInstalacionesFiltradas({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final data = await handleAsyncOperation(() => _repository.getAllForExportWithDateFilter(
+          startDate: startDate,
+          endDate: endDate,
+        ));
+
+    if (data != null) {
+      await ExcelExportUtility.exportToExcel(
+        collectionName: 'instalaciones',
+        headers: [
+          'ID',
+          'Fecha Instalación',
+          'Cédula',
+          'Nombre Comercial',
+          'Dirección',
+          'Item',
+          'Descripción',
+          'Hora Inicio',
+          'Hora Fin',
+          'Tipo Trabajo',
+          'Cargo/Puesto',
+          'Teléfono',
+          'Número Tarea',
+        ],
+        mapper: (dataItem) => [
+          dataItem['id'] ?? '',
+          dataItem['fechaInstalacion'] ?? '',
+          dataItem['cedula'] ?? '',
+          dataItem['nombreComercial'] ?? '',
+          dataItem['direccion'] ?? '',
+          dataItem['item'] ?? '',
+          dataItem['descripcion'] ?? '',
+          dataItem['horaInicio'] ?? '',
+          dataItem['horaFin'] ?? '',
+          dataItem['tipoTrabajo'] ?? '',
+          dataItem['cargoPuesto'] ?? '',
+          dataItem['telefono'] ?? '',
+          dataItem['numeroTarea'] ?? '',
+        ],
+        sheetName: 'Instalaciones',
+        fileName: 'reporte_instalaciones_filtrado.xlsx',
+      );
+    }
+  }
+
   // Escuchar instalaciones en tiempo real
   void listenToInstalaciones() {
     _repository.watchAll().listen(
