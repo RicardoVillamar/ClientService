@@ -164,7 +164,7 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
     final filter = await DateFilterModal.show(
       context: context,
       initialFilter: _currentFilter,
-      title: 'Filtrar por fecha de instalación',
+      title: 'Filtrar instalación',
     );
 
     if (filter != null) {

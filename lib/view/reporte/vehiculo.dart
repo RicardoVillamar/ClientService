@@ -160,9 +160,8 @@ class _ReportVehiculoState extends State<ReportVehiculo> {
     final currentFilter =
         filterType == 'reserva' ? _currentReservaFilter : _currentTrabajoFilter;
 
-    final title = filterType == 'reserva'
-        ? 'Filtrar por Fecha de Reserva'
-        : 'Filtrar por Fecha de Trabajo';
+    final title =
+        filterType == 'reserva' ? 'Filtrar Reserva' : 'Filtrar Trabajo';
 
     final result = await DateFilterModal.show(
       context: context,
