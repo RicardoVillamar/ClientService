@@ -232,21 +232,6 @@ class _RegistroCamaraState extends State<RegistroCamara> {
         ),
       ),
       bottomNavigationBar: const Toolbar(),
-      /*
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Aquí puedes agregar la lógica para guardar el registro
-          Por ejemplo, enviar los datos a una API o guardarlos localmente
-          print('Nombre Comercial: ${_nombreC.text}');
-          print('Fecha de Mantenimiento: ${_dateController.text}');
-          print('Dirección de Instalación: ${_direccion.text}');
-          print('Tipo: $selectTecnico');
-          print('Descripción: ${_observaciones.text}');
-          print('Costo de Mantenimiento: ${_costo.text}');
-        },
-        backgroundColor: AppColors.primaryColor,
-        child: const Icon(Icons.save),
-      ),*/
     );
   }
 }

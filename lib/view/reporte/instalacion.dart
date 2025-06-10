@@ -2,8 +2,9 @@ import 'package:client_service/models/instalacion.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
-import 'package:client_service/view/widgets/shared/search.dart';
+import 'package:client_service/view/widgets/shared/search_with_filter.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/view/widgets/date_filter_modal.dart';
 import 'package:client_service/viewmodel/instalacion_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class ReportInstalacion extends StatefulWidget {
 
 class _ReportInstalacionState extends State<ReportInstalacion> {
   late final InstalacionViewModel viewModel;
+  DateRangeFilter? _currentFilter;
 
   @override
   void initState() {
@@ -35,10 +37,20 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
         child: Column(
           children: [
             const Apptitle(title: 'Reporte de Instalaciones', isVisible: true),
-            const SearchBarPage(),
+            SearchWithFilter(
+              filterText: _currentFilter?.toString(),
+              onFilterPressed: _showDateFilterModal,
+              onClearFilter: _clearFilter,
+              hasActiveFilter: _currentFilter?.hasFilter == true,
+            ),
             Expanded(
               child: FutureBuilder<List<Instalacion>>(
-                future: viewModel.obtenerInstalaciones(),
+                future: _currentFilter?.hasFilter == true
+                    ? viewModel.obtenerInstalacionesFiltradas(
+                        startDate: _currentFilter!.startDate,
+                        endDate: _currentFilter!.endDate,
+                      )
+                    : viewModel.obtenerInstalaciones(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -132,12 +144,39 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
       ),
       floatingActionButton: BtnFloating(
         onPressed: () {
-          viewModel.exportarInstalaciones();
+          if (_currentFilter?.hasFilter == true) {
+            viewModel.exportarInstalacionesFiltradas(
+              startDate: _currentFilter!.startDate,
+              endDate: _currentFilter!.endDate,
+            );
+          } else {
+            viewModel.exportarInstalaciones();
+          }
         },
         icon: Icons.download_rounded,
         text: 'Descargar',
       ),
       bottomNavigationBar: const Toolbar(),
     );
+  }
+
+  Future<void> _showDateFilterModal() async {
+    final filter = await DateFilterModal.show(
+      context: context,
+      initialFilter: _currentFilter,
+      title: 'Filtrar por fecha de instalación',
+    );
+
+    if (filter != null) {
+      setState(() {
+        _currentFilter = filter;
+      });
+    }
+  }
+
+  void _clearFilter() {
+    setState(() {
+      _currentFilter = null;
+    });
   }
 }

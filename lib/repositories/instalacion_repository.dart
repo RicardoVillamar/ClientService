@@ -89,4 +89,62 @@ class InstalacionRepository implements BaseRepository<Instalacion> {
       throw Exception('Error al obtener datos para exportar: $e');
     }
   }
+
+  /// Obtener instalaciones filtradas por rango de fecha de instalación
+  Future<List<Instalacion>> getAllByDateRange({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    try {
+      Query<Map<String, dynamic>> query = _firestore
+          .collection(_collection)
+          .orderBy('fechaInstalacion', descending: true);
+
+      if (startDate != null) {
+        query =
+            query.where('fechaInstalacion', isGreaterThanOrEqualTo: startDate);
+      }
+      if (endDate != null) {
+        final endOfDay =
+            DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
+        query = query.where('fechaInstalacion', isLessThanOrEqualTo: endOfDay);
+      }
+
+      final snapshot = await query.get();
+      return snapshot.docs
+          .map((doc) => Instalacion.fromMap(doc.data(), doc.id))
+          .toList();
+    } catch (e) {
+      throw Exception('Error al obtener instalaciones filtradas: $e');
+    }
+  }
+
+  /// Obtener datos de instalaciones para exportar con filtro de fecha
+  Future<List<Map<String, dynamic>>> getAllForExportWithDateFilter({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    try {
+      Query<Map<String, dynamic>> query = _firestore.collection(_collection);
+
+      if (startDate != null) {
+        query =
+            query.where('fechaInstalacion', isGreaterThanOrEqualTo: startDate);
+      }
+      if (endDate != null) {
+        final endOfDay =
+            DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
+        query = query.where('fechaInstalacion', isLessThanOrEqualTo: endOfDay);
+      }
+
+      final snapshot = await query.get();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+    } catch (e) {
+      throw Exception('Error al obtener datos para exportar: $e');
+    }
+  }
 }

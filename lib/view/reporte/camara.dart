@@ -2,8 +2,9 @@ import 'package:client_service/models/camara.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
-import 'package:client_service/view/widgets/shared/search.dart';
+import 'package:client_service/view/widgets/shared/search_with_filter.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/view/widgets/date_filter_modal.dart';
 import 'package:client_service/viewmodel/camara_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ class ReportCamara extends StatefulWidget {
 
 class _ReportCamaraState extends State<ReportCamara> {
   final CamaraViewModel viewModel = sl<CamaraViewModel>();
+  DateRangeFilter? _currentFilter;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,11 +30,21 @@ class _ReportCamaraState extends State<ReportCamara> {
         ),
         child: Column(
           children: [
-            const Apptitle(title: 'Reporte de Camaras', isVisible: true),
-            const SearchBarPage(),
+            const Apptitle(title: 'Reporte de Cámaras', isVisible: true),
+            SearchWithFilter(
+              filterText: _currentFilter?.toString(),
+              onFilterPressed: _showDateFilterModal,
+              onClearFilter: _clearFilter,
+              hasActiveFilter: _currentFilter?.hasFilter == true,
+            ),
             Expanded(
               child: FutureBuilder<List<Camara>>(
-                future: viewModel.obtenerCamaras(),
+                future: _currentFilter?.hasFilter == true
+                    ? viewModel.obtenerCamarasFiltradas(
+                        startDate: _currentFilter!.startDate,
+                        endDate: _currentFilter!.endDate,
+                      )
+                    : viewModel.obtenerCamaras(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -130,12 +143,39 @@ class _ReportCamaraState extends State<ReportCamara> {
       ),
       floatingActionButton: BtnFloating(
         onPressed: () {
-          viewModel.exportarCamaras();
+          if (_currentFilter?.hasFilter == true) {
+            viewModel.exportarCamarasFiltradas(
+              startDate: _currentFilter!.startDate,
+              endDate: _currentFilter!.endDate,
+            );
+          } else {
+            viewModel.exportarCamaras();
+          }
         },
         icon: Icons.download_rounded,
         text: 'Descargar',
       ),
       bottomNavigationBar: const Toolbar(),
     );
+  }
+
+  Future<void> _showDateFilterModal() async {
+    final filter = await DateFilterModal.show(
+      context: context,
+      initialFilter: _currentFilter,
+      title: 'Filtrar Mantenimiento',
+    );
+
+    if (filter != null) {
+      setState(() {
+        _currentFilter = filter;
+      });
+    }
+  }
+
+  void _clearFilter() {
+    setState(() {
+      _currentFilter = null;
+    });
   }
 }

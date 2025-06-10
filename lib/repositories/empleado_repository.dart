@@ -176,4 +176,63 @@ class EmpleadoRepository implements BaseRepository<Empleado> {
       throw Exception('Error al obtener datos para exportar: $e');
     }
   }
+
+  /// Obtener empleados filtrados por rango de fecha de contratación
+  Future<List<Empleado>> getAllByDateRange({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    try {
+      Query<Map<String, dynamic>> query = _firestore
+          .collection(_collection)
+          .orderBy('fechaContratacion', descending: true);
+
+      if (startDate != null) {
+        query =
+            query.where('fechaContratacion', isGreaterThanOrEqualTo: startDate);
+      }
+      if (endDate != null) {
+        // Agregar un día para incluir todo el día final
+        final endOfDay =
+            DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
+        query = query.where('fechaContratacion', isLessThanOrEqualTo: endOfDay);
+      }
+
+      final snapshot = await query.get();
+      return snapshot.docs
+          .map((doc) => Empleado.fromMap(doc.data(), doc.id))
+          .toList();
+    } catch (e) {
+      throw Exception('Error al obtener empleados filtrados: $e');
+    }
+  }
+
+  /// Obtener datos de empleados para exportar con filtro de fecha
+  Future<List<Map<String, dynamic>>> getAllForExportWithDateFilter({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    try {
+      Query<Map<String, dynamic>> query = _firestore.collection(_collection);
+
+      if (startDate != null) {
+        query =
+            query.where('fechaContratacion', isGreaterThanOrEqualTo: startDate);
+      }
+      if (endDate != null) {
+        final endOfDay =
+            DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
+        query = query.where('fechaContratacion', isLessThanOrEqualTo: endOfDay);
+      }
+
+      final snapshot = await query.get();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+    } catch (e) {
+      throw Exception('Error al obtener datos para exportar: $e');
+    }
+  }
 }

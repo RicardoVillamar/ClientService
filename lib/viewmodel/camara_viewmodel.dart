@@ -94,6 +94,58 @@ class CamaraViewModel extends BaseViewModel {
     }
   }
 
+  /// Obtener cámaras filtradas por rango de fechas
+  Future<List<Camara>> obtenerCamarasFiltradas({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final result = await executeOperation(() => _repository.getAllByDateRange(
+          startDate: startDate,
+          endDate: endDate,
+        ));
+    return result ?? [];
+  }
+
+  /// Exportar cámaras con filtro de fecha
+  Future<void> exportarCamarasFiltradas({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final data = await handleAsyncOperation(
+        () => _repository.getAllForExportWithDateFilter(
+              startDate: startDate,
+              endDate: endDate,
+            ));
+
+    if (data != null) {
+      await ExcelExportUtility.exportToExcel(
+        collectionName: 'camaras',
+        headers: [
+          'ID',
+          'Nombre Comercial',
+          'Fecha Mantenimiento',
+          'Dirección',
+          'Técnico',
+          'Tipo',
+          'Descripción',
+          'Costo',
+        ],
+        mapper: (dataItem) => [
+          dataItem['id'] ?? '',
+          dataItem['nombreComercial'] ?? '',
+          dataItem['fechaMantenimiento'] ?? '',
+          dataItem['direccion'] ?? '',
+          dataItem['tecnico'] ?? '',
+          dataItem['tipo'] ?? '',
+          dataItem['descripcion'] ?? '',
+          dataItem['costo']?.toString() ?? '0',
+        ],
+        sheetName: 'Cámaras',
+        fileName: 'reporte_camaras_filtrado.xlsx',
+      );
+    }
+  }
+
   // Escuchar cambios en tiempo real
   Stream<List<Camara>> escucharCamaras() {
     return _repository.watchAll();

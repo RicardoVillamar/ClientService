@@ -86,4 +86,118 @@ class VehiculoRepository implements BaseRepository<Alquiler> {
       throw Exception('Error al obtener datos para exportar: $e');
     }
   }
+
+  /// Obtener alquileres filtrados por rango de fecha de reserva
+  Future<List<Alquiler>> getAllByReservaDateRange({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    try {
+      Query<Map<String, dynamic>> query = _firestore
+          .collection(_collection)
+          .orderBy('fechaReserva', descending: true);
+
+      if (startDate != null) {
+        query = query.where('fechaReserva', isGreaterThanOrEqualTo: startDate);
+      }
+      if (endDate != null) {
+        final endOfDay =
+            DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
+        query = query.where('fechaReserva', isLessThanOrEqualTo: endOfDay);
+      }
+
+      final snapshot = await query.get();
+      return snapshot.docs
+          .map((doc) => Alquiler.fromMap(doc.data(), doc.id))
+          .toList();
+    } catch (e) {
+      throw Exception(
+          'Error al obtener alquileres filtrados por fecha de reserva: $e');
+    }
+  }
+
+  /// Obtener alquileres filtrados por rango de fecha de trabajo
+  Future<List<Alquiler>> getAllByTrabajoDateRange({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    try {
+      Query<Map<String, dynamic>> query = _firestore
+          .collection(_collection)
+          .orderBy('fechaTrabajo', descending: true);
+
+      if (startDate != null) {
+        query = query.where('fechaTrabajo', isGreaterThanOrEqualTo: startDate);
+      }
+      if (endDate != null) {
+        final endOfDay =
+            DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
+        query = query.where('fechaTrabajo', isLessThanOrEqualTo: endOfDay);
+      }
+
+      final snapshot = await query.get();
+      return snapshot.docs
+          .map((doc) => Alquiler.fromMap(doc.data(), doc.id))
+          .toList();
+    } catch (e) {
+      throw Exception(
+          'Error al obtener alquileres filtrados por fecha de trabajo: $e');
+    }
+  }
+
+  /// Obtener datos de alquileres para exportar con filtro de fecha de reserva
+  Future<List<Map<String, dynamic>>> getAllForExportWithReservaDateFilter({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    try {
+      Query<Map<String, dynamic>> query = _firestore.collection(_collection);
+
+      if (startDate != null) {
+        query = query.where('fechaReserva', isGreaterThanOrEqualTo: startDate);
+      }
+      if (endDate != null) {
+        final endOfDay =
+            DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
+        query = query.where('fechaReserva', isLessThanOrEqualTo: endOfDay);
+      }
+
+      final snapshot = await query.get();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+    } catch (e) {
+      throw Exception('Error al obtener datos para exportar: $e');
+    }
+  }
+
+  /// Obtener datos de alquileres para exportar con filtro de fecha de trabajo
+  Future<List<Map<String, dynamic>>> getAllForExportWithTrabajoDateFilter({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    try {
+      Query<Map<String, dynamic>> query = _firestore.collection(_collection);
+
+      if (startDate != null) {
+        query = query.where('fechaTrabajo', isGreaterThanOrEqualTo: startDate);
+      }
+      if (endDate != null) {
+        final endOfDay =
+            DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
+        query = query.where('fechaTrabajo', isLessThanOrEqualTo: endOfDay);
+      }
+
+      final snapshot = await query.get();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+    } catch (e) {
+      throw Exception('Error al obtener datos para exportar: $e');
+    }
+  }
 }
