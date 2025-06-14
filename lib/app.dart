@@ -1,4 +1,4 @@
-import 'package:client_service/view/inicio/home.dart';
+import 'package:client_service/view/home/view.dart';
 import 'package:client_service/services/navigation_service.dart';
 import 'package:client_service/routes.dart';
 import 'package:flutter/material.dart';
