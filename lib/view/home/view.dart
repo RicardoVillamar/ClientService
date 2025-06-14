@@ -1,8 +1,8 @@
 import 'package:client_service/utils/colors.dart';
-import 'package:client_service/view/inicio/widgets/category.dart';
+import 'package:client_service/view/home/widgets/category.dart';
 import 'package:client_service/view/widgets/shared/search.dart';
-import 'package:client_service/view/inicio/widgets/header.dart';
-import 'package:client_service/view/inicio/widgets/section.dart';
+import 'package:client_service/view/home/widgets/header.dart';
+import 'package:client_service/view/home/widgets/section.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:flutter/material.dart';
 

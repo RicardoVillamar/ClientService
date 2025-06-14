@@ -1,4 +1,5 @@
 import 'package:client_service/models/vehiculo.dart';
+import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
@@ -6,6 +7,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/vehiculo_viewmodel.dart';
+import 'package:client_service/viewmodel/empleado_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:client_service/view/widgets/flash_messages.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
   final TextEditingController _correo = TextEditingController();
   final TextEditingController _monto = TextEditingController();
   final AlquilerViewModel _alquilerVM = sl<AlquilerViewModel>();
+  final EmpleadoViewmodel _empleadoViewModel = sl<EmpleadoViewmodel>();
 
   // Date picker
   final TextEditingController _dateController = TextEditingController();
@@ -63,15 +66,21 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
   }
 
   String? selectValue;
-  List<String> personal = [
-    'Tipo 1',
-    'Tipo 2',
-    'Tipo 3',
-    'Tipo 4',
-  ];
+  List<Empleado> personal = [];
 
   List<String> tiposVehiculo = ['Tipo 1', 'Tipo 2', 'Tipo 3', 'Tipo 4'];
   String tipoVehiculoSeleccionado = 'Tipo 1';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmpleados();
+  }
+
+  void _loadEmpleados() async {
+    personal = await _empleadoViewModel.obtenerEmpleados();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -205,10 +214,11 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
                               selectValue = newValue;
                             });
                           },
-                          items: personal.map((String value) {
+                          items: personal.map((Empleado empleado) {
                             return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                              value: '${empleado.nombre} ${empleado.apellido}',
+                              child: Text(
+                                  '${empleado.nombre} ${empleado.apellido} - ${empleado.cargo}'),
                             );
                           }).toList(),
                         ),

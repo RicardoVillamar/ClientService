@@ -1,31 +1,27 @@
-import 'package:client_service/models/instalacion.dart';
+import 'package:client_service/models/vehiculo.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
-import 'package:client_service/view/widgets/shared/search_with_filter.dart';
+import 'package:client_service/view/widgets/shared/search_with_dual_filter.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/view/widgets/date_filter_modal.dart';
-import 'package:client_service/viewmodel/instalacion_viewmodel.dart';
+import 'package:client_service/viewmodel/vehiculo_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ReportInstalacion extends StatefulWidget {
-  const ReportInstalacion({super.key});
+class ReportVehiculo extends StatefulWidget {
+  const ReportVehiculo({super.key});
 
   @override
-  State<ReportInstalacion> createState() => _ReportInstalacionState();
+  State<ReportVehiculo> createState() => _ReportVehiculoState();
 }
 
-class _ReportInstalacionState extends State<ReportInstalacion> {
-  late final InstalacionViewModel viewModel;
-  DateRangeFilter? _currentFilter;
-
-  @override
-  void initState() {
-    super.initState();
-    viewModel = sl<InstalacionViewModel>();
-  }
+class _ReportVehiculoState extends State<ReportVehiculo> {
+  final AlquilerViewModel viewModel = sl<AlquilerViewModel>();
+  DateRangeFilter? _currentReservaFilter;
+  DateRangeFilter? _currentTrabajoFilter;
+  String _activeFilterType = 'none'; // 'none', 'reserva', 'trabajo'
 
   @override
   Widget build(BuildContext context) {
@@ -36,21 +32,19 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
         ),
         child: Column(
           children: [
-            const Apptitle(title: 'Reporte de Instalaciones', isVisible: true),
-            SearchWithFilter(
-              filterText: _currentFilter?.toString(),
-              onFilterPressed: _showDateFilterModal,
-              onClearFilter: _clearFilter,
-              hasActiveFilter: _currentFilter?.hasFilter == true,
+            const Apptitle(title: 'Reporte de vehiculos'),
+            SearchWithDualFilter(
+              reservaFilterText: _currentReservaFilter?.toString(),
+              trabajoFilterText: _currentTrabajoFilter?.toString(),
+              onReservaFilterPressed: () => _showFilterModal('reserva'),
+              onTrabajoFilterPressed: () => _showFilterModal('trabajo'),
+              onClearFilters: _clearFilters,
+              hasActiveReservaFilter: _activeFilterType == 'reserva',
+              hasActiveTrabajoFilter: _activeFilterType == 'trabajo',
             ),
             Expanded(
-              child: FutureBuilder<List<Instalacion>>(
-                future: _currentFilter?.hasFilter == true
-                    ? viewModel.obtenerInstalacionesFiltradas(
-                        startDate: _currentFilter!.startDate,
-                        endDate: _currentFilter!.endDate,
-                      )
-                    : viewModel.obtenerInstalaciones(),
+              child: FutureBuilder<List<Alquiler>>(
+                future: _getFilteredAlquileres(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -59,11 +53,11 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text('No hay clientes'));
                   } else {
-                    final instalaciones = snapshot.data!;
+                    final alquileres = snapshot.data!;
                     return ListView.builder(
-                      itemCount: instalaciones.length,
+                      itemCount: alquileres.length,
                       itemBuilder: (context, index) {
-                        final instalacion = instalaciones[index];
+                        final alquiler = alquileres[index];
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 10),
                           decoration: const BoxDecoration(
@@ -80,11 +74,20 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
                             title: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(instalacion.numeroTarea),
-                                Text(instalacion.nombreComercial),
+                                Text(alquiler.nombreComercial),
                                 Text(DateFormat('yyyy-MM-dd')
-                                    .format(instalacion.fechaInstalacion)),
-                                Text(instalacion.direccion),
+                                    .format(alquiler.fechaReserva)),
+                                Text(DateFormat('yyyy-MM-dd')
+                                    .format(alquiler.fechaTrabajo)),
+                                Text(alquiler.direccion),
+                              ],
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(alquiler.telefono),
+                                Text(
+                                    '\$${alquiler.montoAlquiler.toStringAsFixed(2)}'),
                               ],
                             ),
                             trailing: PopupMenuButton<String>(
@@ -93,10 +96,10 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
                               onSelected: (value) async {
                                 if (value == 'editar') {
                                   print(
-                                      'Editar cliente: ${instalacion.nombreComercial}');
+                                      'Editar cliente: ${alquiler.nombreComercial}');
                                 } else if (value == 'eliminar') {
                                   await viewModel
-                                      .eliminarInstalacion(instalacion.id!);
+                                      .eliminarAlquiler(alquiler.id!);
                                   setState(() {});
                                 }
                               },
@@ -144,14 +147,7 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
       ),
       floatingActionButton: BtnFloating(
         onPressed: () {
-          if (_currentFilter?.hasFilter == true) {
-            viewModel.exportarInstalacionesFiltradas(
-              startDate: _currentFilter!.startDate,
-              endDate: _currentFilter!.endDate,
-            );
-          } else {
-            viewModel.exportarInstalaciones();
-          }
+          _exportWithCurrentFilter();
         },
         icon: Icons.download_rounded,
         text: 'Descargar',
@@ -160,23 +156,75 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
     );
   }
 
-  Future<void> _showDateFilterModal() async {
-    final filter = await DateFilterModal.show(
+  Future<void> _showFilterModal(String filterType) async {
+    final currentFilter =
+        filterType == 'reserva' ? _currentReservaFilter : _currentTrabajoFilter;
+
+    final title =
+        filterType == 'reserva' ? 'Filtrar Reserva' : 'Filtrar Trabajo';
+
+    final result = await DateFilterModal.show(
       context: context,
-      initialFilter: _currentFilter,
-      title: 'Filtrar por fecha de instalación',
+      initialFilter: currentFilter,
+      title: title,
     );
 
-    if (filter != null) {
+    if (result != null) {
       setState(() {
-        _currentFilter = filter;
+        if (filterType == 'reserva') {
+          _currentReservaFilter = result;
+          _currentTrabajoFilter = null;
+          _activeFilterType = result.hasFilter ? 'reserva' : 'none';
+        } else {
+          _currentTrabajoFilter = result;
+          _currentReservaFilter = null;
+          _activeFilterType = result.hasFilter ? 'trabajo' : 'none';
+        }
       });
     }
   }
 
-  void _clearFilter() {
+  void _clearFilters() {
     setState(() {
-      _currentFilter = null;
+      _currentReservaFilter = null;
+      _currentTrabajoFilter = null;
+      _activeFilterType = 'none';
     });
+  }
+
+  Future<List<Alquiler>> _getFilteredAlquileres() async {
+    if (_activeFilterType == 'reserva' &&
+        _currentReservaFilter?.hasFilter == true) {
+      return viewModel.obtenerAlquileresFiltradosPorReserva(
+        startDate: _currentReservaFilter!.startDate,
+        endDate: _currentReservaFilter!.endDate,
+      );
+    } else if (_activeFilterType == 'trabajo' &&
+        _currentTrabajoFilter?.hasFilter == true) {
+      return viewModel.obtenerAlquileresFiltradosPorTrabajo(
+        startDate: _currentTrabajoFilter!.startDate,
+        endDate: _currentTrabajoFilter!.endDate,
+      );
+    } else {
+      return viewModel.obtenerAlquileres();
+    }
+  }
+
+  Future<void> _exportWithCurrentFilter() async {
+    if (_activeFilterType == 'reserva' &&
+        _currentReservaFilter?.hasFilter == true) {
+      await viewModel.exportarAlquileresFiltradosPorReserva(
+        startDate: _currentReservaFilter!.startDate,
+        endDate: _currentReservaFilter!.endDate,
+      );
+    } else if (_activeFilterType == 'trabajo' &&
+        _currentTrabajoFilter?.hasFilter == true) {
+      await viewModel.exportarAlquileresFiltradosPorTrabajo(
+        startDate: _currentTrabajoFilter!.startDate,
+        endDate: _currentTrabajoFilter!.endDate,
+      );
+    } else {
+      await viewModel.exportAlquileres();
+    }
   }
 }

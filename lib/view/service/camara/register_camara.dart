@@ -1,4 +1,5 @@
 import 'package:client_service/models/camara.dart';
+import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
@@ -6,6 +7,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/camara_viewmodel.dart';
+import 'package:client_service/viewmodel/empleado_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:client_service/view/widgets/flash_messages.dart';
 import 'package:flutter/material.dart';
@@ -43,12 +45,7 @@ class _RegistroCamaraState extends State<RegistroCamara> {
   }
 
   String? selectTecnico;
-  List<String> tecnico = [
-    'Tecnico 1',
-    'Tecnico 2',
-    'Tecnico 3',
-    'Tecnico 4',
-  ];
+  List<Empleado> tecnicos = [];
 
   String? selectTipo;
   List<String> tipo = [
@@ -58,6 +55,18 @@ class _RegistroCamaraState extends State<RegistroCamara> {
     'Tipo 4',
   ];
   final CamaraViewModel _camaraViewModel = sl<CamaraViewModel>();
+  final EmpleadoViewmodel _empleadoViewModel = sl<EmpleadoViewmodel>();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmpleados();
+  }
+
+  void _loadEmpleados() async {
+    tecnicos = await _empleadoViewModel.obtenerEmpleados();
+    setState(() {});
+  }
 
   void _registrarMantenimiento() async {
     if (_nombreC.text.isEmpty ||
@@ -168,10 +177,11 @@ class _RegistroCamaraState extends State<RegistroCamara> {
                               selectTecnico = newValue;
                             });
                           },
-                          items: tecnico.map((String value) {
+                          items: tecnicos.map((Empleado empleado) {
                             return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                              value: '${empleado.nombre} ${empleado.apellido}',
+                              child: Text(
+                                  '${empleado.nombre} ${empleado.apellido} - ${empleado.cargo}'),
                             );
                           }).toList(),
                         ),

@@ -1,22 +1,32 @@
-import 'package:client_service/models/cliente.dart';
+import 'package:client_service/models/instalacion.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
-import 'package:client_service/view/widgets/shared/search.dart';
+import 'package:client_service/view/widgets/shared/search_with_filter.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
-import 'package:client_service/viewmodel/cliente_viewmodel.dart';
+import 'package:client_service/view/widgets/date_filter_modal.dart';
+import 'package:client_service/viewmodel/instalacion_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class ReportCliente extends StatefulWidget {
-  const ReportCliente({super.key});
+class ReportInstalacion extends StatefulWidget {
+  const ReportInstalacion({super.key});
 
   @override
-  State<ReportCliente> createState() => _ReportClienteState();
+  State<ReportInstalacion> createState() => _ReportInstalacionState();
 }
 
-class _ReportClienteState extends State<ReportCliente> {
-  final ClienteViewModel viewModel = sl<ClienteViewModel>();
+class _ReportInstalacionState extends State<ReportInstalacion> {
+  late final InstalacionViewModel viewModel;
+  DateRangeFilter? _currentFilter;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = sl<InstalacionViewModel>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +36,21 @@ class _ReportClienteState extends State<ReportCliente> {
         ),
         child: Column(
           children: [
-            const Apptitle(title: 'Reporte de Clientes'),
-            const SearchBarPage(),
+            const Apptitle(title: 'Reporte de Instalaciones', isVisible: true),
+            SearchWithFilter(
+              filterText: _currentFilter?.toString(),
+              onFilterPressed: _showDateFilterModal,
+              onClearFilter: _clearFilter,
+              hasActiveFilter: _currentFilter?.hasFilter == true,
+            ),
             Expanded(
-              child: FutureBuilder<List<Cliente>>(
-                future: viewModel.obtenerClientes(),
+              child: FutureBuilder<List<Instalacion>>(
+                future: _currentFilter?.hasFilter == true
+                    ? viewModel.obtenerInstalacionesFiltradas(
+                        startDate: _currentFilter!.startDate,
+                        endDate: _currentFilter!.endDate,
+                      )
+                    : viewModel.obtenerInstalaciones(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -39,11 +59,11 @@ class _ReportClienteState extends State<ReportCliente> {
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text('No hay clientes'));
                   } else {
-                    final clientes = snapshot.data!;
+                    final instalaciones = snapshot.data!;
                     return ListView.builder(
-                      itemCount: clientes.length,
+                      itemCount: instalaciones.length,
                       itemBuilder: (context, index) {
-                        final cliente = clientes[index];
+                        final instalacion = instalaciones[index];
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 10),
                           decoration: const BoxDecoration(
@@ -57,31 +77,14 @@ class _ReportClienteState extends State<ReportCliente> {
                             ],
                           ),
                           child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: AppColors.primaryColor,
-                              child: Text(
-                                cliente.nombreComercial.isNotEmpty
-                                    ? cliente.nombreComercial[0].toUpperCase()
-                                    : '?',
-                                style: const TextStyle(
-                                  color: AppColors.whiteColor,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
                             title: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(cliente.nombreComercial),
-                                Text(cliente.telefono),
-                                Text(cliente.correo),
-                              ],
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(cliente.personaContacto),
-                                Text(cliente.cedula),
+                                Text(instalacion.numeroTarea),
+                                Text(instalacion.nombreComercial),
+                                Text(DateFormat('yyyy-MM-dd')
+                                    .format(instalacion.fechaInstalacion)),
+                                Text(instalacion.direccion),
                               ],
                             ),
                             trailing: PopupMenuButton<String>(
@@ -90,9 +93,10 @@ class _ReportClienteState extends State<ReportCliente> {
                               onSelected: (value) async {
                                 if (value == 'editar') {
                                   print(
-                                      'Editar cliente: ${cliente.nombreComercial}');
+                                      'Editar cliente: ${instalacion.nombreComercial}');
                                 } else if (value == 'eliminar') {
-                                  await viewModel.eliminarCliente(cliente.id!);
+                                  await viewModel
+                                      .eliminarInstalacion(instalacion.id!);
                                   setState(() {});
                                 }
                               },
@@ -139,13 +143,40 @@ class _ReportClienteState extends State<ReportCliente> {
         ),
       ),
       floatingActionButton: BtnFloating(
-          onPressed: () {
-            viewModel.exportarClientes();
-          },
-          icon: Icons.download_rounded,
-          text: 'Descargar',
-          isActive: viewModel.clientes.isNotEmpty),
+        onPressed: () {
+          if (_currentFilter?.hasFilter == true) {
+            viewModel.exportarInstalacionesFiltradas(
+              startDate: _currentFilter!.startDate,
+              endDate: _currentFilter!.endDate,
+            );
+          } else {
+            viewModel.exportarInstalaciones();
+          }
+        },
+        icon: Icons.download_rounded,
+        text: 'Descargar',
+      ),
       bottomNavigationBar: const Toolbar(),
     );
+  }
+
+  Future<void> _showDateFilterModal() async {
+    final filter = await DateFilterModal.show(
+      context: context,
+      initialFilter: _currentFilter,
+      title: 'Filtrar instalación',
+    );
+
+    if (filter != null) {
+      setState(() {
+        _currentFilter = filter;
+      });
+    }
+  }
+
+  void _clearFilter() {
+    setState(() {
+      _currentFilter = null;
+    });
   }
 }

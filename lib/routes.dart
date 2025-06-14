@@ -1,13 +1,13 @@
-import 'package:client_service/view/registro/register_cliente.dart';
-import 'package:client_service/view/registro/register_empleado.dart';
-import 'package:client_service/view/reporte/camara.dart';
-import 'package:client_service/view/reporte/cliente.dart';
-import 'package:client_service/view/reporte/empleado.dart';
-import 'package:client_service/view/reporte/instalacion.dart';
-import 'package:client_service/view/reporte/vehiculo.dart';
-import 'package:client_service/view/servicio/registro_alquiler.dart';
-import 'package:client_service/view/servicio/registro_camara.dart';
-import 'package:client_service/view/servicio/registro_instalacion.dart';
+import 'package:client_service/view/registers/client/register_client.dart';
+import 'package:client_service/view/registers/employet/register_employet.dart';
+import 'package:client_service/view/reports/camara.dart';
+import 'package:client_service/view/reports/cliente.dart';
+import 'package:client_service/view/reports/empleado.dart';
+import 'package:client_service/view/reports/instalacion.dart';
+import 'package:client_service/view/reports/vehiculo.dart';
+import 'package:client_service/view/service/vehicle_rental/register_vehicle.dart';
+import 'package:client_service/view/service/camara/register_camara.dart';
+import 'package:client_service/view/service/installation/register_installation.dart';
 import 'package:flutter/cupertino.dart';
 
 final Map<String, WidgetBuilder> routes = {
