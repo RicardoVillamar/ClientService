@@ -4,6 +4,7 @@ import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/search.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/view/registers/client/edit_client.dart';
 import 'package:client_service/viewmodel/cliente_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -89,8 +90,16 @@ class _ReportClienteState extends State<ReportCliente> {
                               icon: const Icon(Icons.more_vert),
                               onSelected: (value) async {
                                 if (value == 'editar') {
-                                  print(
-                                      'Editar cliente: ${cliente.nombreComercial}');
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditClientePage(cliente: cliente),
+                                    ),
+                                  );
+                                  if (result == true) {
+                                    setState(() {}); // Refresh the list
+                                  }
                                 } else if (value == 'eliminar') {
                                   await viewModel.eliminarCliente(cliente.id!);
                                   setState(() {});

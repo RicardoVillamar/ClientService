@@ -4,6 +4,7 @@ import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/search.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/view/registers/employet/edit_employet.dart';
 import 'package:client_service/viewmodel/empleado_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +98,16 @@ class _ReportEmpleadoState extends State<ReportEmpleado> {
                               icon: const Icon(Icons.more_vert),
                               onSelected: (value) async {
                                 if (value == 'editar') {
-                                  print('Editar empleado: ${empleado.nombre}');
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditEmpleadoPage(empleado: empleado),
+                                    ),
+                                  );
+                                  if (result == true) {
+                                    setState(() {}); // Refresh the list
+                                  }
                                 } else if (value == 'eliminar') {
                                   await viewModel
                                       .eliminarEmpleado(empleado.id!);
