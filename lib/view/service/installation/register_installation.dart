@@ -1,4 +1,5 @@
 import 'package:client_service/models/instalacion.dart';
+import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
@@ -6,6 +7,7 @@ import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/instalacion_viewmodel.dart';
+import 'package:client_service/viewmodel/empleado_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:client_service/view/widgets/flash_messages.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +50,6 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
       initialTime: TimeOfDay.now(),
     );
     if (picked != null) {
-      final now = DateTime.now();
       final formattedTime = TimeOfDay(
         hour: picked.hour,
         minute: picked.minute,
@@ -68,7 +69,6 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
       initialTime: TimeOfDay.now(),
     );
     if (picked != null) {
-      final now = DateTime.now();
       final formattedTime = TimeOfDay(
         hour: picked.hour,
         minute: picked.minute,
@@ -93,23 +93,24 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
     'Cuadrilla',
   ];
 
-  final List<String> observaciones = [
-    'Técnico',
-    'Conductor',
-    'Excavador',
-    'Electricista',
-    'Ayudante',
-  ];
+  List<Empleado> observaciones = [];
 
   String? selectValueDatosTrabajo;
   String? selectValueObservaciones;
 
   late final InstalacionViewModel _instalacionViewModel;
+  final EmpleadoViewmodel _empleadoViewModel = sl<EmpleadoViewmodel>();
 
   @override
   void initState() {
     super.initState();
     _instalacionViewModel = sl<InstalacionViewModel>();
+    _loadEmpleados();
+  }
+
+  void _loadEmpleados() async {
+    observaciones = await _empleadoViewModel.obtenerEmpleados();
+    setState(() {});
   }
 
   void _guardarInstalacion() async {
@@ -338,10 +339,13 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
                                         selectValueObservaciones = newValue;
                                       });
                                     },
-                                    items: observaciones.map((String value) {
+                                    items:
+                                        observaciones.map((Empleado empleado) {
                                       return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
+                                        value:
+                                            '${empleado.nombre} ${empleado.apellido}',
+                                        child: Text(
+                                            '${empleado.nombre} ${empleado.apellido} - ${empleado.cargo}'),
                                       );
                                     }).toList(),
                                   ),
