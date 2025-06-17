@@ -28,7 +28,7 @@ class _ToolbarState extends State<Toolbar> {
             color: AppColors.whiteColor,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(context, 'calendario'),
             icon: const Icon(Icons.calendar_month, size: 30),
             color: AppColors.secondaryColor,
           ),
@@ -43,7 +43,7 @@ class _ToolbarState extends State<Toolbar> {
             color: AppColors.secondaryColor,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(context, 'configuracion'),
             icon: const Icon(Icons.settings, size: 30),
             color: AppColors.secondaryColor,
           ),

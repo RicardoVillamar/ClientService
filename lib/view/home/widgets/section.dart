@@ -27,7 +27,9 @@ class _SectionPageState extends State<SectionPage> {
               blockSections('Nuevos Empleados', 'NuevosEmpleados.png'),
               blockSections('Nuevos Clientes', 'NuevosClientes.png'),
             ] else if (widget.selectedCategory == 'Facturación') ...[
+              blockSections('Dashboard Facturación', 'ReporteFactura.png'),
               blockSections('Nuevas Facturas', 'NuevaFactura.png'),
+              blockSections('Facturar Servicio', 'NuevaFactura.png'),
               blockSections('Reporte de Facturas', 'ReporteFactura.png'),
               blockSections('Anular Factura', 'AnularFactura.png'),
             ] else if (widget.selectedCategory == 'Servicios') ...[
