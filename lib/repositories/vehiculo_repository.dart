@@ -200,4 +200,92 @@ class VehiculoRepository implements BaseRepository<Alquiler> {
       throw Exception('Error al obtener datos para exportar: $e');
     }
   }
+
+  /// Cancelar un alquiler específico
+  Future<void> cancelarAlquiler(String id, String motivo) async {
+    try {
+      final alquiler = await getById(id);
+      if (alquiler == null) {
+        throw Exception('Alquiler no encontrado');
+      }
+
+      final alquilerCancelado = alquiler.cancelar(motivo);
+      await update(id, alquilerCancelado);
+    } catch (e) {
+      throw Exception('Error al cancelar alquiler: $e');
+    }
+  }
+
+  /// Retomar un alquiler cancelado
+  Future<void> retomarAlquiler(String id) async {
+    try {
+      final alquiler = await getById(id);
+      if (alquiler == null) {
+        throw Exception('Alquiler no encontrado');
+      }
+
+      final alquilerRetomado = alquiler.retomar();
+      await update(id, alquilerRetomado);
+    } catch (e) {
+      throw Exception('Error al retomar alquiler: $e');
+    }
+  }
+
+  /// Cambiar el estado de un alquiler
+  Future<void> cambiarEstado(String id, EstadoAlquiler nuevoEstado) async {
+    try {
+      await _firestore.collection(_collection).doc(id).update({
+        'estado': nuevoEstado.displayName,
+      });
+    } catch (e) {
+      throw Exception('Error al cambiar estado del alquiler: $e');
+    }
+  }
+
+  /// Obtener alquileres filtrados por estado
+  Future<List<Alquiler>> getAllByEstado(EstadoAlquiler estado) async {
+    try {
+      final snapshot = await _firestore
+          .collection(_collection)
+          .where('estado', isEqualTo: estado.displayName)
+          .orderBy('fechaReserva', descending: true)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => Alquiler.fromMap(doc.data(), doc.id))
+          .toList();
+    } catch (e) {
+      throw Exception('Error al obtener alquileres por estado: $e');
+    }
+  }
+
+  /// Obtener alquileres filtrados por múltiples estados
+  Future<List<Alquiler>> getAllByEstados(List<EstadoAlquiler> estados) async {
+    try {
+      final estadosString = estados.map((e) => e.displayName).toList();
+      final snapshot = await _firestore
+          .collection(_collection)
+          .where('estado', whereIn: estadosString)
+          .orderBy('fechaReserva', descending: true)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => Alquiler.fromMap(doc.data(), doc.id))
+          .toList();
+    } catch (e) {
+      throw Exception('Error al obtener alquileres por estados: $e');
+    }
+  }
+
+  /// Stream de alquileres filtrado por estado
+  Stream<List<Alquiler>> watchByEstado(EstadoAlquiler estado) {
+    return _firestore
+        .collection(_collection)
+        .where('estado', isEqualTo: estado.displayName)
+        .orderBy('fechaReserva', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Alquiler.fromMap(doc.data(), doc.id))
+            .toList());
+  }
 }
