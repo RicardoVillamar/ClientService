@@ -5,7 +5,6 @@ import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/billing/create_factura.dart';
 import 'package:client_service/view/billing/facturas_list_avanzada.dart';
 import 'package:client_service/view/billing/anular_facturas.dart';
-import 'package:client_service/view/billing/crear_factura_desde_servicio.dart';
 import 'package:client_service/viewmodel/factura_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -258,13 +257,13 @@ class _DashboardFacturacionState extends State<DashboardFacturacion> {
                 ),
               ),
               _buildActionCard(
-                'Facturar Servicio',
+                'Nueva Factura',
                 Icons.build_circle,
                 Colors.blue,
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CrearFacturaDesdeServicio()),
+                      builder: (context) => const CreateFactura()),
                 ),
               ),
               _buildActionCard(
