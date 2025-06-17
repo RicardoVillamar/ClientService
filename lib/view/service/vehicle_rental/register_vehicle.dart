@@ -2,6 +2,7 @@ import 'package:client_service/models/vehiculo.dart';
 import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
+import 'package:client_service/utils/helpers/notificacion_helper.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
@@ -216,9 +217,8 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
                           },
                           items: personal.map((Empleado empleado) {
                             return DropdownMenuItem<String>(
-                              value: '${empleado.nombre} ${empleado.apellido}',
-                              child: Text(
-                                  '${empleado.nombre} ${empleado.apellido} - ${empleado.cargo}'),
+                              value: empleado.nombreCompleto,
+                              child: Text(empleado.nombreCompletoConCargo),
                             );
                           }).toList(),
                         ),
@@ -258,6 +258,14 @@ class _RegistroAlquilerState extends State<RegistroAlquiler> {
                               );
 
                               await _alquilerVM.guardarAlquiler(alquiler);
+
+                              // Crear notificación del sistema
+                              await NotificacionUtils.notificarServicioCreado(
+                                'alquiler de vehículo',
+                                _nombreC.text.trim(),
+                                DateFormat('dd/MM/yyyy')
+                                    .parse(_dateController.text),
+                              );
 
                               FlashMessages.showSuccess(
                                 context: context,

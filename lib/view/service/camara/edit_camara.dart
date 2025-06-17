@@ -1,8 +1,9 @@
 import 'package:client_service/models/camara.dart';
 import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
-import 'package:client_service/utils/font.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
+import 'package:client_service/view/widgets/shared/estado_gestion_widget.dart';
+import 'package:client_service/view/widgets/dialogs/estado_dialogs.dart';
 import 'package:client_service/viewmodel/camara_viewmodel.dart';
 import 'package:client_service/viewmodel/empleado_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
@@ -104,6 +105,9 @@ class _EditCamaraState extends State<EditCamara> {
             DateFormat('dd/MM/yyyy').parse(_dateController.text),
         descripcion: _observaciones.text.trim(),
         costo: double.tryParse(_costo.text.trim()) ?? 0,
+        estado: widget.camara.estado,
+        fechaCancelacion: widget.camara.fechaCancelacion,
+        motivoCancelacion: widget.camara.motivoCancelacion,
       );
 
       await _camaraViewModel.actualizarCamara(updatedCamara);
@@ -122,6 +126,82 @@ class _EditCamaraState extends State<EditCamara> {
     }
   }
 
+  void _cancelarMantenimiento() {
+    showDialog(
+      context: context,
+      builder: (context) => CancelarServicioDialog(
+        tipoServicio: 'Mantenimiento de Cámara',
+        onConfirmar: (motivo) async {
+          try {
+            await _camaraViewModel.cancelarMantenimiento(
+                widget.camara.id!, motivo);
+            FlashMessages.showSuccess(
+              context: context,
+              message: 'Mantenimiento cancelado exitosamente',
+            );
+            Navigator.pop(context);
+          } catch (e) {
+            FlashMessages.showError(
+              context: context,
+              message: 'Error al cancelar: $e',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  void _retomarMantenimiento() {
+    showDialog(
+      context: context,
+      builder: (context) => RetomarServicioDialog(
+        tipoServicio: 'Mantenimiento de Cámara',
+        onConfirmar: () async {
+          try {
+            await _camaraViewModel.retomarMantenimiento(widget.camara.id!);
+            FlashMessages.showSuccess(
+              context: context,
+              message: 'Mantenimiento retomado exitosamente',
+            );
+            Navigator.pop(context);
+          } catch (e) {
+            FlashMessages.showError(
+              context: context,
+              message: 'Error al retomar: $e',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  void _cambiarEstado() {
+    showDialog(
+      context: context,
+      builder: (context) => CambiarEstadoDialog(
+        estadoActual: widget.camara.estado.displayName,
+        estadosDisponibles: EstadoCamara.allDisplayNames,
+        onConfirmar: (nuevoEstado) async {
+          try {
+            final estadoEnum = EstadoCamara.fromString(nuevoEstado);
+            await _camaraViewModel.cambiarEstado(
+                widget.camara.id!, estadoEnum.displayName);
+            FlashMessages.showSuccess(
+              context: context,
+              message: 'Estado cambiado exitosamente',
+            );
+            Navigator.pop(context);
+          } catch (e) {
+            FlashMessages.showError(
+              context: context,
+              message: 'Error al cambiar estado: $e',
+            );
+          }
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,6 +215,20 @@ class _EditCamaraState extends State<EditCamara> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            // Widget de gestión de estado
+            EstadoGestionWidget(
+              estado: widget.camara.estado.displayName,
+              estaCancelado: widget.camara.estaCancelado,
+              fechaCancelacion: widget.camara.fechaCancelacion,
+              motivoCancelacion: widget.camara.motivoCancelacion,
+              onCancelar:
+                  widget.camara.estaCancelado ? null : _cancelarMantenimiento,
+              onRetomar:
+                  widget.camara.estaCancelado ? _retomarMantenimiento : null,
+              onCambiarEstado:
+                  widget.camara.estaCancelado ? null : _cambiarEstado,
+            ),
+            const SizedBox(height: 20),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -154,7 +248,9 @@ class _EditCamaraState extends State<EditCamara> {
                 children: [
                   Text(
                     'Editar Información de Cámara',
-                    style: AppFonts.titleBold.copyWith(
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                       color: AppColors.primaryColor,
                     ),
                   ),
@@ -217,7 +313,7 @@ class _EditCamaraState extends State<EditCamara> {
       children: [
         Text(
           label,
-          style: AppFonts.bodyNormal.copyWith(
+          style: const TextStyle(fontSize: 14).copyWith(
             color: AppColors.textColor,
             fontWeight: FontWeight.w500,
           ),
@@ -256,7 +352,7 @@ class _EditCamaraState extends State<EditCamara> {
       children: [
         Text(
           label,
-          style: AppFonts.bodyNormal.copyWith(
+          style: const TextStyle(fontSize: 14).copyWith(
             color: AppColors.textColor,
             fontWeight: FontWeight.w500,
           ),
@@ -275,7 +371,7 @@ class _EditCamaraState extends State<EditCamara> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               hint: Text(
                 'Seleccione $label',
-                style: AppFonts.text.copyWith(
+                style: const TextStyle(fontSize: 12).copyWith(
                   color: AppColors.greyColor,
                 ),
               ),
@@ -284,7 +380,7 @@ class _EditCamaraState extends State<EditCamara> {
                   value: item,
                   child: Text(
                     item,
-                    style: AppFonts.text.copyWith(
+                    style: const TextStyle(fontSize: 12).copyWith(
                       color: AppColors.textColor,
                     ),
                   ),
@@ -305,7 +401,7 @@ class _EditCamaraState extends State<EditCamara> {
       children: [
         Text(
           label,
-          style: AppFonts.bodyNormal.copyWith(
+          style: const TextStyle(fontSize: 14).copyWith(
             color: AppColors.textColor,
             fontWeight: FontWeight.w500,
           ),
@@ -324,16 +420,16 @@ class _EditCamaraState extends State<EditCamara> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               hint: Text(
                 'Seleccione $label',
-                style: AppFonts.text.copyWith(
+                style: const TextStyle(fontSize: 12).copyWith(
                   color: AppColors.greyColor,
                 ),
               ),
               items: employees.map((Empleado empleado) {
                 return DropdownMenuItem<String>(
-                  value: '${empleado.nombre} ${empleado.apellido}',
+                  value: empleado.nombreCompleto,
                   child: Text(
-                    '${empleado.nombre} ${empleado.apellido} - ${empleado.cargo}',
-                    style: AppFonts.text.copyWith(
+                    empleado.nombreCompletoConCargo,
+                    style: const TextStyle(fontSize: 12).copyWith(
                       color: AppColors.textColor,
                     ),
                   ),
