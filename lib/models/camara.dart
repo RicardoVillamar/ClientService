@@ -1,5 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+enum EstadoCamara {
+  pendiente('Pendiente'),
+  enProceso('En Proceso'),
+  completado('Completado'),
+  cancelado('Cancelado');
+
+  const EstadoCamara(this.displayName);
+  final String displayName;
+
+  static EstadoCamara fromString(String value) {
+    switch (value.toLowerCase()) {
+      case 'pendiente':
+        return EstadoCamara.pendiente;
+      case 'en proceso':
+      case 'enproceso':
+        return EstadoCamara.enProceso;
+      case 'completado':
+        return EstadoCamara.completado;
+      case 'cancelado':
+        return EstadoCamara.cancelado;
+      default:
+        return EstadoCamara.pendiente;
+    }
+  }
+
+  static List<String> get allDisplayNames => EstadoCamara.values.map((e) => e.displayName).toList();
+}
+
 class Camara {
   final String? id;
   final String nombreComercial;
@@ -9,6 +37,9 @@ class Camara {
   final String tipo;
   final String descripcion;
   final double costo;
+  final EstadoCamara estado;
+  final DateTime? fechaCancelacion;
+  final String? motivoCancelacion;
 
   Camara({
     this.id,
@@ -19,6 +50,9 @@ class Camara {
     required this.tipo,
     required this.descripcion,
     required this.costo,
+    this.estado = EstadoCamara.pendiente,
+    this.fechaCancelacion,
+    this.motivoCancelacion,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,6 +64,9 @@ class Camara {
       'tipo': tipo,
       'descripcion': descripcion,
       'costo': costo,
+      'estado': estado.displayName,
+      'fechaCancelacion': fechaCancelacion?.toIso8601String(),
+      'motivoCancelacion': motivoCancelacion,
     };
   }
 
@@ -50,6 +87,53 @@ class Camara {
           : (map['costo'] is double
               ? map['costo']
               : double.tryParse(map['costo'].toString()) ?? 0.0),
+      estado: EstadoCamara.fromString(map['estado'] ?? 'pendiente'),
+      fechaCancelacion: map['fechaCancelacion'] != null
+          ? (map['fechaCancelacion'] is Timestamp
+              ? (map['fechaCancelacion'] as Timestamp).toDate()
+              : DateTime.tryParse(map['fechaCancelacion'].toString()))
+          : null,
+      motivoCancelacion: map['motivoCancelacion'],
+    );
+  }
+
+  // Métodos de conveniencia
+  bool get estaCancelado => estado == EstadoCamara.cancelado;
+  bool get estaCompletado => estado == EstadoCamara.completado;
+  bool get estaPendiente => estado == EstadoCamara.pendiente;
+  bool get estaEnProceso => estado == EstadoCamara.enProceso;
+
+  // Método para cancelar
+  Camara cancelar(String motivo) {
+    return Camara(
+      id: id,
+      nombreComercial: nombreComercial,
+      fechaMantenimiento: fechaMantenimiento,
+      direccion: direccion,
+      tecnico: tecnico,
+      tipo: tipo,
+      descripcion: descripcion,
+      costo: costo,
+      estado: EstadoCamara.cancelado,
+      fechaCancelacion: DateTime.now(),
+      motivoCancelacion: motivo,
+    );
+  }
+
+  // Método para retomar
+  Camara retomar() {
+    return Camara(
+      id: id,
+      nombreComercial: nombreComercial,
+      fechaMantenimiento: fechaMantenimiento,
+      direccion: direccion,
+      tecnico: tecnico,
+      tipo: tipo,
+      descripcion: descripcion,
+      costo: costo,
+      estado: EstadoCamara.pendiente,
+      fechaCancelacion: null,
+      motivoCancelacion: null,
     );
   }
 }
