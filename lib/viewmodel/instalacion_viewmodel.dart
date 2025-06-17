@@ -124,10 +124,11 @@ class InstalacionViewModel extends BaseViewModel {
     DateTime? startDate,
     DateTime? endDate,
   }) async {
-    final data = await handleAsyncOperation(() => _repository.getAllForExportWithDateFilter(
-          startDate: startDate,
-          endDate: endDate,
-        ));
+    final data = await handleAsyncOperation(
+        () => _repository.getAllForExportWithDateFilter(
+              startDate: startDate,
+              endDate: endDate,
+            ));
 
     if (data != null) {
       await ExcelExportUtility.exportToExcel(
@@ -213,5 +214,77 @@ class InstalacionViewModel extends BaseViewModel {
     });
 
     return result ?? false;
+  }
+
+  // Cancelar instalación
+  Future<bool> cancelarInstalacion(String id, String motivo) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.cancelar(id, motivo);
+
+      // Actualizar en la lista local
+      final index = _instalaciones.indexWhere((inst) => inst.id == id);
+      if (index != -1) {
+        final instalacionActual = _instalaciones[index];
+        _instalaciones[index] = instalacionActual.cancelar(motivo);
+        notifyListeners();
+      }
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Retomar instalación
+  Future<bool> retomarInstalacion(String id) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.retomar(id);
+
+      // Actualizar en la lista local
+      final index = _instalaciones.indexWhere((inst) => inst.id == id);
+      if (index != -1) {
+        final instalacionActual = _instalaciones[index];
+        _instalaciones[index] = instalacionActual.retomar();
+        notifyListeners();
+      }
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Cambiar estado de la instalación
+  Future<bool> cambiarEstado(String id, String nuevoEstado) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.cambiarEstado(id, nuevoEstado);
+
+      // Actualizar en la lista local si es necesario
+      await fetchInstalaciones();
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Obtener instalaciones por estado
+  Future<List<Instalacion>> obtenerInstalacionesPorEstado(
+      EstadoInstalacion estado) async {
+    final result = await executeOperation(
+        () => _repository.getByEstado(estado.displayName));
+    return result ?? [];
   }
 }

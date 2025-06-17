@@ -196,4 +196,75 @@ class CamaraViewModel extends BaseViewModel {
       setLoading(false);
     }
   }
+
+  // Cancelar mantenimiento de cámara
+  Future<bool> cancelarMantenimiento(String id, String motivo) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.cancelar(id, motivo);
+
+      // Actualizar en la lista local
+      final index = _camaras.indexWhere((c) => c.id == id);
+      if (index != -1) {
+        final camaraActual = _camaras[index];
+        _camaras[index] = camaraActual.cancelar(motivo);
+        notifyListeners();
+      }
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Retomar mantenimiento de cámara
+  Future<bool> retomarMantenimiento(String id) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.retomar(id);
+
+      // Actualizar en la lista local
+      final index = _camaras.indexWhere((c) => c.id == id);
+      if (index != -1) {
+        final camaraActual = _camaras[index];
+        _camaras[index] = camaraActual.retomar();
+        notifyListeners();
+      }
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Cambiar estado del mantenimiento
+  Future<bool> cambiarEstado(String id, String nuevoEstado) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.cambiarEstado(id, nuevoEstado);
+
+      // Actualizar en la lista local si es necesario
+      await fetchCamaras();
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Obtener cámaras por estado
+  Future<List<Camara>> obtenerCamarasPorEstado(EstadoCamara estado) async {
+    final result = await executeOperation(
+        () => _repository.getByEstado(estado.displayName));
+    return result ?? [];
+  }
 }
