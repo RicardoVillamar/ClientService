@@ -353,9 +353,9 @@ class _EditVehicleState extends State<EditVehicle> {
               ),
               items: employees.map((Empleado empleado) {
                 return DropdownMenuItem<String>(
-                  value: '${empleado.nombre} ${empleado.apellido}',
+                  value: empleado.nombreCompleto,
                   child: Text(
-                    '${empleado.nombre} ${empleado.apellido} - ${empleado.cargo}',
+                    empleado.nombreCompletoConCargo,
                     style: AppFonts.text.copyWith(
                       color: AppColors.textColor,
                     ),

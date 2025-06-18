@@ -2,6 +2,7 @@ import 'package:client_service/models/instalacion.dart';
 import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
+import 'package:client_service/utils/helpers/notificacion_helper.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
@@ -152,6 +153,13 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
         );
 
         await _instalacionViewModel.guardarInstalacion(instalacion);
+
+        // Crear notificación del sistema
+        await NotificacionUtils.notificarServicioCreado(
+          'instalación de postes',
+          _nombreC.text.trim(),
+          DateFormat('dd/MM/yyyy').parse(_dateController.text),
+        );
 
         FlashMessages.showSuccess(
           context: context,
@@ -342,10 +350,9 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
                                     items:
                                         observaciones.map((Empleado empleado) {
                                       return DropdownMenuItem<String>(
-                                        value:
-                                            '${empleado.nombre} ${empleado.apellido}',
+                                        value: empleado.nombreCompleto,
                                         child: Text(
-                                            '${empleado.nombre} ${empleado.apellido} - ${empleado.cargo}'),
+                                            empleado.nombreCompletoConCargo),
                                       );
                                     }).toList(),
                                   ),

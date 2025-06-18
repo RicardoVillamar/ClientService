@@ -25,13 +25,7 @@ class EditEmpleadoPage extends StatefulWidget {
 
 class _EditEmpleadoPageState extends State<EditEmpleadoPage> {
   double heightScreen = 0;
-  final List<String> items = [
-    'Técnico',
-    'Conductor',
-    'Excavador',
-    'Electricista',
-    'Ayudante',
-  ];
+  final List<String> items = CargoEmpleado.allDisplayNames;
 
   String? selectValue;
   final TextEditingController _nombre = TextEditingController();
@@ -112,7 +106,7 @@ class _EditEmpleadoPageState extends State<EditEmpleadoPage> {
     _direccion.text = widget.empleado.direccion;
     _telefono.text = widget.empleado.telefono;
     _correo.text = widget.empleado.correo;
-    selectValue = widget.empleado.cargo;
+    selectValue = widget.empleado.cargo.displayName;
     _dateController.text =
         DateFormat('dd/MM/yyyy').format(widget.empleado.fechaContratacion);
   }
@@ -131,7 +125,7 @@ class _EditEmpleadoPageState extends State<EditEmpleadoPage> {
           direccion: _direccion.text.trim(),
           telefono: _telefono.text.trim(),
           correo: _correo.text.trim(),
-          cargo: selectValue!,
+          cargo: CargoEmpleado.fromString(selectValue!),
           fechaContratacion: fecha,
           fotoUrl: widget.empleado.fotoUrl,
         );

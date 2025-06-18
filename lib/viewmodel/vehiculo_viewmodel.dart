@@ -254,4 +254,84 @@ class AlquilerViewModel extends BaseViewModel {
       );
     }
   }
+
+  // Cancelar alquiler
+  Future<bool> cancelarAlquiler(String id, String motivo) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.cancelarAlquiler(id, motivo);
+
+      // Actualizar en la lista local
+      final index = _alquileres.indexWhere((alq) => alq.id == id);
+      if (index != -1) {
+        final alquilerActual = _alquileres[index];
+        _alquileres[index] = alquilerActual.cancelar(motivo);
+        notifyListeners();
+      }
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Retomar alquiler
+  Future<bool> retomarAlquiler(String id) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.retomarAlquiler(id);
+
+      // Actualizar en la lista local
+      final index = _alquileres.indexWhere((alq) => alq.id == id);
+      if (index != -1) {
+        final alquilerActual = _alquileres[index];
+        _alquileres[index] = alquilerActual.retomar();
+        notifyListeners();
+      }
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Cambiar estado del alquiler
+  Future<bool> cambiarEstado(String id, EstadoAlquiler nuevoEstado) async {
+    try {
+      setLoading(true);
+      clearError();
+      await _repository.cambiarEstado(id, nuevoEstado);
+
+      // Actualizar en la lista local si es necesario
+      await fetchAlquileres();
+      return true;
+    } catch (e) {
+      setError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Obtener alquileres por estado
+  Future<List<Alquiler>> obtenerAlquileresPorEstado(
+      EstadoAlquiler estado) async {
+    final result =
+        await executeOperation(() => _repository.getAllByEstado(estado));
+    return result ?? [];
+  }
+
+  // Obtener alquileres por múltiples estados
+  Future<List<Alquiler>> obtenerAlquileresPorEstados(
+      List<EstadoAlquiler> estados) async {
+    final result =
+        await executeOperation(() => _repository.getAllByEstados(estados));
+    return result ?? [];
+  }
 }

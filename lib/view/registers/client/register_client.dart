@@ -7,6 +7,7 @@ import 'package:client_service/models/cliente.dart';
 import 'package:client_service/viewmodel/cliente_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:client_service/view/widgets/flash_messages.dart';
+import 'package:client_service/utils/helpers/notificacion_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -50,8 +51,14 @@ class _RegistroClientePageState extends State<RegistroClientePage> {
         cedula: _cedula.text.trim(),
       );
 
-      _clienteVM.guardarCliente(cliente).then((_) {
+      _clienteVM.guardarCliente(cliente).then((_) async {
         if (context.mounted) {
+          // Crear notificación del sistema
+          await NotificacionUtils.crearNotificacionRegistro(
+            'Nuevo cliente registrado',
+            'Se ha registrado el cliente ${cliente.nombreComercial} exitosamente.',
+          );
+
           FlashMessages.showSuccess(
             context: context,
             message: 'Cliente guardado exitosamente',

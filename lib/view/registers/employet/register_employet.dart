@@ -9,6 +9,7 @@ import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/empleado_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:client_service/view/widgets/flash_messages.dart';
+import 'package:client_service/utils/helpers/notificacion_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,13 +24,7 @@ class RegistroEmpleadoPage extends StatefulWidget {
 
 class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
   double heightScreen = 0;
-  final List<String> items = [
-    'Técnico',
-    'Conductor',
-    'Excavador',
-    'Electricista',
-    'Ayudante',
-  ];
+  final List<String> items = CargoEmpleado.allDisplayNames;
 
   String? selectValue;
   final TextEditingController _nombre = TextEditingController();
@@ -346,7 +341,7 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                                   direccion: _direccion.text.trim(),
                                   telefono: _telefono.text.trim(),
                                   correo: _correo.text.trim(),
-                                  cargo: selectValue!,
+                                  cargo: CargoEmpleado.fromString(selectValue!),
                                   fechaContratacion: fecha,
                                   fotoUrl: '',
                                 );
@@ -356,6 +351,13 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                                     nuevoEmpleado, _imageFile);
 
                                 if (context.mounted) {
+                                  // Crear notificación del sistema
+                                  await NotificacionUtils
+                                      .crearNotificacionRegistro(
+                                    'Nuevo empleado registrado',
+                                    'Se ha registrado el empleado ${nuevoEmpleado.nombre} ${nuevoEmpleado.apellido} exitosamente.',
+                                  );
+
                                   FlashMessages.showSuccess(
                                     context: context,
                                     message: 'Empleado registrado exitosamente',
@@ -373,7 +375,8 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                             } else {
                               FlashMessages.showWarning(
                                 context: context,
-                                message: 'Completa todos los campos obligatorios',
+                                message:
+                                    'Completa todos los campos obligatorios',
                               );
                             }
                           },

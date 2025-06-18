@@ -4,15 +4,22 @@ import '../repositories/cliente_repository.dart';
 import '../repositories/instalacion_repository.dart';
 import '../repositories/camara_repository.dart';
 import '../repositories/vehiculo_repository.dart';
+import '../repositories/factura_repository.dart';
 import '../viewmodel/empleado_viewmodel.dart';
 import '../viewmodel/cliente_viewmodel.dart';
 import '../viewmodel/instalacion_viewmodel.dart';
 import '../viewmodel/camara_viewmodel.dart';
 import '../viewmodel/vehiculo_viewmodel.dart';
+import '../viewmodel/factura_viewmodel.dart';
+import '../viewmodel/calendario_viewmodel.dart';
+import '../services/notificacion_service.dart';
 
 final GetIt sl = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
+  // Services
+  sl.registerLazySingleton<NotificacionService>(() => NotificacionService());
+
   // Repositories
   sl.registerLazySingleton<EmpleadoRepository>(() => EmpleadoRepository());
   sl.registerLazySingleton<ClienteRepository>(() => ClienteRepository());
@@ -20,6 +27,7 @@ Future<void> setupServiceLocator() async {
       () => InstalacionRepository());
   sl.registerLazySingleton<CamaraRepository>(() => CamaraRepository());
   sl.registerLazySingleton<VehiculoRepository>(() => VehiculoRepository());
+  sl.registerLazySingleton<FacturaRepository>(() => FacturaRepository());
 
   // ViewModels - Factory para crear nuevas instancias cada vez
   sl.registerFactory<EmpleadoViewmodel>(
@@ -32,4 +40,14 @@ Future<void> setupServiceLocator() async {
       () => CamaraViewModel(sl<CamaraRepository>()));
   sl.registerFactory<AlquilerViewModel>(
       () => AlquilerViewModel(sl<VehiculoRepository>()));
+  sl.registerFactory<FacturaViewModel>(
+      () => FacturaViewModel(sl<FacturaRepository>()));
+  sl.registerFactory<CalendarioViewModel>(() => CalendarioViewModel(
+        sl<CamaraRepository>(),
+        sl<InstalacionRepository>(),
+        sl<VehiculoRepository>(),
+      ));
+
+  // Inicializar servicios que lo requieran
+  await sl<NotificacionService>().inicializar();
 }

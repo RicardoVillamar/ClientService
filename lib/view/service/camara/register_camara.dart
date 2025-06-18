@@ -2,6 +2,7 @@ import 'package:client_service/models/camara.dart';
 import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
+import 'package:client_service/utils/helpers/notificacion_helper.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/inputs.dart';
@@ -98,6 +99,13 @@ class _RegistroCamaraState extends State<RegistroCamara> {
 
       await _camaraViewModel.guardarCamara(mantenimiento);
 
+      // Crear notificación del sistema
+      await NotificacionUtils.notificarServicioCreado(
+        'mantenimiento de cámaras',
+        _nombreC.text.trim(),
+        DateFormat('dd/MM/yyyy').parse(_dateController.text),
+      );
+
       FlashMessages.showSuccess(
         context: context,
         message: 'Mantenimiento registrado exitosamente',
@@ -179,9 +187,8 @@ class _RegistroCamaraState extends State<RegistroCamara> {
                           },
                           items: tecnicos.map((Empleado empleado) {
                             return DropdownMenuItem<String>(
-                              value: '${empleado.nombre} ${empleado.apellido}',
-                              child: Text(
-                                  '${empleado.nombre} ${empleado.apellido} - ${empleado.cargo}'),
+                              value: empleado.nombreCompleto,
+                              child: Text(empleado.nombreCompletoConCargo),
                             );
                           }).toList(),
                         ),

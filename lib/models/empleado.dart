@@ -1,5 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+enum CargoEmpleado {
+  tecnico('Técnico'),
+  escavador('Escavador'),
+  electricista('Electricista'),
+  ayudante('Ayudante'),
+  conductor('Conductor');
+
+  const CargoEmpleado(this.displayName);
+  final String displayName;
+
+  static CargoEmpleado fromString(String value) {
+    switch (value.toLowerCase()) {
+      case 'técnico':
+      case 'tecnico':
+        return CargoEmpleado.tecnico;
+      case 'escavador':
+      case 'excavador':
+        return CargoEmpleado.escavador;
+      case 'electricista':
+        return CargoEmpleado.electricista;
+      case 'ayudante':
+        return CargoEmpleado.ayudante;
+      case 'conductor':
+        return CargoEmpleado.conductor;
+      default:
+        return CargoEmpleado.tecnico; // Default fallback
+    }
+  }
+
+  static List<String> get allDisplayNames =>
+      CargoEmpleado.values.map((e) => e.displayName).toList();
+}
+
 class Empleado {
   final String? id;
   final String nombre;
@@ -8,7 +41,7 @@ class Empleado {
   final String direccion;
   final String telefono;
   final String correo;
-  final String cargo;
+  final CargoEmpleado cargo;
   final DateTime fechaContratacion;
   final String fotoUrl;
 
@@ -33,7 +66,7 @@ class Empleado {
       'direccion': direccion,
       'telefono': telefono,
       'correo': correo,
-      'cargo': cargo,
+      'cargo': cargo.displayName,
       'fechaContratacion': fechaContratacion,
       'fotoUrl': fotoUrl,
     };
@@ -48,9 +81,15 @@ class Empleado {
       direccion: map['direccion'] ?? '',
       telefono: map['telefono'] ?? '',
       correo: map['correo'] ?? '',
-      cargo: map['cargo'] ?? '',
+      cargo: CargoEmpleado.fromString(map['cargo'] ?? ''),
       fechaContratacion: (map['fechaContratacion'] as Timestamp).toDate(),
       fotoUrl: map['fotoUrl'],
     );
   }
+
+  String get cargoDisplayName => cargo.displayName;
+
+  String get nombreCompleto => '$nombre $apellido';
+
+  String get nombreCompletoConCargo => '$nombreCompleto - ${cargo.displayName}';
 }

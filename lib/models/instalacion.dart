@@ -1,5 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+enum EstadoInstalacion {
+  pendiente('Pendiente'),
+  enProceso('En Proceso'),
+  completado('Completado'),
+  cancelado('Cancelado');
+
+  const EstadoInstalacion(this.displayName);
+  final String displayName;
+
+  static EstadoInstalacion fromString(String value) {
+    switch (value.toLowerCase()) {
+      case 'pendiente':
+        return EstadoInstalacion.pendiente;
+      case 'en proceso':
+      case 'enproceso':
+        return EstadoInstalacion.enProceso;
+      case 'completado':
+        return EstadoInstalacion.completado;
+      case 'cancelado':
+        return EstadoInstalacion.cancelado;
+      default:
+        return EstadoInstalacion.pendiente;
+    }
+  }
+
+  static List<String> get allDisplayNames =>
+      EstadoInstalacion.values.map((e) => e.displayName).toList();
+}
+
 class Instalacion {
   final String? id;
   final DateTime fechaInstalacion;
@@ -14,6 +43,9 @@ class Instalacion {
   final String cargoPuesto;
   final String telefono;
   final String numeroTarea;
+  final EstadoInstalacion estado;
+  final DateTime? fechaCancelacion;
+  final String? motivoCancelacion;
 
   Instalacion({
     this.id,
@@ -29,6 +61,9 @@ class Instalacion {
     required this.cargoPuesto,
     required this.telefono,
     required this.numeroTarea,
+    this.estado = EstadoInstalacion.pendiente,
+    this.fechaCancelacion,
+    this.motivoCancelacion,
   });
 
   Map<String, dynamic> toMap() {
@@ -45,6 +80,11 @@ class Instalacion {
       'cargoPuesto': cargoPuesto,
       'telefono': telefono,
       'numeroTarea': numeroTarea,
+      'estado': estado.displayName,
+      'fechaCancelacion': fechaCancelacion != null
+          ? Timestamp.fromDate(fechaCancelacion!)
+          : null,
+      'motivoCancelacion': motivoCancelacion,
     };
   }
 
@@ -66,6 +106,63 @@ class Instalacion {
       cargoPuesto: map['cargoPuesto'] ?? '',
       telefono: map['telefono'] ?? '',
       numeroTarea: map['numeroTarea'] ?? '',
+      estado: EstadoInstalacion.fromString(map['estado'] ?? 'pendiente'),
+      fechaCancelacion: map['fechaCancelacion'] != null
+          ? (map['fechaCancelacion'] is Timestamp
+              ? (map['fechaCancelacion'] as Timestamp).toDate()
+              : DateTime.tryParse(map['fechaCancelacion'].toString()))
+          : null,
+      motivoCancelacion: map['motivoCancelacion'],
+    );
+  }
+
+  // Métodos de conveniencia
+  bool get estaCancelado => estado == EstadoInstalacion.cancelado;
+  bool get estaCompletado => estado == EstadoInstalacion.completado;
+  bool get estaPendiente => estado == EstadoInstalacion.pendiente;
+  bool get estaEnProceso => estado == EstadoInstalacion.enProceso;
+
+  // Método para cancelar
+  Instalacion cancelar(String motivo) {
+    return Instalacion(
+      id: id,
+      fechaInstalacion: fechaInstalacion,
+      cedula: cedula,
+      nombreComercial: nombreComercial,
+      direccion: direccion,
+      item: item,
+      descripcion: descripcion,
+      horaInicio: horaInicio,
+      horaFin: horaFin,
+      tipoTrabajo: tipoTrabajo,
+      cargoPuesto: cargoPuesto,
+      telefono: telefono,
+      numeroTarea: numeroTarea,
+      estado: EstadoInstalacion.cancelado,
+      fechaCancelacion: DateTime.now(),
+      motivoCancelacion: motivo,
+    );
+  }
+
+  // Método para retomar
+  Instalacion retomar() {
+    return Instalacion(
+      id: id,
+      fechaInstalacion: fechaInstalacion,
+      cedula: cedula,
+      nombreComercial: nombreComercial,
+      direccion: direccion,
+      item: item,
+      descripcion: descripcion,
+      horaInicio: horaInicio,
+      horaFin: horaFin,
+      tipoTrabajo: tipoTrabajo,
+      cargoPuesto: cargoPuesto,
+      telefono: telefono,
+      numeroTarea: numeroTarea,
+      estado: EstadoInstalacion.pendiente,
+      fechaCancelacion: null,
+      motivoCancelacion: null,
     );
   }
 }

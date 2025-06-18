@@ -147,4 +147,57 @@ class InstalacionRepository implements BaseRepository<Instalacion> {
       throw Exception('Error al obtener datos para exportar: $e');
     }
   }
+
+  /// Cancelar instalación
+  Future<void> cancelar(String id, String motivo) async {
+    try {
+      await _firestore.collection(_collection).doc(id).update({
+        'estado': 'Cancelado',
+        'fechaCancelacion': Timestamp.fromDate(DateTime.now()),
+        'motivoCancelacion': motivo,
+      });
+    } catch (e) {
+      throw Exception('Error al cancelar instalación: $e');
+    }
+  }
+
+  /// Retomar instalación
+  Future<void> retomar(String id) async {
+    try {
+      await _firestore.collection(_collection).doc(id).update({
+        'estado': 'Pendiente',
+        'fechaCancelacion': null,
+        'motivoCancelacion': null,
+      });
+    } catch (e) {
+      throw Exception('Error al retomar instalación: $e');
+    }
+  }
+
+  /// Cambiar estado de la instalación
+  Future<void> cambiarEstado(String id, String nuevoEstado) async {
+    try {
+      await _firestore.collection(_collection).doc(id).update({
+        'estado': nuevoEstado,
+      });
+    } catch (e) {
+      throw Exception('Error al cambiar estado: $e');
+    }
+  }
+
+  /// Obtener instalaciones por estado
+  Future<List<Instalacion>> getByEstado(String estado) async {
+    try {
+      final snapshot = await _firestore
+          .collection(_collection)
+          .where('estado', isEqualTo: estado)
+          .orderBy('fechaInstalacion', descending: true)
+          .get();
+      return snapshot.docs
+          .map((doc) => Instalacion.fromMap(doc.data(), doc.id))
+          .toList();
+    } catch (e) {
+      throw Exception('Error al obtener instalaciones por estado: $e');
+    }
+  }
 }

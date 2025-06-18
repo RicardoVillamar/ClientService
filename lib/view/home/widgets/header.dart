@@ -1,5 +1,7 @@
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
+import 'package:client_service/services/notificacion_service.dart';
+import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatefulWidget {
@@ -12,6 +14,26 @@ class Header extends StatefulWidget {
 class _HeaderState extends State<Header> {
   double screenHeight = 0.0;
   final String nombre = 'Usuario';
+  late final NotificacionService _notificacionService;
+
+  @override
+  void initState() {
+    super.initState();
+    _notificacionService = sl<NotificacionService>();
+    _notificacionService.addListener(_onNotificacionesChanged);
+  }
+
+  @override
+  void dispose() {
+    _notificacionService.removeListener(_onNotificacionesChanged);
+    super.dispose();
+  }
+
+  void _onNotificacionesChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +60,41 @@ class _HeaderState extends State<Header> {
                   border:
                       Border.all(color: AppColors.blackColor.withOpacity(0.1)),
                 ),
-                child: IconButton(
-                  icon: const Icon(Icons.notifications),
-                  color: AppColors.blackColor,
-                  iconSize: 25,
-                  onPressed: () => {},
+                child: Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.notifications),
+                      color: AppColors.blackColor,
+                      iconSize: 25,
+                      onPressed: () =>
+                          Navigator.pushNamed(context, 'notificaciones'),
+                    ),
+                    if (_notificacionService.tieneNotificacionesNoLeidas)
+                      Positioned(
+                        right: 8,
+                        top: 8,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Text(
+                            '${_notificacionService.contadorNoLeidas}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
               Container(
@@ -56,7 +108,8 @@ class _HeaderState extends State<Header> {
                   icon: const Icon(Icons.settings),
                   color: AppColors.blackColor,
                   iconSize: 25,
-                  onPressed: () => {},
+                  onPressed: () =>
+                      Navigator.pushNamed(context, 'configuracion'),
                 ),
               )
             ],

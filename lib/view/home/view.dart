@@ -4,6 +4,7 @@ import 'package:client_service/view/widgets/shared/search.dart';
 import 'package:client_service/view/home/widgets/header.dart';
 import 'package:client_service/view/home/widgets/section.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/utils/helpers/notificacion_helper.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,6 +32,21 @@ class _HomePageState extends State<HomePage> {
             Toolbar(),
           ],
         ),
+      ),
+      // Botón flotante temporal para probar notificaciones
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          print('DEBUG: Botón de prueba presionado');
+          await NotificacionUtils.notificarServicioCreado(
+            'prueba manual',
+            'Cliente de prueba',
+            DateTime.now(),
+          );
+          print('DEBUG: Notificación de prueba creada');
+        },
+        icon: const Icon(Icons.notification_add),
+        label: const Text('Probar'),
+        backgroundColor: AppColors.primaryColor,
       ),
     );
   }
