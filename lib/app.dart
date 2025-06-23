@@ -1,4 +1,4 @@
-import 'package:client_service/view/home/view.dart';
+import 'package:client_service/view/auth/splash_screen.dart';
 import 'package:client_service/services/navigation_service.dart';
 import 'package:client_service/routes.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +11,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Client Service',
+      title: 'Light Vitae',
       navigatorKey: NavigationService.navigatorKey,
-      home: const HomePage(),
+      home: const SplashScreen(),
       routes: routes,
       // Add localization support
       localizationsDelegates: const [
