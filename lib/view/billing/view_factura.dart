@@ -282,7 +282,7 @@ class ViewFactura extends StatelessWidget {
                               ],
                             ),
                           ))
-                      .toList(),
+                      ,
                 ],
               ),
             ),

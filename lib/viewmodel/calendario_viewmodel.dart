@@ -18,7 +18,7 @@ class CalendarioViewModel extends BaseViewModel {
   List<EventoCalendario> _eventos = [];
   List<EventoCalendario> get eventos => _eventos;
 
-  Map<DateTime, List<EventoCalendario>> _eventosPorFecha = {};
+  final Map<DateTime, List<EventoCalendario>> _eventosPorFecha = {};
   Map<DateTime, List<EventoCalendario>> get eventosPorFecha => _eventosPorFecha;
 
   DateTime _fechaSeleccionada = DateTime.now();

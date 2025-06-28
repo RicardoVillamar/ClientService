@@ -421,7 +421,7 @@ class _EditFacturaState extends State<EditFactura> {
                           _actualizarItem(index, nuevoItem),
                       onDelete: () => _eliminarItem(index),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),

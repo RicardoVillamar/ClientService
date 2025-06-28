@@ -246,9 +246,9 @@ class _EditCamaraState extends State<EditCamara> {
               ),
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     'Editar Información de Cámara',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryColor,

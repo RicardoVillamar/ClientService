@@ -278,7 +278,7 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
             children: [
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.event,
                     color: AppColors.primaryColor,
                     size: 20,

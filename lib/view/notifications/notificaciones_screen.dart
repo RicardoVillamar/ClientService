@@ -255,7 +255,7 @@ class _NotificacionesScreenState extends State<NotificacionesScreen> {
                               ),
                             ),
                             const SizedBox(width: 8),
-                            Text(
+                            const Text(
                               'Nueva',
                               style: TextStyle(
                                 fontSize: 12,

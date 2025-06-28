@@ -106,10 +106,10 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                 const SizedBox(height: 40),
 
                 // Header con logo y título
-                Column(
+                const Column(
                   children: [
                     // Título LIGHT VITAE más grande
-                    const Text(
+                    Text(
                       'LIGHT VITAE',
                       style: TextStyle(
                         fontSize: 48,
@@ -126,10 +126,10 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
 
                     // Subtítulo SERVICE
-                    const Text(
+                    Text(
                       'SERVICE',
                       style: TextStyle(
                         fontSize: 24,
@@ -146,10 +146,10 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
 
                     // Tipo de usuario
-                    const Text(
+                    Text(
                       'Administrador',
                       style: TextStyle(
                         color: Colors.white,
