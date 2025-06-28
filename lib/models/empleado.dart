@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum CargoEmpleado {
+  administrador('Administrador'),
   tecnico('Técnico'),
   escavador('Escavador'),
   electricista('Electricista'),
@@ -12,6 +13,8 @@ enum CargoEmpleado {
 
   static CargoEmpleado fromString(String value) {
     switch (value.toLowerCase()) {
+      case 'administrador':
+        return CargoEmpleado.administrador;
       case 'técnico':
       case 'tecnico':
         return CargoEmpleado.tecnico;
@@ -83,7 +86,7 @@ class Empleado {
       correo: map['correo'] ?? '',
       cargo: CargoEmpleado.fromString(map['cargo'] ?? ''),
       fechaContratacion: (map['fechaContratacion'] as Timestamp).toDate(),
-      fotoUrl: map['fotoUrl'],
+      fotoUrl: map['fotoUrl'] ?? '',
     );
   }
 
@@ -92,4 +95,7 @@ class Empleado {
   String get nombreCompleto => '$nombre $apellido';
 
   String get nombreCompletoConCargo => '$nombreCompleto - ${cargo.displayName}';
+
+  // Método para verificar si es administrador
+  bool get esAdministrador => cargo == CargoEmpleado.administrador;
 }

@@ -15,9 +15,18 @@ import 'package:client_service/view/billing/dashboard_facturacion.dart';
 import 'package:client_service/view/calendar/calendario_screen.dart';
 import 'package:client_service/view/notifications/notificaciones_screen.dart';
 import 'package:client_service/view/settings/configuracion_screen.dart';
+import 'package:client_service/view/auth/splash_screen.dart';
+import 'package:client_service/view/auth/login_selection_screen.dart';
+import 'package:client_service/view/auth/login_empleado_screen.dart';
+import 'package:client_service/view/auth/login_admin_screen.dart';
 import 'package:flutter/cupertino.dart';
 
 final Map<String, WidgetBuilder> routes = {
+  // Auth
+  '/splash': (context) => const SplashScreen(),
+  '/login': (context) => const LoginSelectionScreen(),
+  '/login-empleado': (context) => const LoginEmpleadoScreen(),
+  '/login-admin': (context) => const LoginAdminScreen(),
   // Registros
   'Nuevos Empleados': (context) => const RegistroEmpleadoPage(),
   'Nuevos Clientes': (context) => const RegistroClientePage(),

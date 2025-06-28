@@ -334,7 +334,6 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                                 final fecha = DateFormat('dd/MM/yyyy')
                                     .parse(_dateController.text);
                                 final nuevoEmpleado = Empleado(
-                                  id: '',
                                   nombre: _nombre.text.trim(),
                                   apellido: _apellido.text.trim(),
                                   cedula: _cedula.text.trim(),
