@@ -6,6 +6,14 @@ import 'package:universal_html/html.dart' as html;
 ///
 /// This utility is designed to be compatible with the latest versions of
 /// the excel package and Dart SDK.
+class ExcelSheetData {
+  final String sheetName;
+  final List<String> headers;
+  final List<List<dynamic>> rows;
+  ExcelSheetData(
+      {required this.sheetName, required this.headers, required this.rows});
+}
+
 class ExcelExportUtility {
   /// Exports a Firestore collection to an Excel file.
   ///
@@ -105,6 +113,45 @@ class ExcelExportUtility {
       await _downloadFile(fileBytes, fileName);
     } catch (e) {
       throw Exception('Error exporting to Excel: $e');
+    }
+  }
+
+  /// Exporta múltiples hojas a un solo archivo Excel (una hoja por empleado, por ejemplo)
+  static Future<void> exportMultipleSheets({
+    required List<ExcelSheetData> sheets,
+    String fileName = 'export.xlsx',
+  }) async {
+    try {
+      var excel = Excel.createExcel();
+      // Eliminar la hoja por defecto
+      excel.delete('Sheet1');
+      for (final sheetData in sheets) {
+        final sheet = excel[sheetData.sheetName];
+        // Header
+        for (int i = 0; i < sheetData.headers.length; i++) {
+          var cell = sheet
+              .cell(CellIndex.indexByColumnRow(columnIndex: i, rowIndex: 0));
+          cell.value = TextCellValue(sheetData.headers[i]);
+        }
+        // Data
+        for (int r = 0; r < sheetData.rows.length; r++) {
+          final row = sheetData.rows[r];
+          for (int c = 0; c < row.length; c++) {
+            var cell = sheet.cell(
+                CellIndex.indexByColumnRow(columnIndex: c, rowIndex: r + 1));
+            cell.value = TextCellValue(row[c]?.toString() ?? '');
+          }
+        }
+        // Column widths
+        for (int i = 0; i < sheetData.headers.length; i++) {
+          sheet.setColumnWidth(i, 20.0);
+        }
+      }
+      List<int>? fileBytes = excel.encode();
+      if (fileBytes == null) throw Exception("Failed to encode Excel file.");
+      await _downloadFile(fileBytes, fileName);
+    } catch (e) {
+      throw Exception('Error exporting multiple sheets to Excel: $e');
     }
   }
 
