@@ -1,5 +1,4 @@
 name: Flutter CI
-
 on:
   push:
     branches: [main]
@@ -8,101 +7,82 @@ on:
   workflow_dispatch:
   release:
     types: [created]
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.19.6"
-
       - name: Install dependencies
         run: flutter pub get
-
       - name: Run analyzer
         run: flutter analyze
-
       - name: Run CRUD tests
         run: flutter test test/crud/
-
       - name: Run ViewModel tests
         run: flutter test test/viewmodels/
-
       - name: Run Utils tests
         run: flutter test test/utils/
-
       - name: Run Services tests
         run: flutter test test/services/
-
       - name: Run Repositories tests
         run: flutter test test/repositories/
-
       - name: Run all tests with coverage
         run: flutter test --coverage
-
       - name: Generate test report for SonarQube
         run: flutter test --machine --coverage > tests.output
-
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
-
       - name: Upload test report
         uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: tests.output
-
       - name: Build APK (release)
         run: flutter build apk --release
-
       - name: Build Web (release)
         run: flutter build web
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
-
       - name: Upload Web Build
         uses: actions/upload-artifact@v4
         with:
           name: web-build
           path: build/web
-
   release:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.19.6"
-
       - name: Install dependencies
         run: flutter pub get
-
       - name: Build APK (release)
         run: flutter build apk --release
-
       - name: Build Web (release)
         run: flutter build web
-
+      - name: Create web archive
+        run: |
+          cd build/web
+          tar -czf ../web-release.tar.gz .
       - name: Upload Release Assets
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v1
         with:
           files: |
             build/app/outputs/flutter-apk/app-release.apk
-            build/web/**
+            build/web-release.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
