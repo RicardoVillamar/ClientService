@@ -58,6 +58,8 @@ dependencies:
   provider: ^6.1.2
   flash: ^3.1.1
   firebase_auth: ^5.6.0
+  build_runner: ^2.5.4
+  mockito: ^5.4.6
 
 dev_dependencies:
   flutter_test:
