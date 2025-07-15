@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:client_service/services/auth_service.dart';
-import 'package:client_service/models/usuario.dart';
-import 'package:client_service/view/home/view.dart';
-import 'package:client_service/view/widgets/auth/login_card.dart';
+import 'package:client_service/view/calendar/calendario_screen.dart';
+import 'package:client_service/view/auth/cambiar_password_screen.dart';
+import 'package:client_service/view/asistencia/asistencia_screen.dart';
 
 class LoginEmpleadoScreen extends StatefulWidget {
   const LoginEmpleadoScreen({super.key});
@@ -12,240 +12,132 @@ class LoginEmpleadoScreen extends StatefulWidget {
 }
 
 class _LoginEmpleadoScreenState extends State<LoginEmpleadoScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _cedulaController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _obscurePassword = true;
 
-  Future<void> _iniciarSesion(String email, String password) async {
-    setState(() {
-      _isLoading = true;
-    });
+  @override
+  void dispose() {
+    _cedulaController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
-    try {
-      final resultado = await AuthService.iniciarSesion(
-        email: email,
-        password: password,
-      );
-
-      if (resultado['success']) {
-        final usuario = resultado['usuario'] as Usuario;
-
-        // Verificar que sea un empleado
-        if (usuario.tipo != TipoUsuario.empleado) {
-          _mostrarError('Este acceso es solo para empleados');
-          return;
-        }
-
-        // Navegar a la pantalla principal
-        if (mounted) {
-          Navigator.pushAndRemoveUntil(
+  Future<void> _iniciarSesion() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isLoading = true);
+    final cedula = _cedulaController.text.trim();
+    final password = _passwordController.text;
+    final email = '$cedula@empleado.com';
+    final resultado =
+        await AuthService.iniciarSesion(email: email, password: password);
+    setState(() => _isLoading = false);
+    if (resultado['success']) {
+      // Si es primer login (password == cedula), forzar cambio de contraseña
+      if (password == cedula) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (_) => CambiarPasswordScreen(cedula: cedula)),
+        );
+      } else {
+        // Ir a la pantalla principal de empleado (calendario + asistencia)
+        Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-            (route) => false,
+          MaterialPageRoute(builder: (_) => const EmpleadoHomeScreen()),
           );
         }
       } else {
         _mostrarError(resultado['message']);
-      }
-    } catch (e) {
-      _mostrarError('Error inesperado: $e');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
     }
   }
 
   void _mostrarError(String mensaje) {
-    if (!mounted) return;
-
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(mensaje),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
+      SnackBar(content: Text(mensaje), backgroundColor: Colors.red),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SafeArea(
+      body: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(32),
+          child: Form(
+            key: _formKey,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // Botón de regreso
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                    ),
-                  ],
+                const Text('Login Empleado',
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 32),
+                TextFormField(
+                  controller: _cedulaController,
+                  decoration: const InputDecoration(labelText: 'Cédula'),
+                  keyboardType: TextInputType.number,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Ingrese su cédula' : null,
                 ),
-
-                const SizedBox(height: 40),
-
-                // Header con logo y título
-                const Column(
-                  children: [
-                    Text(
-                      'LIGHT VITAE',
-                      style: TextStyle(
-                        fontSize: 54,
-                        color: Color(0xFF8962F8),
-                        letterSpacing: 3,
-                        fontWeight: FontWeight.w900,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black26,
-                            offset: Offset(1, 1),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 10),
-                    Text(
-                      'SERVICE',
-                      style: TextStyle(
-                        fontSize: 48,
-                        color: Color(0xFF8962F8),
-                        letterSpacing: 2,
-                        fontWeight: FontWeight.w700,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black26,
-                            offset: Offset(1, 1),
-                            blurRadius: 2,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 20),
-
-                    // Tipo de usuario
-                    Text(
-                      'Usuario',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black54,
-                            offset: Offset(1, 1),
-                            blurRadius: 3,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 80),
-
-                // Formulario flotante
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(35),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 25,
-                        offset: const Offset(0, 15),
-                      ),
-                    ],
-                  ),
-                  child: LoginCard(
-                    userType: 'Usuario',
-                    isLoading: _isLoading,
-                    onLogin: _iniciarSesion,
-                    showFormOnly: true,
-                  ),
-                ),
-
-                const SizedBox(height: 40),
-
-                // Enlaces adicionales
-                TextButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Ayuda'),
-                        content: const Text(
-                          'Si tienes problemas para acceder, contacta al administrador del sistema.',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('Entendido'),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  child: Text(
-                    '¿Problemas para acceder?',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
-                      fontSize: 14,
-                      shadows: const [
-                        Shadow(
-                          color: Colors.black54,
-                          offset: Offset(1, 1),
-                          blurRadius: 2,
-                        ),
-                      ],
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Contraseña',
+                    suffixIcon: IconButton(
+                      icon: Icon(_obscurePassword
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
+                  obscureText: _obscurePassword,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Ingrese su contraseña' : null,
                 ),
-
-                const SizedBox(height: 20),
-
-                // Footer
-                Text(
-                  '© 2025 Light Vitae',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.white.withOpacity(0.8),
-                    shadows: const [
-                      Shadow(
-                        color: Colors.black54,
-                        offset: Offset(1, 1),
-                        blurRadius: 2,
-                      ),
-                    ],
-                  ),
+                const SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _iniciarSesion,
+                  child: _isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text('Ingresar'),
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// Pantalla principal de empleado: calendario + asistencia
+class EmpleadoHomeScreen extends StatelessWidget {
+  const EmpleadoHomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Panel Empleado'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.calendar_today), text: 'Servicios'),
+              Tab(icon: Icon(Icons.access_time), text: 'Asistencia'),
+            ],
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            CalendarioScreen(),
+            AsistenciaScreen(),
+          ],
         ),
       ),
     );

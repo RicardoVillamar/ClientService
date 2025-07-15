@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:client_service/view/auth/login_empleado_screen.dart';
 import 'package:client_service/view/auth/login_admin_screen.dart';
 import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
+import 'package:client_service/view/auth/login_empleado_screen.dart';
 
 class LoginSelectionScreen extends StatelessWidget {
   const LoginSelectionScreen({super.key});
@@ -79,44 +79,6 @@ class LoginSelectionScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: Column(
                   children: [
-                    // Botón Usuario (Empleado)
-                    Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginEmpleadoScreen(),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primaryColor,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 24),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.person, size: 24),
-                            const SizedBox(width: 12),
-                            Text(
-                              'Usuario',
-                              style: AppFonts.buttonBold.copyWith(
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
                     // Botón Administrador
                     SizedBox(
                       width: double.infinity,
@@ -145,6 +107,42 @@ class LoginSelectionScreen extends StatelessWidget {
                             const SizedBox(width: 12),
                             Text(
                               'Administrador',
+                              style: AppFonts.buttonBold.copyWith(
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Botón Usuario (Empleado)
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginEmpleadoScreen(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          elevation: 5,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.person, size: 24),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Empleado',
                               style: AppFonts.buttonBold.copyWith(
                                 fontSize: 18,
                               ),
