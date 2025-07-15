@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:client_service/services/auth_service.dart';
-import 'package:client_service/models/usuario.dart';
 import 'package:client_service/view/home/view.dart';
 import 'package:client_service/view/widgets/auth/login_card.dart';
 
@@ -26,21 +25,25 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
       );
 
       if (resultado['success']) {
-        final usuario = resultado['usuario'] as Usuario;
-
-        // Verificar que sea un administrador
-        if (usuario.tipo != TipoUsuario.administrador) {
-          _mostrarError('Este acceso es solo para administradores');
-          return;
-        }
-
-        // Navegar a la pantalla principal
-        if (mounted) {
+        final user = resultado['user'];
+        if (user != null) {
+          // Si el email es de empleado (termina en @empleado.com)
+          if (user.email != null && user.email!.endsWith('@empleado.com')) {
+            // Si es primer login (password == cédula), redirigir a cambio de contraseña
+            // (Esto requiere lógica adicional en AuthService para detectar primer login)
+            // Por ahora, redirigir a la pantalla de cambio de contraseña si es necesario
+            // Si no, redirigir a la pantalla principal de empleado
+            // Ejemplo:
+            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => CambiarPasswordScreen()));
+            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => EmpleadoHomeScreen()));
+          } else {
+            // Administradora
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),
             (route) => false,
           );
+          }
         }
       } else {
         _mostrarError(resultado['message']);
@@ -106,10 +109,10 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                 const SizedBox(height: 40),
 
                 // Header con logo y título
-                Column(
+                const Column(
                   children: [
                     // Título LIGHT VITAE más grande
-                    const Text(
+                    Text(
                       'LIGHT VITAE',
                       style: TextStyle(
                         fontSize: 48,
@@ -126,10 +129,10 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
 
                     // Subtítulo SERVICE
-                    const Text(
+                    Text(
                       'SERVICE',
                       style: TextStyle(
                         fontSize: 24,
@@ -146,10 +149,10 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
 
                     // Tipo de usuario
-                    const Text(
+                    Text(
                       'Administrador',
                       style: TextStyle(
                         color: Colors.white,

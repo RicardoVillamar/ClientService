@@ -43,7 +43,7 @@ dependencies:
   google_fonts: ^6.2.1
   intl: ^0.20.2
   image_picker: ^1.1.2
-  firebase_core: ^3.13.1
+  firebase_core: ^3.14.0
   excel: ^4.0.6
   universal_html: ^2.2.4
   cloud_firestore: ^5.6.8
@@ -57,6 +57,9 @@ dependencies:
   get_it: ^8.0.2
   provider: ^6.1.2
   flash: ^3.1.1
+  firebase_auth: ^5.6.0
+  build_runner: ^2.5.4
+  mockito: ^5.4.6
 
 dev_dependencies:
   flutter_test:

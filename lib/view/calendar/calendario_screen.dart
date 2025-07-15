@@ -5,6 +5,8 @@ import 'package:client_service/utils/events/evento_calendario.dart';
 import 'package:client_service/viewmodel/calendario_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CalendarioScreen extends StatefulWidget {
   const CalendarioScreen({super.key});
@@ -278,7 +280,7 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
             children: [
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.event,
                     color: AppColors.primaryColor,
                     size: 20,
@@ -380,126 +382,131 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
         break;
     }
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: tipoColor, width: 1),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: tipoColor.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      tipoIcon,
-                      color: tipoColor,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          evento.titulo,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          evento.tipo.displayName,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: tipoColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  _buildEstadoBadge(evento.estado),
-                ],
-              ),
-              const SizedBox(height: 12),
-              if (evento.descripcion.isNotEmpty) ...[
+    return GestureDetector(
+      onTap: () => _onEventTap(evento),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: tipoColor, width: 1),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Row(
                   children: [
-                    Icon(Icons.description, size: 16, color: Colors.grey[600]),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        evento.descripcion,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[700],
-                        ),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: tipoColor.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        tipoIcon,
+                        color: tipoColor,
+                        size: 20,
                       ),
                     ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            evento.titulo,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            evento.tipo.displayName,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: tipoColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    _buildEstadoBadge(evento.estado),
                   ],
                 ),
-                const SizedBox(height: 8),
-              ],
-              Row(
-                children: [
-                  Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
-                  const SizedBox(width: 8),
-                  Text(
-                    evento.horaFin != null
-                        ? '${evento.horaInicio} - ${evento.horaFin}'
-                        : evento.horaInicio,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  if (evento.direccion != null) ...[
-                    Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        evento.direccion!,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[700],
+                const SizedBox(height: 12),
+                if (evento.descripcion.isNotEmpty) ...[
+                  Row(
+                    children: [
+                      Icon(Icons.description,
+                          size: 16, color: Colors.grey[600]),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          evento.descripcion,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[700],
+                          ),
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                  const SizedBox(height: 8),
                 ],
-              ),
-              if (evento.tecnico != null) ...[
-                const SizedBox(height: 8),
                 Row(
                   children: [
-                    Icon(Icons.person, size: 16, color: Colors.grey[600]),
+                    Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
                     const SizedBox(width: 8),
                     Text(
-                      'Técnico: ${evento.tecnico}',
+                      evento.horaFin != null
+                          ? '${evento.horaInicio} - ${evento.horaFin}'
+                          : evento.horaInicio,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[700],
                       ),
                     ),
+                    const SizedBox(width: 16),
+                    if (evento.direccion != null) ...[
+                      Icon(Icons.location_on,
+                          size: 16, color: Colors.grey[600]),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          evento.direccion!,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[700],
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
+                if (evento.tecnico != null) ...[
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(Icons.person, size: 16, color: Colors.grey[600]),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Técnico: ${evento.tecnico}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -543,5 +550,93 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
         ),
       ),
     );
+  }
+
+  void _onEventTap(EventoCalendario evento) async {
+    final user = FirebaseAuth.instance.currentUser;
+    final isEmpleado = user != null &&
+        user.email != null &&
+        user.email!.endsWith('@empleado.com');
+    if (!isEmpleado) return;
+    final now = TimeOfDay.now();
+    final hoy = DateTime.now();
+    final horaInicio = _parseTimeOfDay(evento.horaInicio);
+    final horaFin =
+        evento.horaFin != null ? _parseTimeOfDay(evento.horaFin!) : null;
+    final puedeCambiarEstado = _puedeCambiarEstado(now, horaInicio, horaFin);
+    final opciones = <String>[];
+    if (puedeCambiarEstado) {
+      if (evento.estado.toLowerCase() == 'pendiente') {
+        opciones.add('En Proceso');
+      }
+      if (evento.estado.toLowerCase() == 'en proceso' ||
+          evento.estado.toLowerCase() == 'enproceso') {
+        opciones.add('Terminado');
+      }
+    }
+    if (opciones.isEmpty) {
+      opciones.add('No puedes cambiar el estado en este momento');
+    }
+    final seleccion = await showModalBottomSheet<String>(
+      context: context,
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: opciones
+            .map((opcion) => ListTile(
+                  title: Text(opcion),
+                  onTap: () => Navigator.pop(context, opcion),
+                ))
+            .toList(),
+      ),
+    );
+    if (seleccion == null || seleccion.startsWith('No puedes')) return;
+    // Actualizar estado en Firestore según el tipo
+    await _actualizarEstadoServicio(evento, seleccion);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Estado actualizado a "$seleccion"'),
+            backgroundColor: Colors.green),
+      );
+      await _cargarEventos();
+    }
+  }
+
+  TimeOfDay _parseTimeOfDay(String hora) {
+    final partes = hora.split(':');
+    return TimeOfDay(hour: int.parse(partes[0]), minute: int.parse(partes[1]));
+  }
+
+  bool _puedeCambiarEstado(TimeOfDay ahora, TimeOfDay inicio, TimeOfDay? fin) {
+    final ahoraMin = ahora.hour * 60 + ahora.minute;
+    final inicioMin = inicio.hour * 60 + inicio.minute;
+    if (ahoraMin < inicioMin) return false;
+    if (fin != null) {
+      final finMin = fin.hour * 60 + fin.minute;
+      if (ahoraMin > finMin + 30) return false;
+    }
+    return true;
+  }
+
+  Future<void> _actualizarEstadoServicio(
+      EventoCalendario evento, String nuevoEstado) async {
+    final tipo = evento.tipo;
+    final id = evento.id;
+    String coleccion = '';
+    String campoEstado = 'estado';
+    switch (tipo) {
+      case TipoServicio.camara:
+        coleccion = 'camaras';
+        break;
+      case TipoServicio.instalacion:
+        coleccion = 'instalaciones';
+        break;
+      case TipoServicio.alquiler:
+        coleccion = 'alquileres';
+        break;
+    }
+    await FirebaseFirestore.instance.collection(coleccion).doc(id).update({
+      campoEstado: nuevoEstado,
+    });
   }
 }

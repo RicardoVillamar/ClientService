@@ -1,95 +1,81 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:client_service/models/usuario.dart';
+import 'package:client_service/models/empleado.dart';
 
 class InitialUserSetup {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static Future<void> crearUsuariosIniciales() async {
+  static Future<void> crearEmpleadosIniciales() async {
     try {
-      // Verificar si ya existen usuarios
-      final existingUsers = await _firestore.collection('usuarios').get();
-      if (existingUsers.docs.isNotEmpty) {
-        print('Ya existen usuarios en el sistema');
+      // Verificar si ya existen empleados
+      final existing = await _firestore.collection('empleados').get();
+      if (existing.docs.isNotEmpty) {
+        print('Ya existen empleados en el sistema');
         return;
       }
 
-      // Crear usuario administrador
-      final admin = Usuario(
-        email: 'admin@lightvitae.com',
-        password: 'admin123', // En producción, esto debería estar hasheado
-        tipo: TipoUsuario.administrador,
+      // Crear empleado administrador
+      final admin = Empleado(
         nombre: 'Administrador',
         apellido: 'Sistema',
-        activo: true,
-        fechaCreacion: DateTime.now(),
+        cedula: 'admin',
+        direccion: 'Oficina',
+        telefono: '0000000000',
+        correo: 'admin@lightviate.com',
+        cargo: CargoEmpleado.administrador,
+        fechaContratacion: DateTime.now(),
+        fotoUrl: '',
       );
+      await _firestore.collection('empleados').add(admin.toMap());
+      print('Empleado administrador creado: admin@lightviate.com');
 
-      await _firestore.collection('usuarios').add(admin.toMap());
-      print('Usuario administrador creado: admin@lightvitae.com / admin123');
-
-      // Crear usuario empleado de prueba
-      final empleado = Usuario(
-        email: 'empleado@lightvitae.com',
-        password: 'empleado123', // En producción, esto debería estar hasheado
-        tipo: TipoUsuario.empleado,
-        nombre: 'Juan',
-        apellido: 'Pérez',
-        activo: true,
-        fechaCreacion: DateTime.now(),
-      );
-
-      await _firestore.collection('usuarios').add(empleado.toMap());
-      print('Usuario empleado creado: empleado@lightvitae.com / empleado123');
-
-      // Crear más usuarios empleados de ejemplo
+      // Crear empleados de ejemplo
       final empleados = [
-        Usuario(
-          email: 'maria.gonzalez@lightvitae.com',
-          password: 'maria123',
-          tipo: TipoUsuario.empleado,
+        Empleado(
+          nombre: 'Juan',
+          apellido: 'Pérez',
+          cedula: '123',
+          direccion: 'Calle 1',
+          telefono: '1111111111',
+          correo: 'juan@lightviate.com',
+          cargo: CargoEmpleado.tecnico,
+          fechaContratacion: DateTime.now(),
+        ),
+        Empleado(
           nombre: 'María',
           apellido: 'González',
-          activo: true,
-          fechaCreacion: DateTime.now(),
-        ),
-        Usuario(
-          email: 'carlos.rodriguez@lightvitae.com',
-          password: 'carlos123',
-          tipo: TipoUsuario.empleado,
-          nombre: 'Carlos',
-          apellido: 'Rodríguez',
-          activo: true,
-          fechaCreacion: DateTime.now(),
+          cedula: '456',
+          direccion: 'Calle 2',
+          telefono: '2222222222',
+          correo: 'maria@lightviate.com',
+          cargo: CargoEmpleado.ayudante,
+          fechaContratacion: DateTime.now(),
         ),
       ];
-
       for (final emp in empleados) {
-        await _firestore.collection('usuarios').add(emp.toMap());
-        print('Usuario empleado creado: ${emp.email} / ${emp.password}');
+        await _firestore.collection('empleados').add(emp.toMap());
+        print('Empleado creado: ${emp.correo}');
       }
-
-      print('Usuarios iniciales creados exitosamente');
+      print('Empleados iniciales creados exitosamente');
     } catch (e) {
-      print('Error al crear usuarios iniciales: $e');
+      print('Error al crear empleados iniciales: $e');
     }
   }
 
-  // Método para mostrar todos los usuarios (solo para debug)
-  static Future<void> mostrarUsuarios() async {
+  // Método para mostrar todos los empleados (solo para debug)
+  static Future<void> mostrarEmpleados() async {
     try {
-      final usuarios = await _firestore.collection('usuarios').get();
-      print('\n=== USUARIOS EN EL SISTEMA ===');
-      for (final doc in usuarios.docs) {
-        final usuario = Usuario.fromMap(doc.data(), doc.id);
-        print('ID: ${usuario.id}');
-        print('Email: ${usuario.email}');
-        print('Nombre: ${usuario.nombreCompleto}');
-        print('Tipo: ${usuario.tipo.displayName}');
-        print('Activo: ${usuario.activo}');
+      final empleados = await _firestore.collection('empleados').get();
+      print('\n=== EMPLEADOS EN EL SISTEMA ===');
+      for (final doc in empleados.docs) {
+        final empleado = Empleado.fromMap(doc.data(), doc.id);
+        print('ID: ${empleado.id}');
+        print('Nombre: ${empleado.nombreCompleto}');
+        print('Cargo: ${empleado.cargoDisplayName}');
+        print('Correo: ${empleado.correo}');
         print('---');
       }
     } catch (e) {
-      print('Error al obtener usuarios: $e');
+      print('Error al obtener empleados: $e');
     }
   }
 }

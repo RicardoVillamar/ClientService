@@ -1,8 +1,8 @@
 import 'package:client_service/view/registers/client/register_client.dart';
 import 'package:client_service/view/registers/employet/register_employet.dart';
-import 'package:client_service/view/reports/camara.dart';
-import 'package:client_service/view/reports/cliente.dart';
 import 'package:client_service/view/reports/empleado.dart';
+import 'package:client_service/view/reports/cliente.dart';
+import 'package:client_service/view/reports/camara.dart';
 import 'package:client_service/view/reports/instalacion.dart';
 import 'package:client_service/view/reports/vehiculo.dart';
 import 'package:client_service/view/service/vehicle_rental/register_vehicle.dart';
@@ -43,7 +43,7 @@ final Map<String, WidgetBuilder> routes = {
   'Anular Factura': (context) => const AnularFacturas(),
 
   // Reportes
-  'Empleados': (context) => const ReportEmpleado(),
+  'Empleados': (context) => const AsistenciasAdminScreen(),
   'Clientes': (context) => const ReportCliente(),
   'Reporte de instalaciones': (context) => const ReportInstalacion(),
   'Reporte de cámaras': (context) => const ReportCamara(),

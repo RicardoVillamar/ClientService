@@ -37,7 +37,7 @@ class _CreateFacturaState extends State<CreateFactura> {
 
   List<Cliente> _clientes = [];
   List<Empleado> _empleados = [];
-  List<ItemFactura> _items = [];
+  final List<ItemFactura> _items = [];
 
   Cliente? _clienteSeleccionado;
   TipoServicio _tipoServicioSeleccionado = TipoServicio.instalacion;
@@ -389,7 +389,7 @@ class _CreateFacturaState extends State<CreateFactura> {
                           _actualizarItem(index, nuevoItem),
                       onDelete: () => _eliminarItem(index),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),

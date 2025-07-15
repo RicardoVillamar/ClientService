@@ -1,0 +1,368 @@
+{"protocolVersion":"0.1.1","runnerVersion":null,"pid":855129,"type":"start","time":0}
+{"suite":{"id":0,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/widget_test.dart"},"type":"suite","time":0}
+{"test":{"id":1,"name":"loading /home/save/Dev/Projects/LightViate/test/widget_test.dart","suiteID":0,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":1}
+{"suite":{"id":2,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/login_admin_screen_test.dart"},"type":"suite","time":6}
+{"test":{"id":3,"name":"loading /home/save/Dev/Projects/LightViate/test/login_admin_screen_test.dart","suiteID":2,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":7}
+{"suite":{"id":4,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/login_empleado_screen_test.dart"},"type":"suite","time":7}
+{"test":{"id":5,"name":"loading /home/save/Dev/Projects/LightViate/test/login_empleado_screen_test.dart","suiteID":4,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":7}
+{"suite":{"id":6,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/cambiar_password_screen_test.dart"},"type":"suite","time":7}
+{"test":{"id":7,"name":"loading /home/save/Dev/Projects/LightViate/test/cambiar_password_screen_test.dart","suiteID":6,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":7}
+{"suite":{"id":8,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/asistencia_screen_test.dart"},"type":"suite","time":8}
+{"test":{"id":9,"name":"loading /home/save/Dev/Projects/LightViate/test/asistencia_screen_test.dart","suiteID":8,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":8}
+{"suite":{"id":10,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/register_camara_screen_test.dart"},"type":"suite","time":9}
+{"test":{"id":11,"name":"loading /home/save/Dev/Projects/LightViate/test/views/register_camara_screen_test.dart","suiteID":10,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":9}
+{"count":29,"time":12,"type":"allSuites"}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:42341/oYBHqd6MEjk=/","observatoryUri":"http://127.0.0.1:42341/oYBHqd6MEjk=/"}}]
+{"testID":1,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":2706}
+{"group":{"id":12,"suiteID":0,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":2710}
+{"test":{"id":13,"name":"Basic widget test","suiteID":0,"groupIDs":[12],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":12,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/widget_test.dart"},"type":"testStart","time":2711}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:43555/uimGSVh5muE=/","observatoryUri":"http://127.0.0.1:43555/uimGSVh5muE=/"}}]
+{"testID":13,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3379}
+{"testID":3,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":3578}
+{"group":{"id":14,"suiteID":2,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":3579}
+{"test":{"id":15,"name":"LoginAdminScreen muestra campos y botón","suiteID":2,"groupIDs":[14],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/login_admin_screen_test.dart"},"type":"testStart","time":3579}
+{"suite":{"id":16,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/edit_camara_screen_test.dart"},"type":"suite","time":3974}
+{"test":{"id":17,"name":"loading /home/save/Dev/Projects/LightViate/test/views/edit_camara_screen_test.dart","suiteID":16,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":3974}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:41411/6Yu_HD-E_9Y=/","observatoryUri":"http://127.0.0.1:41411/6Yu_HD-E_9Y=/"}}]
+{"testID":5,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":4492}
+{"group":{"id":18,"suiteID":4,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":4493}
+{"test":{"id":19,"name":"LoginEmpleadoScreen muestra campos y botón","suiteID":4,"groupIDs":[18],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/login_empleado_screen_test.dart"},"type":"testStart","time":4493}
+{"testID":15,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4729}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:37067/YpqV2fTLJEQ=/","observatoryUri":"http://127.0.0.1:37067/YpqV2fTLJEQ=/"}}]
+{"testID":7,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":5318}
+{"group":{"id":20,"suiteID":6,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":5319}
+{"test":{"id":21,"name":"CambiarPasswordScreen muestra campos y botón","suiteID":6,"groupIDs":[20],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/cambiar_password_screen_test.dart"},"type":"testStart","time":5319}
+{"testID":19,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":5560}
+{"suite":{"id":22,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/register_installation_screen_test.dart"},"type":"suite","time":5814}
+{"test":{"id":23,"name":"loading /home/save/Dev/Projects/LightViate/test/views/register_installation_screen_test.dart","suiteID":22,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":5814}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:38775/5yVueLFyKrY=/","observatoryUri":"http://127.0.0.1:38775/5yVueLFyKrY=/"}}]
+{"testID":9,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":6431}
+{"group":{"id":24,"suiteID":8,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":6432}
+{"test":{"id":25,"name":"AsistenciaScreen muestra botones de entrada y salida","suiteID":8,"groupIDs":[24],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/asistencia_screen_test.dart"},"type":"testStart","time":6433}
+{"suite":{"id":26,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/edit_installation_screen_test.dart"},"type":"suite","time":6574}
+{"test":{"id":27,"name":"loading /home/save/Dev/Projects/LightViate/test/views/edit_installation_screen_test.dart","suiteID":26,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":6574}
+{"testID":21,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":6619}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:36247/BZJcZ0hlw_8=/","observatoryUri":"http://127.0.0.1:36247/BZJcZ0hlw_8=/"}}]
+{"testID":11,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":7254}
+{"group":{"id":28,"suiteID":10,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":7255}
+{"test":{"id":29,"name":"(setUpAll)","suiteID":10,"groupIDs":[28],"metadata":{"skip":false,"skipReason":null},"line":8,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/register_camara_screen_test.dart"},"type":"testStart","time":7255}
+{"testID":25,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7275}
+{"testID":29,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":7306}
+{"test":{"id":30,"name":"Registro de cámara - pantalla se carga correctamente","suiteID":10,"groupIDs":[28],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":20,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/register_camara_screen_test.dart"},"type":"testStart","time":7308}
+{"suite":{"id":31,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/register_vehicle_screen_test.dart"},"type":"suite","time":7415}
+{"test":{"id":32,"name":"loading /home/save/Dev/Projects/LightViate/test/views/register_vehicle_screen_test.dart","suiteID":31,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":7416}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:38315/IBdudlo-V_o=/","observatoryUri":"http://127.0.0.1:38315/IBdudlo-V_o=/"}}]
+{"suite":{"id":33,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/edit_vehicle_screen_test.dart"},"type":"suite","time":8122}
+{"test":{"id":34,"name":"loading /home/save/Dev/Projects/LightViate/test/views/edit_vehicle_screen_test.dart","suiteID":33,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":8122}
+{"testID":17,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":8235}
+{"group":{"id":35,"suiteID":16,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":8236}
+{"test":{"id":36,"name":"(setUpAll)","suiteID":16,"groupIDs":[35],"metadata":{"skip":false,"skipReason":null},"line":9,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/edit_camara_screen_test.dart"},"type":"testStart","time":8236}
+{"testID":36,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":8288}
+{"test":{"id":37,"name":"Edición de cámara - pantalla se carga correctamente","suiteID":16,"groupIDs":[35],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":21,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/edit_camara_screen_test.dart"},"type":"testStart","time":8289}
+{"testID":30,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8776}
+{"test":{"id":38,"name":"(tearDownAll)","suiteID":10,"groupIDs":[28],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":8777}
+{"testID":38,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":8787}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:43279/ZUuos9-NfuE=/","observatoryUri":"http://127.0.0.1:43279/ZUuos9-NfuE=/"}}]
+{"testID":23,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":9169}
+{"group":{"id":39,"suiteID":22,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":9170}
+{"test":{"id":40,"name":"(setUpAll)","suiteID":22,"groupIDs":[39],"metadata":{"skip":false,"skipReason":null},"line":8,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/register_installation_screen_test.dart"},"type":"testStart","time":9170}
+{"testID":40,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":9220}
+{"test":{"id":41,"name":"Registro de instalación - pantalla se carga correctamente","suiteID":22,"groupIDs":[39],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":20,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/register_installation_screen_test.dart"},"type":"testStart","time":9221}
+{"suite":{"id":42,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/register_employet_screen_test.dart"},"type":"suite","time":9706}
+{"test":{"id":43,"name":"loading /home/save/Dev/Projects/LightViate/test/views/register_employet_screen_test.dart","suiteID":42,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":9706}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:34583/QF8IKRHVTJU=/","observatoryUri":"http://127.0.0.1:34583/QF8IKRHVTJU=/"}}]
+{"testID":37,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9900}
+{"test":{"id":44,"name":"(tearDownAll)","suiteID":16,"groupIDs":[35],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":9900}
+{"testID":44,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":9909}
+{"testID":27,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":10141}
+{"group":{"id":45,"suiteID":26,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":10142}
+{"test":{"id":46,"name":"(setUpAll)","suiteID":26,"groupIDs":[45],"metadata":{"skip":false,"skipReason":null},"line":10,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/edit_installation_screen_test.dart"},"type":"testStart","time":10142}
+{"testID":46,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":10248}
+{"test":{"id":47,"name":"Edición de instalación - pantalla se carga correctamente","suiteID":26,"groupIDs":[45],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":22,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/edit_installation_screen_test.dart"},"type":"testStart","time":10252}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:45497/ZFOwcHNLqQs=/","observatoryUri":"http://127.0.0.1:45497/ZFOwcHNLqQs=/"}}]
+{"suite":{"id":48,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/register_client_screen_test.dart"},"type":"suite","time":10931}
+{"test":{"id":49,"name":"loading /home/save/Dev/Projects/LightViate/test/views/register_client_screen_test.dart","suiteID":48,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":10931}
+{"testID":32,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":11184}
+{"group":{"id":50,"suiteID":31,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":11184}
+{"test":{"id":51,"name":"(setUpAll)","suiteID":31,"groupIDs":[50],"metadata":{"skip":false,"skipReason":null},"line":8,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/register_vehicle_screen_test.dart"},"type":"testStart","time":11184}
+{"testID":51,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":11246}
+{"test":{"id":52,"name":"Registro de vehículo - pantalla se carga correctamente","suiteID":31,"groupIDs":[50],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":20,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/register_vehicle_screen_test.dart"},"type":"testStart","time":11247}
+{"testID":41,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":11274}
+{"test":{"id":53,"name":"(tearDownAll)","suiteID":22,"groupIDs":[39],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":11274}
+{"testID":53,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":11284}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:35091/BdWFDiFNXXo=/","observatoryUri":"http://127.0.0.1:35091/BdWFDiFNXXo=/"}}]
+{"testID":34,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":12110}
+{"group":{"id":54,"suiteID":33,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":12110}
+{"test":{"id":55,"name":"(setUpAll)","suiteID":33,"groupIDs":[54],"metadata":{"skip":false,"skipReason":null},"line":9,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/edit_vehicle_screen_test.dart"},"type":"testStart","time":12111}
+{"testID":55,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":12187}
+{"test":{"id":56,"name":"Edición de vehículo - pantalla se carga correctamente","suiteID":33,"groupIDs":[54],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":21,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/edit_vehicle_screen_test.dart"},"type":"testStart","time":12189}
+{"suite":{"id":57,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/create_factura_screen_test.dart"},"type":"suite","time":12302}
+{"test":{"id":58,"name":"loading /home/save/Dev/Projects/LightViate/test/views/create_factura_screen_test.dart","suiteID":57,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":12303}
+{"testID":47,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":12755}
+{"test":{"id":59,"name":"(tearDownAll)","suiteID":26,"groupIDs":[45],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":12756}
+{"testID":59,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":12765}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:44381/_c534dFW3s0=/","observatoryUri":"http://127.0.0.1:44381/_c534dFW3s0=/"}}]
+{"testID":43,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":13032}
+{"group":{"id":60,"suiteID":42,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":13033}
+{"test":{"id":61,"name":"(setUpAll)","suiteID":42,"groupIDs":[60],"metadata":{"skip":false,"skipReason":null},"line":8,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/register_employet_screen_test.dart"},"type":"testStart","time":13033}
+{"testID":61,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":13095}
+{"test":{"id":62,"name":"Registro de empleado - pantalla se carga correctamente","suiteID":42,"groupIDs":[60],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":20,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/register_employet_screen_test.dart"},"type":"testStart","time":13096}
+{"testID":52,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":13250}
+{"test":{"id":63,"name":"(tearDownAll)","suiteID":31,"groupIDs":[50],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":13250}
+{"testID":63,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":13263}
+{"suite":{"id":64,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/edit_factura_screen_test.dart"},"type":"suite","time":13595}
+{"test":{"id":65,"name":"loading /home/save/Dev/Projects/LightViate/test/views/edit_factura_screen_test.dart","suiteID":64,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":13595}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:43465/WTyfTiqvCLo=/","observatoryUri":"http://127.0.0.1:43465/WTyfTiqvCLo=/"}}]
+{"testID":56,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":13952}
+{"test":{"id":66,"name":"(tearDownAll)","suiteID":33,"groupIDs":[54],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":13953}
+{"testID":66,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":13964}
+{"suite":{"id":67,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/views/anular_factura_screen_test.dart"},"type":"suite","time":14115}
+{"test":{"id":68,"name":"loading /home/save/Dev/Projects/LightViate/test/views/anular_factura_screen_test.dart","suiteID":67,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":14115}
+{"testID":49,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":14224}
+{"group":{"id":69,"suiteID":48,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":14225}
+{"test":{"id":70,"name":"(setUpAll)","suiteID":48,"groupIDs":[69],"metadata":{"skip":false,"skipReason":null},"line":9,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/register_client_screen_test.dart"},"type":"testStart","time":14225}
+{"testID":70,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":14291}
+{"test":{"id":71,"name":"Registro de cliente - flujo básico","suiteID":48,"groupIDs":[69],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":21,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/register_client_screen_test.dart"},"type":"testStart","time":14291}
+{"testID":62,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":14827}
+{"test":{"id":72,"name":"(tearDownAll)","suiteID":42,"groupIDs":[60],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":14828}
+{"testID":72,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":14838}
+{"suite":{"id":73,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/crud/cliente_crud_test.dart"},"type":"suite","time":14925}
+{"test":{"id":74,"name":"loading /home/save/Dev/Projects/LightViate/test/crud/cliente_crud_test.dart","suiteID":73,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":14925}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:44939/GAcCFdMYi-k=/","observatoryUri":"http://127.0.0.1:44939/GAcCFdMYi-k=/"}}]
+{"testID":58,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":15325}
+{"group":{"id":75,"suiteID":57,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":15326}
+{"test":{"id":76,"name":"(setUpAll)","suiteID":57,"groupIDs":[75],"metadata":{"skip":false,"skipReason":null},"line":8,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/create_factura_screen_test.dart"},"type":"testStart","time":15326}
+{"testID":76,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":15388}
+{"test":{"id":77,"name":"Crear factura - flujo básico","suiteID":57,"groupIDs":[75],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":20,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/create_factura_screen_test.dart"},"type":"testStart","time":15389}
+{"suite":{"id":78,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/crud/empleado_crud_test.dart"},"type":"suite","time":15789}
+{"test":{"id":79,"name":"loading /home/save/Dev/Projects/LightViate/test/crud/empleado_crud_test.dart","suiteID":78,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":15790}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:45441/l68p93MgWD4=/","observatoryUri":"http://127.0.0.1:45441/l68p93MgWD4=/"}}]
+{"testID":65,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":16545}
+{"group":{"id":80,"suiteID":64,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":16547}
+{"test":{"id":81,"name":"(setUpAll)","suiteID":64,"groupIDs":[80],"metadata":{"skip":false,"skipReason":null},"line":10,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/edit_factura_screen_test.dart"},"type":"testStart","time":16548}
+{"testID":81,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":16681}
+{"test":{"id":82,"name":"Edición de factura - flujo básico","suiteID":64,"groupIDs":[80],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":22,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/edit_factura_screen_test.dart"},"type":"testStart","time":16682}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:41881/ElsN0EyR05o=/","observatoryUri":"http://127.0.0.1:41881/ElsN0EyR05o=/"}}]
+{"testID":71,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":17416}
+{"test":{"id":83,"name":"(tearDownAll)","suiteID":48,"groupIDs":[69],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":17417}
+{"testID":83,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":17427}
+{"testID":68,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":17653}
+{"group":{"id":84,"suiteID":67,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":17654}
+{"test":{"id":85,"name":"(setUpAll)","suiteID":67,"groupIDs":[84],"metadata":{"skip":false,"skipReason":null},"line":8,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/views/anular_factura_screen_test.dart"},"type":"testStart","time":17654}
+{"testID":77,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":17709}
+{"test":{"id":86,"name":"(tearDownAll)","suiteID":57,"groupIDs":[75],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":17709}
+{"testID":86,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":17724}
+{"testID":85,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":17727}
+{"test":{"id":87,"name":"Anular factura - flujo básico","suiteID":67,"groupIDs":[84],"metadata":{"skip":false,"skipReason":null},"line":175,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":20,"root_column":3,"root_url":"file:///home/save/Dev/Projects/LightViate/test/views/anular_factura_screen_test.dart"},"type":"testStart","time":17731}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:35043/FFMYx1DRyqg=/","observatoryUri":"http://127.0.0.1:35043/FFMYx1DRyqg=/"}}]
+{"suite":{"id":88,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/crud/factura_crud_test.dart"},"type":"suite","time":18591}
+{"test":{"id":89,"name":"loading /home/save/Dev/Projects/LightViate/test/crud/factura_crud_test.dart","suiteID":88,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":18591}
+{"testID":74,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":18750}
+{"group":{"id":90,"suiteID":73,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":null,"column":null,"url":null},"type":"group","time":18750}
+{"group":{"id":91,"suiteID":73,"parentID":90,"name":"Casos de Prueba - Gestión de Clientes","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":7,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/cliente_crud_test.dart"},"type":"group","time":18750}
+{"test":{"id":92,"name":"Casos de Prueba - Gestión de Clientes Registrar cliente","suiteID":73,"groupIDs":[90,91],"metadata":{"skip":false,"skipReason":null},"line":8,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/cliente_crud_test.dart"},"type":"testStart","time":18751}
+{"testID":92,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18806}
+{"test":{"id":93,"name":"Casos de Prueba - Gestión de Clientes Editar cliente","suiteID":73,"groupIDs":[90,91],"metadata":{"skip":false,"skipReason":null},"line":25,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/cliente_crud_test.dart"},"type":"testStart","time":18807}
+{"testID":93,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18812}
+{"test":{"id":94,"name":"Casos de Prueba - Gestión de Clientes Eliminar cliente","suiteID":73,"groupIDs":[90,91],"metadata":{"skip":false,"skipReason":null},"line":42,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/cliente_crud_test.dart"},"type":"testStart","time":18813}
+{"testID":94,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18819}
+{"test":{"id":95,"name":"Casos de Prueba - Gestión de Clientes Listar clientes","suiteID":73,"groupIDs":[90,91],"metadata":{"skip":false,"skipReason":null},"line":49,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/cliente_crud_test.dart"},"type":"testStart","time":18834}
+{"testID":95,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18842}
+{"suite":{"id":96,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"suite","time":18877}
+{"test":{"id":97,"name":"loading /home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart","suiteID":96,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":18877}
+{"testID":87,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19236}
+{"test":{"id":98,"name":"(tearDownAll)","suiteID":67,"groupIDs":[84],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":19240}
+{"testID":98,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":19250}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:43663/yhub48GwGBk=/","observatoryUri":"http://127.0.0.1:43663/yhub48GwGBk=/"}}]
+{"testID":79,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":19864}
+{"group":{"id":99,"suiteID":78,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":19864}
+{"group":{"id":100,"suiteID":78,"parentID":99,"name":"Casos de Prueba - Gestión de Empleados","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":7,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/empleado_crud_test.dart"},"type":"group","time":19865}
+{"test":{"id":101,"name":"Casos de Prueba - Gestión de Empleados Registrar empleado","suiteID":78,"groupIDs":[99,100],"metadata":{"skip":false,"skipReason":null},"line":8,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/empleado_crud_test.dart"},"type":"testStart","time":19865}
+{"testID":101,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19930}
+{"test":{"id":102,"name":"Casos de Prueba - Gestión de Empleados Editar empleado","suiteID":78,"groupIDs":[99,100],"metadata":{"skip":false,"skipReason":null},"line":27,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/empleado_crud_test.dart"},"type":"testStart","time":19931}
+{"testID":102,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19942}
+{"test":{"id":103,"name":"Casos de Prueba - Gestión de Empleados Eliminar empleado","suiteID":78,"groupIDs":[99,100],"metadata":{"skip":false,"skipReason":null},"line":46,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/empleado_crud_test.dart"},"type":"testStart","time":19943}
+{"testID":103,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19950}
+{"test":{"id":104,"name":"Casos de Prueba - Gestión de Empleados Listar empleados","suiteID":78,"groupIDs":[99,100],"metadata":{"skip":false,"skipReason":null},"line":53,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/empleado_crud_test.dart"},"type":"testStart","time":19975}
+{"suite":{"id":105,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"suite","time":19988}
+{"test":{"id":106,"name":"loading /home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart","suiteID":105,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":19989}
+{"testID":104,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19992}
+{"test":{"id":107,"name":"Casos de Prueba - Gestión de Empleados Verificar si un empleado es administrador","suiteID":78,"groupIDs":[99,100],"metadata":{"skip":false,"skipReason":null},"line":74,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/empleado_crud_test.dart"},"type":"testStart","time":19998}
+{"testID":107,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20010}
+{"testID":82,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20080}
+{"test":{"id":108,"name":"(tearDownAll)","suiteID":64,"groupIDs":[80],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":20081}
+{"testID":108,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":20092}
+{"suite":{"id":109,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"suite","time":20103}
+{"test":{"id":110,"name":"loading /home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart","suiteID":109,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":20103}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:38619/j1k2aptgq-M=/","observatoryUri":"http://127.0.0.1:38619/j1k2aptgq-M=/"}}]
+{"testID":89,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":20555}
+{"group":{"id":111,"suiteID":88,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":20557}
+{"group":{"id":112,"suiteID":88,"parentID":111,"name":"Casos de Prueba - Gestión de Facturas","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":7,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/factura_crud_test.dart"},"type":"group","time":20557}
+{"test":{"id":113,"name":"Casos de Prueba - Gestión de Facturas Registrar factura","suiteID":88,"groupIDs":[111,112],"metadata":{"skip":false,"skipReason":null},"line":8,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/factura_crud_test.dart"},"type":"testStart","time":20557}
+{"testID":113,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20617}
+{"test":{"id":114,"name":"Casos de Prueba - Gestión de Facturas Cancelar factura","suiteID":88,"groupIDs":[111,112],"metadata":{"skip":false,"skipReason":null},"line":46,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/factura_crud_test.dart"},"type":"testStart","time":20617}
+{"testID":114,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20623}
+{"test":{"id":115,"name":"Casos de Prueba - Gestión de Facturas Listar facturas","suiteID":88,"groupIDs":[111,112],"metadata":{"skip":false,"skipReason":null},"line":84,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/factura_crud_test.dart"},"type":"testStart","time":20623}
+{"testID":115,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20630}
+{"test":{"id":116,"name":"Casos de Prueba - Gestión de Facturas Eliminar factura","suiteID":88,"groupIDs":[111,112],"metadata":{"skip":false,"skipReason":null},"line":118,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/factura_crud_test.dart"},"type":"testStart","time":20630}
+{"testID":116,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20636}
+{"test":{"id":117,"name":"Casos de Prueba - Gestión de Facturas Calcular totales de ItemFactura","suiteID":88,"groupIDs":[111,112],"metadata":{"skip":false,"skipReason":null},"line":125,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/factura_crud_test.dart"},"type":"testStart","time":20637}
+{"testID":117,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20642}
+{"suite":{"id":118,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/utils/excel_export_utility_test.dart"},"type":"suite","time":21025}
+{"test":{"id":119,"name":"loading /home/save/Dev/Projects/LightViate/test/utils/excel_export_utility_test.dart","suiteID":118,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":21025}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:37557/R33DbnVL1Bw=/","observatoryUri":"http://127.0.0.1:37557/R33DbnVL1Bw=/"}}]
+{"suite":{"id":120,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/repositories/camara_repository_test.dart"},"type":"suite","time":21293}
+{"test":{"id":121,"name":"loading /home/save/Dev/Projects/LightViate/test/repositories/camara_repository_test.dart","suiteID":120,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":21294}
+{"testID":97,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":21433}
+{"group":{"id":122,"suiteID":96,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":21433}
+{"group":{"id":123,"suiteID":96,"parentID":122,"name":"Casos de Prueba - Mantenimiento de Cámaras","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":7,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"group","time":21433}
+{"group":{"id":124,"suiteID":96,"parentID":123,"name":"Casos de Prueba - Mantenimiento de Cámaras CP-CAM-001: Registrar mantenimiento de cámara","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":8,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"group","time":21433}
+{"test":{"id":125,"name":"Casos de Prueba - Mantenimiento de Cámaras CP-CAM-001: Registrar mantenimiento de cámara Debería registrar un mantenimiento de cámara exitosamente","suiteID":96,"groupIDs":[122,123,124],"metadata":{"skip":false,"skipReason":null},"line":9,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"testStart","time":21434}
+{"testID":125,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":21488}
+{"group":{"id":126,"suiteID":96,"parentID":123,"name":"Casos de Prueba - Mantenimiento de Cámaras CP-CAM-002: Editar mantenimiento de cámara","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":35,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"group","time":21489}
+{"test":{"id":127,"name":"Casos de Prueba - Mantenimiento de Cámaras CP-CAM-002: Editar mantenimiento de cámara Debería actualizar un mantenimiento existente","suiteID":96,"groupIDs":[122,123,126],"metadata":{"skip":false,"skipReason":null},"line":36,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"testStart","time":21489}
+{"testID":127,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":21498}
+{"group":{"id":128,"suiteID":96,"parentID":123,"name":"Casos de Prueba - Mantenimiento de Cámaras CP-CAM-003: Cancelar mantenimiento de cámara","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":60,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"group","time":21498}
+{"test":{"id":129,"name":"Casos de Prueba - Mantenimiento de Cámaras CP-CAM-003: Cancelar mantenimiento de cámara Debería cancelar un mantenimiento correctamente","suiteID":96,"groupIDs":[122,123,128],"metadata":{"skip":false,"skipReason":null},"line":61,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"testStart","time":21498}
+{"testID":129,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":21506}
+{"group":{"id":130,"suiteID":96,"parentID":123,"name":"Casos de Prueba - Mantenimiento de Cámaras Operaciones CRUD básicas","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":84,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"group","time":21506}
+{"test":{"id":131,"name":"Casos de Prueba - Mantenimiento de Cámaras Operaciones CRUD básicas Debería listar todas las cámaras","suiteID":96,"groupIDs":[122,123,130],"metadata":{"skip":false,"skipReason":null},"line":85,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"testStart","time":21506}
+{"testID":131,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":21511}
+{"test":{"id":132,"name":"Casos de Prueba - Mantenimiento de Cámaras Operaciones CRUD básicas Debería eliminar una cámara","suiteID":96,"groupIDs":[122,123,130],"metadata":{"skip":false,"skipReason":null},"line":111,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/camara_crud_test.dart"},"type":"testStart","time":21512}
+{"testID":132,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":21515}
+{"suite":{"id":133,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/repositories/instalacion_repository_test.dart"},"type":"suite","time":21721}
+{"test":{"id":134,"name":"loading /home/save/Dev/Projects/LightViate/test/repositories/instalacion_repository_test.dart","suiteID":133,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":21721}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:43915/8yJky5xLqOg=/","observatoryUri":"http://127.0.0.1:43915/8yJky5xLqOg=/"}}]
+{"testID":106,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":22178}
+{"group":{"id":135,"suiteID":105,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":22178}
+{"group":{"id":136,"suiteID":105,"parentID":135,"name":"Casos de Prueba - Alquiler de Vehículos","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":7,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"group","time":22178}
+{"group":{"id":137,"suiteID":105,"parentID":136,"name":"Casos de Prueba - Alquiler de Vehículos CP-VHL-001: Registrar alquiler de vehículo","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":14,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"group","time":22179}
+{"test":{"id":138,"name":"Casos de Prueba - Alquiler de Vehículos CP-VHL-001: Registrar alquiler de vehículo Debería registrar un alquiler de vehículo exitosamente","suiteID":105,"groupIDs":[135,136,137],"metadata":{"skip":false,"skipReason":null},"line":15,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"testStart","time":22179}
+{"testID":138,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":22220}
+{"group":{"id":139,"suiteID":105,"parentID":136,"name":"Casos de Prueba - Alquiler de Vehículos CP-VHL-002: Actualizar alquiler de vehículo","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":40,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"group","time":22220}
+{"test":{"id":140,"name":"Casos de Prueba - Alquiler de Vehículos CP-VHL-002: Actualizar alquiler de vehículo Debería actualizar un alquiler existente","suiteID":105,"groupIDs":[135,136,139],"metadata":{"skip":false,"skipReason":null},"line":41,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"testStart","time":22220}
+{"testID":140,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":22225}
+{"group":{"id":141,"suiteID":105,"parentID":136,"name":"Casos de Prueba - Alquiler de Vehículos CP-VHL-003: Cancelar alquiler de vehículo","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":79,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"group","time":22225}
+{"test":{"id":142,"name":"Casos de Prueba - Alquiler de Vehículos CP-VHL-003: Cancelar alquiler de vehículo Debería cancelar un alquiler correctamente","suiteID":105,"groupIDs":[135,136,141],"metadata":{"skip":false,"skipReason":null},"line":80,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"testStart","time":22225}
+{"testID":142,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":22230}
+{"group":{"id":143,"suiteID":105,"parentID":136,"name":"Casos de Prueba - Alquiler de Vehículos Operaciones CRUD básicas","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":111,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"group","time":22231}
+{"test":{"id":144,"name":"Casos de Prueba - Alquiler de Vehículos Operaciones CRUD básicas Debería listar todos los alquileres","suiteID":105,"groupIDs":[135,136,143],"metadata":{"skip":false,"skipReason":null},"line":112,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"testStart","time":22231}
+{"testID":144,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":22235}
+{"test":{"id":145,"name":"Casos de Prueba - Alquiler de Vehículos Operaciones CRUD básicas Debería eliminar un alquiler","suiteID":105,"groupIDs":[135,136,143],"metadata":{"skip":false,"skipReason":null},"line":139,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/vehiculo_crud_test.dart"},"type":"testStart","time":22235}
+{"testID":145,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":22239}
+{"suite":{"id":146,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/services/auth_service_test.dart"},"type":"suite","time":22334}
+{"test":{"id":147,"name":"loading /home/save/Dev/Projects/LightViate/test/services/auth_service_test.dart","suiteID":146,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":22334}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:32855/YPXExyvA9F8=/","observatoryUri":"http://127.0.0.1:32855/YPXExyvA9F8=/"}}]
+{"testID":110,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":22923}
+{"group":{"id":148,"suiteID":109,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":22923}
+{"group":{"id":149,"suiteID":109,"parentID":148,"name":"Casos de Prueba - Instalación de Postes","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":7,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"group","time":22923}
+{"group":{"id":150,"suiteID":109,"parentID":149,"name":"Casos de Prueba - Instalación de Postes CP-PST-001: Registrar instalación de poste","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":14,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"group","time":22924}
+{"test":{"id":151,"name":"Casos de Prueba - Instalación de Postes CP-PST-001: Registrar instalación de poste Debería registrar una instalación de poste exitosamente","suiteID":109,"groupIDs":[148,149,150],"metadata":{"skip":false,"skipReason":null},"line":15,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"testStart","time":22924}
+{"testID":151,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":22968}
+{"group":{"id":152,"suiteID":109,"parentID":149,"name":"Casos de Prueba - Instalación de Postes CP-PST-002: Editar instalación de poste","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":43,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"group","time":22968}
+{"test":{"id":153,"name":"Casos de Prueba - Instalación de Postes CP-PST-002: Editar instalación de poste Debería actualizar una instalación existente","suiteID":109,"groupIDs":[148,149,152],"metadata":{"skip":false,"skipReason":null},"line":44,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"testStart","time":22968}
+{"testID":153,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":22973}
+{"group":{"id":154,"suiteID":109,"parentID":149,"name":"Casos de Prueba - Instalación de Postes CP-PST-003: Cancelar instalación de poste","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":88,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"group","time":22974}
+{"test":{"id":155,"name":"Casos de Prueba - Instalación de Postes CP-PST-003: Cancelar instalación de poste Debería cancelar una instalación correctamente","suiteID":109,"groupIDs":[148,149,154],"metadata":{"skip":false,"skipReason":null},"line":89,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"testStart","time":22974}
+{"testID":155,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":22981}
+{"group":{"id":156,"suiteID":109,"parentID":149,"name":"Casos de Prueba - Instalación de Postes Operaciones CRUD básicas","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":123,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"group","time":22983}
+{"test":{"id":157,"name":"Casos de Prueba - Instalación de Postes Operaciones CRUD básicas Debería listar todas las instalaciones","suiteID":109,"groupIDs":[148,149,156],"metadata":{"skip":false,"skipReason":null},"line":124,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"testStart","time":22983}
+{"testID":157,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":22988}
+{"test":{"id":158,"name":"Casos de Prueba - Instalación de Postes Operaciones CRUD básicas Debería eliminar una instalación","suiteID":109,"groupIDs":[148,149,156],"metadata":{"skip":false,"skipReason":null},"line":154,"column":7,"url":"file:///home/save/Dev/Projects/LightViate/test/crud/instalacion_crud_test.dart"},"type":"testStart","time":22990}
+{"testID":158,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":22994}
+{"suite":{"id":159,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/services/notificacion_service_test.dart"},"type":"suite","time":23026}
+{"test":{"id":160,"name":"loading /home/save/Dev/Projects/LightViate/test/services/notificacion_service_test.dart","suiteID":159,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":23026}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:40005/aXEtTd-g8aw=/","observatoryUri":"http://127.0.0.1:40005/aXEtTd-g8aw=/"}}]
+{"testID":119,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":23682}
+{"group":{"id":161,"suiteID":118,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":23683}
+{"group":{"id":162,"suiteID":118,"parentID":161,"name":"ExcelExportUtility","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":5,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/utils/excel_export_utility_test.dart"},"type":"group","time":23683}
+{"test":{"id":163,"name":"ExcelExportUtility crea datos de Excel correctamente","suiteID":118,"groupIDs":[161,162],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/utils/excel_export_utility_test.dart"},"type":"testStart","time":23683}
+{"testID":163,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":23708}
+{"test":{"id":164,"name":"ExcelExportUtility valida estructura de ExcelSheetData","suiteID":118,"groupIDs":[161,162],"metadata":{"skip":false,"skipReason":null},"line":34,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/utils/excel_export_utility_test.dart"},"type":"testStart","time":23708}
+{"testID":164,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":23713}
+{"suite":{"id":165,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/viewmodels/camara_viewmodel_test.dart"},"type":"suite","time":23875}
+{"test":{"id":166,"name":"loading /home/save/Dev/Projects/LightViate/test/viewmodels/camara_viewmodel_test.dart","suiteID":165,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":23875}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:45305/4TFghhetO7A=/","observatoryUri":"http://127.0.0.1:45305/4TFghhetO7A=/"}}]
+{"testID":121,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":24398}
+{"group":{"id":167,"suiteID":120,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":24398}
+{"group":{"id":168,"suiteID":120,"parentID":167,"name":"CamaraRepository","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":5,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/repositories/camara_repository_test.dart"},"type":"group","time":24399}
+{"test":{"id":169,"name":"CamaraRepository valida estructura de datos de cámara","suiteID":120,"groupIDs":[167,168],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/repositories/camara_repository_test.dart"},"type":"testStart","time":24399}
+{"testID":169,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":24425}
+{"test":{"id":170,"name":"CamaraRepository valida métodos de Camara","suiteID":120,"groupIDs":[167,168],"metadata":{"skip":false,"skipReason":null},"line":25,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/repositories/camara_repository_test.dart"},"type":"testStart","time":24426}
+{"testID":170,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":24429}
+{"test":{"id":171,"name":"CamaraRepository valida estados de cámara","suiteID":120,"groupIDs":[167,168],"metadata":{"skip":false,"skipReason":null},"line":42,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/repositories/camara_repository_test.dart"},"type":"testStart","time":24430}
+{"testID":171,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":24436}
+{"suite":{"id":172,"platform":"vm","path":"/home/save/Dev/Projects/LightViate/test/viewmodels/calendario_viewmodel_test.dart"},"type":"suite","time":24697}
+{"test":{"id":173,"name":"loading /home/save/Dev/Projects/LightViate/test/viewmodels/calendario_viewmodel_test.dart","suiteID":172,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":24697}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:39383/QlLXOTFp6hk=/","observatoryUri":"http://127.0.0.1:39383/QlLXOTFp6hk=/"}}]
+{"testID":134,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":25169}
+{"group":{"id":174,"suiteID":133,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":25170}
+{"group":{"id":175,"suiteID":133,"parentID":174,"name":"InstalacionRepository","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":5,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/repositories/instalacion_repository_test.dart"},"type":"group","time":25170}
+{"test":{"id":176,"name":"InstalacionRepository valida estructura de datos de instalación","suiteID":133,"groupIDs":[174,175],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/repositories/instalacion_repository_test.dart"},"type":"testStart","time":25170}
+{"testID":176,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25193}
+{"test":{"id":177,"name":"InstalacionRepository valida métodos de Instalacion","suiteID":133,"groupIDs":[174,175],"metadata":{"skip":false,"skipReason":null},"line":35,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/repositories/instalacion_repository_test.dart"},"type":"testStart","time":25193}
+{"testID":177,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25197}
+{"test":{"id":178,"name":"InstalacionRepository valida estados de instalación","suiteID":133,"groupIDs":[174,175],"metadata":{"skip":false,"skipReason":null},"line":57,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/repositories/instalacion_repository_test.dart"},"type":"testStart","time":25198}
+{"testID":178,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25201}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:37437/0d695FKm35c=/","observatoryUri":"http://127.0.0.1:37437/0d695FKm35c=/"}}]
+{"testID":147,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":25859}
+{"group":{"id":179,"suiteID":146,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":25859}
+{"group":{"id":180,"suiteID":146,"parentID":179,"name":"AuthService","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":5,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/services/auth_service_test.dart"},"type":"group","time":25860}
+{"test":{"id":181,"name":"AuthService valida estructura de respuesta de login exitoso","suiteID":146,"groupIDs":[179,180],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/services/auth_service_test.dart"},"type":"testStart","time":25860}
+{"testID":181,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25881}
+{"test":{"id":182,"name":"AuthService valida estructura de respuesta de login fallido","suiteID":146,"groupIDs":[179,180],"metadata":{"skip":false,"skipReason":null},"line":19,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/services/auth_service_test.dart"},"type":"testStart","time":25882}
+{"testID":182,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25886}
+{"test":{"id":183,"name":"AuthService valida métodos estáticos de AuthService","suiteID":146,"groupIDs":[179,180],"metadata":{"skip":false,"skipReason":null},"line":31,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/services/auth_service_test.dart"},"type":"testStart","time":25886}
+{"testID":183,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25890}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:46363/7k-7vvuS1zc=/","observatoryUri":"http://127.0.0.1:46363/7k-7vvuS1zc=/"}}]
+{"testID":160,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":26547}
+{"group":{"id":184,"suiteID":159,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":26547}
+{"group":{"id":185,"suiteID":159,"parentID":184,"name":"NotificacionService","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":6,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/services/notificacion_service_test.dart"},"type":"group","time":26547}
+{"test":{"id":186,"name":"NotificacionService crea instancia de NotificacionService correctamente","suiteID":159,"groupIDs":[184,185],"metadata":{"skip":false,"skipReason":null},"line":7,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/services/notificacion_service_test.dart"},"type":"testStart","time":26548}
+{"testID":186,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":26575}
+{"test":{"id":187,"name":"NotificacionService valida estructura de TipoNotificacion","suiteID":159,"groupIDs":[184,185],"metadata":{"skip":false,"skipReason":null},"line":13,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/services/notificacion_service_test.dart"},"type":"testStart","time":26576}
+{"testID":187,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":26581}
+{"test":{"id":188,"name":"NotificacionService valida estructura de NotificacionSistema","suiteID":159,"groupIDs":[184,185],"metadata":{"skip":false,"skipReason":null},"line":20,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/services/notificacion_service_test.dart"},"type":"testStart","time":26582}
+{"testID":188,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":26593}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:38297/oYak6nSOJFo=/","observatoryUri":"http://127.0.0.1:38297/oYak6nSOJFo=/"}}]
+{"testID":166,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":27383}
+{"group":{"id":189,"suiteID":165,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":27384}
+{"group":{"id":190,"suiteID":165,"parentID":189,"name":"CamaraViewModel","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":6,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/viewmodels/camara_viewmodel_test.dart"},"type":"group","time":27384}
+{"test":{"id":191,"name":"CamaraViewModel Inicializa lista de cámaras vacía","suiteID":165,"groupIDs":[189,190],"metadata":{"skip":false,"skipReason":null},"line":15,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/viewmodels/camara_viewmodel_test.dart"},"type":"testStart","time":27384}
+{"testID":191,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":27413}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:34507/rAvl5-_Svz0=/","observatoryUri":"http://127.0.0.1:34507/rAvl5-_Svz0=/"}}]
+{"testID":173,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":28018}
+{"group":{"id":192,"suiteID":172,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":28018}
+{"group":{"id":193,"suiteID":172,"parentID":192,"name":"CalendarioViewModel","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":7,"column":3,"url":"file:///home/save/Dev/Projects/LightViate/test/viewmodels/calendario_viewmodel_test.dart"},"type":"group","time":28018}
+{"test":{"id":194,"name":"CalendarioViewModel Filtra eventos por técnico/empleado","suiteID":172,"groupIDs":[192,193],"metadata":{"skip":false,"skipReason":null},"line":21,"column":5,"url":"file:///home/save/Dev/Projects/LightViate/test/viewmodels/calendario_viewmodel_test.dart"},"type":"testStart","time":28018}
+{"testID":194,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":28045}
+{"success":true,"type":"done","time":28803}

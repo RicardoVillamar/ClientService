@@ -1,0 +1,60 @@
+services:
+  sonarqube:
+    image: sonarqube:lts-community
+    container_name: sonarqube
+    ports:
+      - '9000:9000'
+    environment:
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar
+      - SONAR_JDBC_URL=jdbc:postgresql://db:5432/sonar
+    depends_on:
+      - db
+    networks:
+      - sonarnet
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+      - ./sonar-flutter-plugin-0.5.3-SNAPSHOT.jar:/opt/sonarqube/extensions/plugins/sonar-flutter-plugin.jar
+
+  db:
+    image: postgres:13
+    container_name: sonardb
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_DB=sonar
+    networks:
+      - sonarnet
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+
+  sonar-scanner:
+    build:
+      context: .
+      dockerfile: Dockerfile.sonar-scanner
+    container_name: sonar-scanner
+    depends_on:
+      - sonarqube
+    environment:
+      - SONAR_HOST_URL=http://sonarqube:9000
+      - SONAR_TOKEN=${SONAR_TOKEN}
+    working_dir: /usr/src
+    volumes:
+      - ./:/usr/src
+    networks:
+      - sonarnet
+    entrypoint: ['/bin/sh', '-c']
+    command: ['sonar-scanner']
+    profiles: ['scanner']
+
+networks:
+  sonarnet:
+    driver: bridge
+
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  postgresql:

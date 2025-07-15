@@ -116,9 +116,18 @@ class UserInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final usuario = AuthService.usuarioActual;
+    final user = AuthService.usuarioActual;
 
-    if (usuario == null) return const SizedBox.shrink();
+    if (user == null) return const SizedBox.shrink();
+
+    // Determine role based on email (simple heuristic)
+    final isAdmin =
+        user.email != null && !user.email!.endsWith('@empleado.com');
+    final displayName =
+        user.displayName ?? (isAdmin ? 'Administradora' : 'Empleado');
+    final email = user.email ?? 'Sin correo';
+    final uid = user.uid;
+    final role = isAdmin ? 'Administradora' : 'Empleado';
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -139,16 +148,14 @@ class UserInfoWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: usuario.esAdministrador
+              color: isAdmin
                   ? Colors.purple.withOpacity(0.1)
                   : Colors.blue.withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
-              usuario.esAdministrador
-                  ? Icons.admin_panel_settings
-                  : Icons.person,
-              color: usuario.esAdministrador ? Colors.purple : Colors.blue,
+              isAdmin ? Icons.admin_panel_settings : Icons.person,
+              color: isAdmin ? Colors.purple : Colors.blue,
               size: 24,
             ),
           ),
@@ -158,7 +165,7 @@ class UserInfoWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  usuario.nombreCompleto,
+                  displayName,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -166,7 +173,7 @@ class UserInfoWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  usuario.tipo.displayName,
+                  role,
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[600],
@@ -174,10 +181,18 @@ class UserInfoWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  usuario.email,
+                  email,
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey[500],
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'UID: $uid',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.grey[400],
                   ),
                 ),
               ],
@@ -192,21 +207,15 @@ class UserInfoWidget extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  title: const Text('Información del Usuario'),
+                  title: const Text('Información de la Cuenta'),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildInfoRow('Nombre:', usuario.nombreCompleto),
-                      _buildInfoRow('Email:', usuario.email),
-                      _buildInfoRow('Tipo:', usuario.tipo.displayName),
-                      _buildInfoRow(
-                          'Estado:', usuario.activo ? 'Activo' : 'Inactivo'),
-                      if (usuario.ultimoAcceso != null)
-                        _buildInfoRow(
-                          'Último acceso:',
-                          '${usuario.ultimoAcceso!.day}/${usuario.ultimoAcceso!.month}/${usuario.ultimoAcceso!.year}',
-                        ),
+                      _buildInfoRow('Nombre:', displayName),
+                      _buildInfoRow('Correo:', email),
+                      _buildInfoRow('Rol:', role),
+                      _buildInfoRow('UID:', uid),
                     ],
                   ),
                   actions: [

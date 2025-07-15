@@ -1,0 +1,14 @@
+FROM cirrusci/flutter:stable
+
+# Instala Java y wget
+RUN apt-get update && apt-get install -y wget unzip openjdk-17-jre
+
+# Descarga y descomprime SonarScanner CLI
+RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip && \
+    unzip sonar-scanner-cli-5.0.1.3006-linux.zip && \
+    mv sonar-scanner-5.0.1.3006-linux /opt/sonar-scanner && \
+    rm sonar-scanner-cli-5.0.1.3006-linux.zip
+
+ENV PATH="/opt/sonar-scanner/bin:${PATH}"
+
+WORKDIR /usr/src

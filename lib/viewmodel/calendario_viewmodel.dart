@@ -3,6 +3,7 @@ import 'package:client_service/repositories/camara_repository.dart';
 import 'package:client_service/repositories/instalacion_repository.dart';
 import 'package:client_service/repositories/vehiculo_repository.dart';
 import 'package:client_service/viewmodel/base_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CalendarioViewModel extends BaseViewModel {
   final CamaraRepository _camaraRepository;
@@ -18,14 +19,15 @@ class CalendarioViewModel extends BaseViewModel {
   List<EventoCalendario> _eventos = [];
   List<EventoCalendario> get eventos => _eventos;
 
-  Map<DateTime, List<EventoCalendario>> _eventosPorFecha = {};
+  final Map<DateTime, List<EventoCalendario>> _eventosPorFecha = {};
   Map<DateTime, List<EventoCalendario>> get eventosPorFecha => _eventosPorFecha;
 
   DateTime _fechaSeleccionada = DateTime.now();
   DateTime get fechaSeleccionada => _fechaSeleccionada;
 
   List<EventoCalendario> get eventosDelDia {
-    final fecha = DateTime(_fechaSeleccionada.year, _fechaSeleccionada.month, _fechaSeleccionada.day);
+    final fecha = DateTime(_fechaSeleccionada.year, _fechaSeleccionada.month,
+        _fechaSeleccionada.day);
     return _eventosPorFecha[fecha] ?? [];
   }
 
@@ -43,13 +45,27 @@ class CalendarioViewModel extends BaseViewModel {
 
       // Cargar eventos de instalaciones
       final instalaciones = await _instalacionRepository.getAll();
-      todosLosEventos.addAll(instalaciones.map(EventoCalendario.fromInstalacion));
+      todosLosEventos
+          .addAll(instalaciones.map(EventoCalendario.fromInstalacion));
 
       // Cargar eventos de alquileres
       final alquileres = await _vehiculoRepository.getAll();
       todosLosEventos.addAll(alquileres.map(EventoCalendario.fromAlquiler));
 
-      _eventos = todosLosEventos;
+      // Filtrar por empleado autenticado si no es admin
+      final user = FirebaseAuth.instance.currentUser;
+      List<EventoCalendario> eventosFiltrados = todosLosEventos;
+      if (user != null &&
+          user.email != null &&
+          user.email!.endsWith('@empleado.com')) {
+        final cedula = user.email!.split('@').first;
+        eventosFiltrados = todosLosEventos.where((evento) {
+          // Filtrar por técnico asignado (puedes expandir para cuadrilla si lo implementas)
+          return evento.tecnico == cedula || evento.tecnico == user.email;
+        }).toList();
+      }
+
+      _eventos = eventosFiltrados;
       _organizarEventosPorFecha();
       notifyListeners();
     } catch (e) {
@@ -91,7 +107,20 @@ class CalendarioViewModel extends BaseViewModel {
       );
       eventosRango.addAll(alquileres.map(EventoCalendario.fromAlquiler));
 
-      _eventos = eventosRango;
+      // Filtrar por empleado autenticado si no es admin
+      final user = FirebaseAuth.instance.currentUser;
+      List<EventoCalendario> eventosFiltradosRango = eventosRango;
+      if (user != null &&
+          user.email != null &&
+          user.email!.endsWith('@empleado.com')) {
+        final cedula = user.email!.split('@').first;
+        eventosFiltradosRango = eventosRango.where((evento) {
+          // Filtrar por técnico asignado (puedes expandir para cuadrilla si lo implementas)
+          return evento.tecnico == cedula || evento.tecnico == user.email;
+        }).toList();
+      }
+
+      _eventos = eventosFiltradosRango;
       _organizarEventosPorFecha();
       notifyListeners();
     } catch (e) {
@@ -105,7 +134,8 @@ class CalendarioViewModel extends BaseViewModel {
   void _organizarEventosPorFecha() {
     _eventosPorFecha.clear();
     for (final evento in _eventos) {
-      final fecha = DateTime(evento.fecha.year, evento.fecha.month, evento.fecha.day);
+      final fecha =
+          DateTime(evento.fecha.year, evento.fecha.month, evento.fecha.day);
       if (_eventosPorFecha[fecha] == null) {
         _eventosPorFecha[fecha] = [];
       }
@@ -144,7 +174,9 @@ class CalendarioViewModel extends BaseViewModel {
 
   // Filtrar eventos por estado
   List<EventoCalendario> filtrarEventosPorEstado(String estado) {
-    return _eventos.where((evento) => evento.estado.toLowerCase() == estado.toLowerCase()).toList();
+    return _eventos
+        .where((evento) => evento.estado.toLowerCase() == estado.toLowerCase())
+        .toList();
   }
 
   // Obtener eventos próximos (siguientes 7 días)
@@ -154,7 +186,8 @@ class CalendarioViewModel extends BaseViewModel {
 
     return _eventos.where((evento) {
       return evento.fecha.isAfter(ahora) && evento.fecha.isBefore(fechaLimite);
-    }).toList()..sort((a, b) => a.fecha.compareTo(b.fecha));
+    }).toList()
+      ..sort((a, b) => a.fecha.compareTo(b.fecha));
   }
 
   // Obtener eventos de hoy

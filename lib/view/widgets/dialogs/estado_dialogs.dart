@@ -225,7 +225,7 @@ class RetomarServicioDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Retomar ${tipoServicio}'),
+      title: Text('Retomar $tipoServicio'),
       content: Text(
         '¿Está seguro de que desea retomar este ${tipoServicio.toLowerCase()}? '
         'Esto cambiará el estado a "Pendiente" y eliminará la información de cancelación.',

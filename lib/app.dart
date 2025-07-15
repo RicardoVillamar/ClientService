@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: NavigationService.navigatorKey,
       home: const SplashScreen(),
       routes: routes,
-      // Add localization support
+      // Add localization supportj
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: const [
         Locale('es', 'ES'), // Spanish
-        Locale('en', 'US'), // English (fallback)
       ],
       locale: const Locale('es', 'ES'),
     );
