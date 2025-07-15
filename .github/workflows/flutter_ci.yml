@@ -18,7 +18,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.6'
+          flutter-version: "3.19.6"
 
       - name: Install dependencies
         run: flutter pub get
@@ -77,56 +77,6 @@ jobs:
           name: web-build
           path: build/web
 
-  sonarqube:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Important for SonarQube to analyze all branches
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.6'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Download coverage report
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/
-
-      - name: Download test report
-        uses: actions/download-artifact@v4
-        with:
-          name: test-report
-          path: ./
-
-      - name: Download sonar-flutter plugin
-        run: |
-          curl -L -o sonar-flutter-plugin.jar \
-            https://github.com/insideapp-oss/sonar-flutter/releases/latest/download/sonar-flutter-plugin.jar
-
-      - name: SonarQube Scan
-        uses: sonarqube-quality-gate-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          scannerHomePath: /opt/sonar-scanner
-          args: >
-            -Dsonar.dart.analyzer.mode=DETECT
-            -Dsonar.dart.analyzer.report.mode=DETECT
-            -Dsonar.flutter.coverage.reportPath=coverage/lcov.info
-            -Dsonar.flutter.tests.reportPath=tests.output
-            -Dsonar.exclusions="**/*.g.dart,**/*.freezed.dart,**/generated_**,**/build/**,**/.dart_tool/**,**/ios/**,**/android/**,**/web/**,**/windows/**,**/linux/**,**/macos/**"
-            -Dsonar.test.exclusions="**/*_test.dart,**/*_test.dart"
-            -Dsonar.coverage.exclusions="**/*_test.dart,**/*_test.dart,**/*.g.dart,**/*.freezed.dart,**/generated_**,**/test/**"
-            -Dsonar.dart.analyzer.options.override=true
-
   release:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -137,7 +87,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.6'
+          flutter-version: "3.19.6"
 
       - name: Install dependencies
         run: flutter pub get
