@@ -161,12 +161,12 @@ class _NotificacionesScreenState extends State<NotificacionesScreen> {
         border: Border.all(
           color: notificacion.leida
               ? Colors.grey[300]!
-              : AppColors.primaryColor.withOpacity(0.2),
+              : AppColors.primaryColor.withValues(alpha: 0.2),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -357,10 +357,10 @@ class _NotificacionesScreenState extends State<NotificacionesScreen> {
       width: 48,
       height: 48,
       decoration: BoxDecoration(
-        color: backgroundColor.withOpacity(0.1),
+        color: backgroundColor.withValues(alpha: 0.1),
         shape: BoxShape.circle,
         border: Border.all(
-          color: backgroundColor.withOpacity(0.3),
+          color: backgroundColor.withValues(alpha: 0.3),
           width: 1,
         ),
       ),

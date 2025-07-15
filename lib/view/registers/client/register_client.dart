@@ -60,14 +60,18 @@ class _RegistroClientePageState extends State<RegistroClientePage> {
           );
 
           FlashMessages.showSuccess(
+            duration: const Duration(seconds: 3),
+            // ignore: use_build_context_synchronously
             context: context,
             message: 'Cliente guardado exitosamente',
           );
+          // ignore: use_build_context_synchronously
           Navigator.pop(context);
         }
       }).catchError((e) {
         if (context.mounted) {
           FlashMessages.showError(
+            // ignore: use_build_context_synchronously
             context: context,
             message: 'Error al guardar el cliente: $e',
           );
