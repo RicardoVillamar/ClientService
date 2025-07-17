@@ -31,7 +31,7 @@ class LoginSelectionScreen extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          'LIGHT VITAE',
+                          'Light Vitae',
                           style: AppFonts.titleBold.copyWith(
                             fontSize: 48,
                             color: AppColors.primaryColor,
@@ -64,8 +64,8 @@ class LoginSelectionScreen extends StatelessWidget {
                 child: Text(
                   'Selecciona tu tipo de acceso',
                   style: AppFonts.subtitleBold.copyWith(
-                    color: AppColors.primaryColor,
-                    fontSize: 20,
+                    color: AppColors.btnColor,
+                    fontSize: 24,
                     letterSpacing: 1.2,
                   ),
                   textAlign: TextAlign.center,
