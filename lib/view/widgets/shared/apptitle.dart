@@ -11,37 +11,38 @@ class Apptitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          margin:
-              const EdgeInsets.only(top: 10, left: 20, right: 10, bottom: 10),
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: AppColors.backgroundColor,
-          ),
-          child: BtnIcon(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icons.arrow_back_ios_new_rounded),
-        ),
-        const SizedBox(width: 10),
-        Text(title, style: AppFonts.subtitleBold),
-        const Spacer(),
-        Visibility(
-          visible: isVisible,
-          child: Container(
-            margin: const EdgeInsets.only(right: 20),
-            child: BtnIcon(
-              onPressed: () {},
-              icon: Icons.delete_rounded,
+    return SafeArea(
+      bottom: false,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            BtnIcon(
+              onPressed: () => Navigator.pop(context),
+              icon: Icons.arrow_back_ios_new_rounded,
+              bg: AppColors.backgroundColor,
             ),
-          ),
-        )
-      ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: AppFonts.subtitleBold,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (isVisible)
+              Container(
+                margin: const EdgeInsets.only(left: 8),
+                child: BtnIcon(
+                  onPressed: () {},
+                  icon: Icons.delete_rounded,
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

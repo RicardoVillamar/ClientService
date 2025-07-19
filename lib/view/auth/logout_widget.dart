@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:client_service/services/auth_service.dart';
 import 'package:client_service/view/auth/login_selection_screen.dart';
 
 class LogoutWidget extends StatelessWidget {
@@ -67,9 +66,6 @@ class LogoutWidget extends StatelessWidget {
   }
 
   void _cerrarSesion(BuildContext context) {
-    // Cerrar sesión
-    AuthService.cerrarSesion();
-
     // Navegar a la pantalla de login
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
@@ -96,163 +92,13 @@ class LogoutWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      floatingActionButton: AuthService.tieneUsuarioActivo
-          ? FloatingActionButton(
-              onPressed: () => _mostrarDialogoLogout(context),
-              backgroundColor: Colors.red[600],
-              child: const Icon(
-                Icons.logout,
-                color: Colors.white,
-              ),
-            )
-          : null,
-    );
-  }
-}
-
-// Widget para mostrar información del usuario logueado
-class UserInfoWidget extends StatelessWidget {
-  const UserInfoWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final user = AuthService.usuarioActual;
-
-    if (user == null) return const SizedBox.shrink();
-
-    // Determine role based on email (simple heuristic)
-    final isAdmin =
-        user.email != null && !user.email!.endsWith('@empleado.com');
-    final displayName =
-        user.displayName ?? (isAdmin ? 'Administradora' : 'Empleado');
-    final email = user.email ?? 'Sin correo';
-    final uid = user.uid;
-    final role = isAdmin ? 'Administradora' : 'Empleado';
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: isAdmin
-                  ? Colors.purple.withOpacity(0.1)
-                  : Colors.blue.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(
-              isAdmin ? Icons.admin_panel_settings : Icons.person,
-              color: isAdmin ? Colors.purple : Colors.blue,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  displayName,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  role,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  email,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[500],
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'UID: $uid',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey[400],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              // Mostrar más información del usuario
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  title: const Text('Información de la Cuenta'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfoRow('Nombre:', displayName),
-                      _buildInfoRow('Correo:', email),
-                      _buildInfoRow('Rol:', role),
-                      _buildInfoRow('UID:', uid),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cerrar'),
-                    ),
-                  ],
-                ),
-              );
-            },
-            icon: const Icon(Icons.info_outline),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(
-              label,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(value),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _mostrarDialogoLogout(context),
+        backgroundColor: Colors.red[600],
+        child: const Icon(
+          Icons.logout,
+          color: Colors.white,
+        ),
       ),
     );
   }

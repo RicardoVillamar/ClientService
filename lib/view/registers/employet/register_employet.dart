@@ -343,6 +343,7 @@ class _RegistroEmpleadoPageState extends State<RegistroEmpleadoPage> {
                                   cargo: CargoEmpleado.fromString(selectValue!),
                                   fechaContratacion: fecha,
                                   fotoUrl: '',
+                                  password: _cedula.text.trim(),
                                 );
 
                                 final viewModel = sl<EmpleadoViewmodel>();

@@ -42,11 +42,17 @@ Future<void> setupServiceLocator() async {
       () => AlquilerViewModel(sl<VehiculoRepository>()));
   sl.registerFactory<FacturaViewModel>(
       () => FacturaViewModel(sl<FacturaRepository>()));
-  sl.registerFactory<CalendarioViewModel>(() => CalendarioViewModel(
-        sl<CamaraRepository>(),
-        sl<InstalacionRepository>(),
-        sl<VehiculoRepository>(),
-      ));
+  // Para usar CalendarioViewModel ahora debes pasar la cédula y el cargo del empleado autenticado:
+  // Ejemplo:
+  // sl.registerFactory<CalendarioViewModel>(() => CalendarioViewModel(
+  //   sl<CamaraRepository>(),
+  //   sl<InstalacionRepository>(),
+  //   sl<VehiculoRepository>(),
+  //   cedulaEmpleado: '1234567890',
+  //   cargoEmpleado: CargoEmpleado.tecnico,
+  // ));
+  //
+  // Por lo general, deberás crear la instancia manualmente donde tengas la info del usuario autenticado.
 
   // Inicializar servicios que lo requieran
   await sl<NotificacionService>().inicializar();

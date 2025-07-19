@@ -20,6 +20,7 @@ class EditVehicle extends StatefulWidget {
 }
 
 class _EditVehicleState extends State<EditVehicle> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _nombreComercial = TextEditingController();
   final TextEditingController _direccion = TextEditingController();
   final TextEditingController _telefono = TextEditingController();
@@ -142,42 +143,49 @@ class _EditVehicleState extends State<EditVehicle> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    'Editar Información de Vehículo',
-                    style: AppFonts.titleBold.copyWith(
-                      color: AppColors.primaryColor,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  _buildForm(),
-                  const SizedBox(height: 30),
-                  BtnElevated(
-                    text: 'Actualizar Vehículo',
-                    onPressed: _updateVehicle,
-                  ),
-                ],
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      'Editar Información de Vehículo',
+                      style: AppFonts.titleBold.copyWith(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    _buildForm(),
+                    const SizedBox(height: 30),
+                    BtnElevated(
+                      text: 'Actualizar Vehículo',
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _updateVehicle();
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -186,28 +194,97 @@ class _EditVehicleState extends State<EditVehicle> {
   Widget _buildForm() {
     return Column(
       children: [
-        _buildTextField('Nombre Comercial', _nombreComercial,
-            'Ingrese el nombre comercial'),
+        _buildTextField(
+          'Nombre Comercial',
+          _nombreComercial,
+          'Ingrese el nombre comercial',
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'El nombre comercial es obligatorio';
+            }
+            return null;
+          },
+        ),
         const SizedBox(height: 15),
-        _buildTextField('Dirección', _direccion, 'Ingrese la dirección'),
+        _buildTextField(
+          'Dirección',
+          _direccion,
+          'Ingrese la dirección',
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'La dirección es obligatoria';
+            }
+            return null;
+          },
+        ),
         const SizedBox(height: 15),
-        _buildTextField('Teléfono', _telefono, 'Ingrese el teléfono'),
+        _buildTextField(
+          'Teléfono',
+          _telefono,
+          'Ingrese el teléfono',
+          keyboardType: TextInputType.phone,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'El teléfono es obligatorio';
+            }
+            final phoneReg = RegExp(r'^[0-9+\-]{7,15}$');
+            if (!phoneReg.hasMatch(value.trim())) {
+              return 'Teléfono inválido';
+            }
+            return null;
+          },
+        ),
         const SizedBox(height: 15),
-        _buildTextField('Correo', _correo, 'Ingrese el correo electrónico'),
+        _buildTextField(
+          'Correo',
+          _correo,
+          'Ingrese el correo electrónico',
+          keyboardType: TextInputType.emailAddress,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'El correo es obligatorio';
+            }
+            final emailReg = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+            if (!emailReg.hasMatch(value.trim())) {
+              return 'Correo inválido';
+            }
+            return null;
+          },
+        ),
         const SizedBox(height: 15),
-        _buildDropdown('Tipo de Vehículo', selectTipoVehiculo, tiposVehiculo,
-            (value) {
-          setState(() {
-            selectTipoVehiculo = value;
-          });
-        }),
+        _buildDropdown(
+          'Tipo de Vehículo',
+          selectTipoVehiculo,
+          tiposVehiculo,
+          (value) {
+            setState(() {
+              selectTipoVehiculo = value;
+            });
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Seleccione un tipo de vehículo';
+            }
+            return null;
+          },
+        ),
         const SizedBox(height: 15),
         GestureDetector(
           onTap: () =>
               _selectDate(context, _fechaReserva, widget.vehiculo.fechaReserva),
           child: AbsorbPointer(
-            child: _buildTextField('Fecha de Reserva', _fechaReserva,
-                'Seleccione la fecha de reserva'),
+            child: _buildTextField(
+              'Fecha de Reserva',
+              _fechaReserva,
+              'Seleccione la fecha de reserva',
+              readOnly: true,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'La fecha de reserva es obligatoria';
+                }
+                return null;
+              },
+            ),
           ),
         ),
         const SizedBox(height: 15),
@@ -215,26 +292,65 @@ class _EditVehicleState extends State<EditVehicle> {
           onTap: () =>
               _selectDate(context, _fechaTrabajo, widget.vehiculo.fechaTrabajo),
           child: AbsorbPointer(
-            child: _buildTextField('Fecha de Trabajo', _fechaTrabajo,
-                'Seleccione la fecha de trabajo'),
+            child: _buildTextField(
+              'Fecha de Trabajo',
+              _fechaTrabajo,
+              'Seleccione la fecha de trabajo',
+              readOnly: true,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'La fecha de trabajo es obligatoria';
+                }
+                return null;
+              },
+            ),
           ),
         ),
         const SizedBox(height: 15),
         _buildTextField(
-            'Monto de Alquiler', _montoAlquiler, 'Ingrese el monto'),
+          'Monto de Alquiler',
+          _montoAlquiler,
+          'Ingrese el monto',
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'El monto es obligatorio';
+            }
+            if (double.tryParse(value.trim()) == null) {
+              return 'Monto inválido';
+            }
+            return null;
+          },
+        ),
         const SizedBox(height: 15),
         _buildEmployeeDropdown(
-            'Personal que Asistió', selectPersonalAsistio, empleados, (value) {
-          setState(() {
-            selectPersonalAsistio = value;
-          });
-        }),
+          'Personal que Asistió',
+          selectPersonalAsistio,
+          empleados,
+          (value) {
+            setState(() {
+              selectPersonalAsistio = value;
+            });
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Seleccione el personal que asistió';
+            }
+            return null;
+          },
+        ),
       ],
     );
   }
 
   Widget _buildTextField(
-      String label, TextEditingController controller, String hint) {
+    String label,
+    TextEditingController controller,
+    String hint, {
+    TextInputType? keyboardType,
+    bool readOnly = false,
+    String? Function(String?)? validator,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -248,6 +364,8 @@ class _EditVehicleState extends State<EditVehicle> {
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
+          keyboardType: keyboardType,
+          readOnly: readOnly,
           decoration: InputDecoration(
             hintText: hint,
             border: OutlineInputBorder(
@@ -267,13 +385,19 @@ class _EditVehicleState extends State<EditVehicle> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
           ),
+          validator: validator,
         ),
       ],
     );
   }
 
-  Widget _buildDropdown(String label, String? value, List<String> items,
-      ValueChanged<String?> onChanged) {
+  Widget _buildDropdown(
+    String label,
+    String? value,
+    List<String> items,
+    ValueChanged<String?> onChanged, {
+    String? Function(String?)? validator,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -285,44 +409,49 @@ class _EditVehicleState extends State<EditVehicle> {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.greyColor.withOpacity(0.3)),
+        DropdownButtonFormField<String>(
+          value: value,
+          isExpanded: true,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide:
+                  BorderSide(color: AppColors.greyColor.withOpacity(0.3)),
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
           ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: value,
-              isExpanded: true,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              hint: Text(
-                'Seleccione $label',
-                style: AppFonts.text.copyWith(
-                  color: AppColors.greyColor,
-                ),
-              ),
-              items: items.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: AppFonts.text.copyWith(
-                      color: AppColors.textColor,
-                    ),
-                  ),
-                );
-              }).toList(),
-              onChanged: onChanged,
+          hint: Text(
+            'Seleccione $label',
+            style: AppFonts.text.copyWith(
+              color: AppColors.greyColor,
             ),
           ),
+          items: items.map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(
+                item,
+                style: AppFonts.text.copyWith(
+                  color: AppColors.textColor,
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: onChanged,
+          validator: validator,
         ),
       ],
     );
   }
 
-  Widget _buildEmployeeDropdown(String label, String? value,
-      List<Empleado> employees, ValueChanged<String?> onChanged) {
+  Widget _buildEmployeeDropdown(
+    String label,
+    String? value,
+    List<Empleado> employees,
+    ValueChanged<String?> onChanged, {
+    String? Function(String?)? validator,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -334,37 +463,37 @@ class _EditVehicleState extends State<EditVehicle> {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.greyColor.withOpacity(0.3)),
+        DropdownButtonFormField<String>(
+          value: value,
+          isExpanded: true,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide:
+                  BorderSide(color: AppColors.greyColor.withOpacity(0.3)),
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
           ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: value,
-              isExpanded: true,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              hint: Text(
-                'Seleccione $label',
-                style: AppFonts.text.copyWith(
-                  color: AppColors.greyColor,
-                ),
-              ),
-              items: employees.map((Empleado empleado) {
-                return DropdownMenuItem<String>(
-                  value: empleado.nombreCompleto,
-                  child: Text(
-                    empleado.nombreCompletoConCargo,
-                    style: AppFonts.text.copyWith(
-                      color: AppColors.textColor,
-                    ),
-                  ),
-                );
-              }).toList(),
-              onChanged: onChanged,
+          hint: Text(
+            'Seleccione $label',
+            style: AppFonts.text.copyWith(
+              color: AppColors.greyColor,
             ),
           ),
+          items: employees.map((Empleado empleado) {
+            return DropdownMenuItem<String>(
+              value: empleado.nombreCompleto,
+              child: Text(
+                empleado.nombreCompletoConCargo,
+                style: AppFonts.text.copyWith(
+                  color: AppColors.textColor,
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: onChanged,
+          validator: validator,
         ),
       ],
     );

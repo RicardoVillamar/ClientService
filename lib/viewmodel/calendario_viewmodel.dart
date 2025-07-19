@@ -3,18 +3,23 @@ import 'package:client_service/repositories/camara_repository.dart';
 import 'package:client_service/repositories/instalacion_repository.dart';
 import 'package:client_service/repositories/vehiculo_repository.dart';
 import 'package:client_service/viewmodel/base_viewmodel.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:client_service/models/empleado.dart';
 
 class CalendarioViewModel extends BaseViewModel {
   final CamaraRepository _camaraRepository;
   final InstalacionRepository _instalacionRepository;
   final VehiculoRepository _vehiculoRepository;
+  final String cedulaEmpleado;
+  final CargoEmpleado cargoEmpleado;
 
   CalendarioViewModel(
     this._camaraRepository,
     this._instalacionRepository,
-    this._vehiculoRepository,
-  );
+    this._vehiculoRepository, {
+    required this.cedulaEmpleado,
+    required this.cargoEmpleado,
+  });
 
   List<EventoCalendario> _eventos = [];
   List<EventoCalendario> get eventos => _eventos;
@@ -52,19 +57,13 @@ class CalendarioViewModel extends BaseViewModel {
       final alquileres = await _vehiculoRepository.getAll();
       todosLosEventos.addAll(alquileres.map(EventoCalendario.fromAlquiler));
 
-      // Filtrar por empleado autenticado si no es admin
-      final user = FirebaseAuth.instance.currentUser;
+      // Filtrar por empleado autenticado si no es administrador
       List<EventoCalendario> eventosFiltrados = todosLosEventos;
-      if (user != null &&
-          user.email != null &&
-          user.email!.endsWith('@empleado.com')) {
-        final cedula = user.email!.split('@').first;
+      if (cargoEmpleado != CargoEmpleado.administrador) {
         eventosFiltrados = todosLosEventos.where((evento) {
-          // Filtrar por técnico asignado (puedes expandir para cuadrilla si lo implementas)
-          return evento.tecnico == cedula || evento.tecnico == user.email;
+          return evento.tecnico == cedulaEmpleado;
         }).toList();
       }
-
       _eventos = eventosFiltrados;
       _organizarEventosPorFecha();
       notifyListeners();
@@ -107,19 +106,13 @@ class CalendarioViewModel extends BaseViewModel {
       );
       eventosRango.addAll(alquileres.map(EventoCalendario.fromAlquiler));
 
-      // Filtrar por empleado autenticado si no es admin
-      final user = FirebaseAuth.instance.currentUser;
+      // Filtrar por empleado autenticado si no es administrador
       List<EventoCalendario> eventosFiltradosRango = eventosRango;
-      if (user != null &&
-          user.email != null &&
-          user.email!.endsWith('@empleado.com')) {
-        final cedula = user.email!.split('@').first;
+      if (cargoEmpleado != CargoEmpleado.administrador) {
         eventosFiltradosRango = eventosRango.where((evento) {
-          // Filtrar por técnico asignado (puedes expandir para cuadrilla si lo implementas)
-          return evento.tecnico == cedula || evento.tecnico == user.email;
+          return evento.tecnico == cedulaEmpleado;
         }).toList();
       }
-
       _eventos = eventosFiltradosRango;
       _organizarEventosPorFecha();
       notifyListeners();

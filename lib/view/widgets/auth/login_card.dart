@@ -169,16 +169,14 @@ class _LoginCardState extends State<LoginCard> {
               ),
             ),
 
-            const SizedBox(height: 45), // Aumenté el espaciado
+            const SizedBox(height: 45),
 
-            // Campo de cédula
             TextFormField(
               controller: _emailController,
-              keyboardType: TextInputType.text,
-              style: const TextStyle(
-                  fontSize: 16), // Aumenté el tamaño de la fuente
+              keyboardType: TextInputType.emailAddress,
+              style: const TextStyle(fontSize: 16),
               decoration: InputDecoration(
-                labelText: 'Cédula',
+                labelText: 'Correo',
                 labelStyle: AppFonts.inputtext.copyWith(
                   color: Colors.grey[600],
                   fontSize: 16,
@@ -196,12 +194,15 @@ class _LoginCardState extends State<LoginCard> {
                     width: 2,
                   ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15), // Más altura en los campos
+                contentPadding: const EdgeInsets.symmetric(vertical: 15),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Por favor ingresa tu cédula';
+                  return 'Por favor ingresa tu correo';
+                }
+                final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+                if (!emailRegex.hasMatch(value)) {
+                  return 'Correo inválido';
                 }
                 return null;
               },

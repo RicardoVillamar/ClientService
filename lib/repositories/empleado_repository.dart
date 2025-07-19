@@ -1,3 +1,5 @@
+// ...existing code...
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/empleado.dart';
@@ -5,6 +7,13 @@ import '../services/cloudinary_service.dart';
 import 'base_repository.dart';
 
 class EmpleadoRepository implements BaseRepository<Empleado> {
+  Future<List<Empleado>> getAllEmpleadosNoAdmin() async {
+    final empleados = await getAll();
+    return empleados
+        .where((e) => e.cargo != CargoEmpleado.administrador)
+        .toList();
+  }
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final CloudinaryService _cloudinaryService = CloudinaryService();
   final String _collection = 'empleados';

@@ -4,20 +4,24 @@ import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/events/evento_calendario.dart';
 import 'package:client_service/viewmodel/calendario_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
+import 'package:client_service/repositories/camara_repository.dart';
+import 'package:client_service/repositories/instalacion_repository.dart';
+import 'package:client_service/repositories/vehiculo_repository.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:client_service/models/empleado.dart';
 
 class CalendarioScreen extends StatefulWidget {
-  const CalendarioScreen({super.key});
+  final Empleado empleado;
+  const CalendarioScreen({super.key, required this.empleado});
 
   @override
   State<CalendarioScreen> createState() => _CalendarioScreenState();
 }
 
 class _CalendarioScreenState extends State<CalendarioScreen> {
-  late final CalendarioViewModel _viewModel;
-  late final ValueNotifier<List<EventoCalendario>> _selectedEvents;
+  late CalendarioViewModel _viewModel;
+  late ValueNotifier<List<EventoCalendario>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -25,7 +29,13 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
   @override
   void initState() {
     super.initState();
-    _viewModel = sl<CalendarioViewModel>();
+    _viewModel = CalendarioViewModel(
+      sl<CamaraRepository>(),
+      sl<InstalacionRepository>(),
+      sl<VehiculoRepository>(),
+      cedulaEmpleado: widget.empleado.cedula,
+      cargoEmpleado: widget.empleado.cargo,
+    );
     _selectedDay = DateTime.now();
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
     _cargarEventos();
@@ -553,13 +563,9 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
   }
 
   void _onEventTap(EventoCalendario evento) async {
-    final user = FirebaseAuth.instance.currentUser;
-    final isEmpleado = user != null &&
-        user.email != null &&
-        user.email!.endsWith('@empleado.com');
-    if (!isEmpleado) return;
+    // Solo permitir cambiar estado si no es admin
+    if (widget.empleado.cargo == CargoEmpleado.administrador) return;
     final now = TimeOfDay.now();
-    final hoy = DateTime.now();
     final horaInicio = _parseTimeOfDay(evento.horaInicio);
     final horaFin =
         evento.horaFin != null ? _parseTimeOfDay(evento.horaFin!) : null;

@@ -1,4 +1,4 @@
-import 'package:client_service/view/auth/splash_screen.dart';
+import 'package:client_service/utils/events/splash_screen.dart';
 import 'package:client_service/services/navigation_service.dart';
 import 'package:client_service/routes.dart';
 import 'package:flutter/material.dart';

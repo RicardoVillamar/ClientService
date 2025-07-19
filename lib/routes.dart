@@ -12,10 +12,9 @@ import 'package:client_service/view/billing/create_factura.dart';
 import 'package:client_service/view/billing/facturas_list_avanzada.dart';
 import 'package:client_service/view/billing/anular_facturas.dart';
 import 'package:client_service/view/billing/dashboard_facturacion.dart';
-import 'package:client_service/view/calendar/calendario_screen.dart';
 import 'package:client_service/view/notifications/notificaciones_screen.dart';
 import 'package:client_service/view/settings/configuracion_screen.dart';
-import 'package:client_service/view/auth/splash_screen.dart';
+import 'package:client_service/utils/events/splash_screen.dart';
 import 'package:client_service/view/auth/login_selection_screen.dart';
 import 'package:client_service/view/auth/login_empleado_screen.dart';
 import 'package:client_service/view/auth/login_admin_screen.dart';
@@ -50,7 +49,7 @@ final Map<String, WidgetBuilder> routes = {
   'Reporte vehículos': (context) => const ReportVehiculo(),
 
   // Nuevas funcionalidades
-  'calendario': (context) => const CalendarioScreen(),
+  // 'calendario': (context) => const CalendarioScreen(), // REMOVED: CalendarioScreen now requires Empleado
   'notificaciones': (context) => const NotificacionesScreen(),
   'configuracion': (context) => const ConfiguracionScreen(),
 };
