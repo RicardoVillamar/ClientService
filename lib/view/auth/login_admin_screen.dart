@@ -1,78 +1,103 @@
 import 'package:flutter/material.dart';
-import 'package:client_service/services/auth_service.dart';
+import 'package:client_service/viewmodel/auth_viewmodel.dart';
 import 'package:client_service/view/home/view.dart';
 import 'package:client_service/view/widgets/auth/login_card.dart';
+import 'package:client_service/models/empleado.dart';
+import 'package:client_service/view/auth/cambiar_password_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:client_service/providers/empleado_provider.dart';
 
-class LoginAdminScreen extends StatefulWidget {
+class LoginAdminScreen extends StatelessWidget {
   const LoginAdminScreen({super.key});
 
   @override
-  State<LoginAdminScreen> createState() => _LoginAdminScreenState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<AuthViewModel>(
+      create: (_) => AuthViewModel(),
+      child: const _LoginAdminScreenBody(),
+    );
+  }
 }
 
-class _LoginAdminScreenState extends State<LoginAdminScreen> {
+class _LoginAdminScreenBody extends StatefulWidget {
+  const _LoginAdminScreenBody();
+
+  @override
+  State<_LoginAdminScreenBody> createState() => _LoginAdminScreenBodyState();
+}
+
+class _LoginAdminScreenBodyState extends State<_LoginAdminScreenBody> {
   bool _isLoading = false;
+
+  void _mostrarError(String mensaje) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(mensaje),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 
   Future<void> _iniciarSesion(String email, String password) async {
     setState(() {
       _isLoading = true;
     });
-
-    try {
-      final resultado = await AuthService.iniciarSesion(
-        email: email,
-        password: password,
-      );
-
-      if (resultado['success']) {
-        final user = resultado['user'];
-        if (user != null) {
-          // Si el email es de empleado (termina en @empleado.com)
-          if (user.email != null && user.email!.endsWith('@empleado.com')) {
-            // Si es primer login (password == cédula), redirigir a cambio de contraseña
-            // (Esto requiere lógica adicional en AuthService para detectar primer login)
-            // Por ahora, redirigir a la pantalla de cambio de contraseña si es necesario
-            // Si no, redirigir a la pantalla principal de empleado
-            // Ejemplo:
-            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => CambiarPasswordScreen()));
-            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => EmpleadoHomeScreen()));
-          } else {
-            // Administradora
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-            (route) => false,
-          );
-          }
+    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+\u0000*');
+    if (!emailRegex.hasMatch(email)) {
+      _mostrarError('Ingrese un correo válido.');
+      setState(() => _isLoading = false);
+      return;
+    }
+    final viewModel = Provider.of<AuthViewModel>(context, listen: false);
+    final resultado =
+        await viewModel.loginEmpleado(correo: email, password: password);
+    if (resultado['success']) {
+      final empleado = resultado['empleado'];
+      final primerLogin = resultado['primerLogin'] ?? false;
+      if (empleado != null) {
+        if (empleado.cargo != CargoEmpleado.administrador) {
+          _mostrarError(
+              'Solo usuarios con cargo de Administrador pueden acceder aquí.');
+          setState(() => _isLoading = false);
+          return;
         }
-      } else {
-        _mostrarError(resultado['message']);
+        Provider.of<EmpleadoProvider>(context, listen: false)
+            .setEmpleado(empleado);
       }
-    } catch (e) {
-      _mostrarError('Error inesperado: $e');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+      if (empleado != null && primerLogin) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => CambiarPasswordScreen(cedula: empleado.cedula),
+          ),
+        );
+      } else {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+          (route) => false,
+        );
+      }
+    } else {
+      final msg = resultado['message']?.toString().toLowerCase() ?? '';
+      if (msg.contains('no encontrado') || msg.contains('not found')) {
+        _mostrarError('No se encontró una cuenta con ese correo.');
+      } else if (msg.contains('contraseña') || msg.contains('password')) {
+        _mostrarError('Credenciales incorrectas.');
+      } else {
+        _mostrarError('Error al iniciar sesión.');
       }
     }
-  }
-
-  void _mostrarError(String mensaje) {
-    if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(mensaje),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-    );
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -92,7 +117,6 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                // Botón de regreso
                 Row(
                   children: [
                     IconButton(
@@ -105,79 +129,12 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 40),
-
-                // Header con logo y título
-                const Column(
-                  children: [
-                    // Título LIGHT VITAE más grande
-                    Text(
-                      'LIGHT VITAE',
-                      style: TextStyle(
-                        fontSize: 48,
-                        color: Color(0xFF8962F8),
-                        letterSpacing: 3,
-                        fontWeight: FontWeight.w900,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black26,
-                            offset: Offset(2, 2),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 10),
-
-                    // Subtítulo SERVICE
-                    Text(
-                      'SERVICE',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Color(0xFF8962F8),
-                        letterSpacing: 2,
-                        fontWeight: FontWeight.w700,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black26,
-                            offset: Offset(1, 1),
-                            blurRadius: 2,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 20),
-
-                    // Tipo de usuario
-                    Text(
-                      'Administrador',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black54,
-                            offset: Offset(1, 1),
-                            blurRadius: 3,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 80),
-
-                // Formulario flotante
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(35),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.white.withOpacity(0.95),
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
@@ -194,10 +151,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                     showFormOnly: true,
                   ),
                 ),
-
                 const SizedBox(height: 40),
-
-                // Enlaces adicionales
                 TextButton(
                   onPressed: () {
                     showDialog(
@@ -231,16 +185,13 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
-                // Footer
-                Text(
+                const Text(
                   '© 2025 Light Vitae',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white.withOpacity(0.8),
-                    shadows: const [
+                    color: Colors.white70,
+                    shadows: [
                       Shadow(
                         color: Colors.black54,
                         offset: Offset(1, 1),
