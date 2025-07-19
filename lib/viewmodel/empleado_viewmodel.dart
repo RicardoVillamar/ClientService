@@ -72,7 +72,7 @@ class EmpleadoViewmodel extends BaseViewModel {
     final result = await handleAsyncOperation(() async {
       final id = await _repository.createWithImage(empleado, imageFile);
 
-      // Actualizar lista local con el nuevo empleado
+      // El password inicial siempre será la cédula
       final newEmpleado = Empleado(
         id: id,
         nombre: empleado.nombre,
@@ -84,6 +84,7 @@ class EmpleadoViewmodel extends BaseViewModel {
         cargo: empleado.cargo,
         fechaContratacion: empleado.fechaContratacion,
         fotoUrl: empleado.fotoUrl,
+        password: empleado.cedula,
       );
 
       _empleados.add(newEmpleado);
