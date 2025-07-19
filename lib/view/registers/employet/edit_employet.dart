@@ -128,6 +128,7 @@ class _EditEmpleadoPageState extends State<EditEmpleadoPage> {
           cargo: CargoEmpleado.fromString(selectValue!),
           fechaContratacion: fecha,
           fotoUrl: widget.empleado.fotoUrl,
+          password: widget.empleado.password, // Mantener el password actual
         );
 
         final success = await _empleadoVM.actualizarEmpleado(
