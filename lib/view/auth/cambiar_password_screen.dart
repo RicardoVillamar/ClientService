@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:client_service/view/auth/login_empleado_screen.dart';
+import 'package:client_service/viewmodel/auth_viewmodel.dart';
 
 class CambiarPasswordScreen extends StatefulWidget {
   final String cedula;
@@ -29,21 +30,30 @@ class _CambiarPasswordScreenState extends State<CambiarPasswordScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) throw Exception('No autenticado');
-      await user.updatePassword(_passwordController.text);
-      await FirebaseAuth.instance.signOut();
-      if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginEmpleadoScreen()),
-          (route) => false,
-        );
+      final viewModel = Provider.of<AuthViewModel>(context, listen: false);
+      final resultado = await viewModel.cambiarPassword(
+        cedula: widget.cedula,
+        nuevaPassword: _passwordController.text,
+      );
+      if (resultado['success']) {
+        if (mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const LoginEmpleadoScreen()),
+            (route) => false,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text(
+                    'Contraseña actualizada. Inicie sesión con su nueva contraseña.'),
+                backgroundColor: Colors.green),
+          );
+        }
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text(
-                  'Contraseña actualizada. Inicie sesión con su nueva contraseña.'),
-              backgroundColor: Colors.green),
+          SnackBar(
+              content: Text(resultado['message'] ?? 'Error'),
+              backgroundColor: Colors.red),
         );
       }
     } catch (e) {
@@ -57,62 +67,66 @@ class _CambiarPasswordScreenState extends State<CambiarPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Cambiar Contraseña')),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(32),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Nueva Contraseña',
-                    style:
-                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 32),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Nueva contraseña',
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
+    return ChangeNotifierProvider<AuthViewModel>(
+      create: (_) => AuthViewModel(),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Cambiar Contraseña')),
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(32),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Nueva Contraseña',
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 32),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Nueva contraseña',
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () => setState(
+                            () => _obscurePassword = !_obscurePassword),
+                      ),
                     ),
+                    obscureText: _obscurePassword,
+                    validator: (v) => v == null || v.length < 6
+                        ? 'Mínimo 6 caracteres'
+                        : null,
                   ),
-                  obscureText: _obscurePassword,
-                  validator: (v) =>
-                      v == null || v.length < 6 ? 'Mínimo 6 caracteres' : null,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _confirmController,
-                  decoration: InputDecoration(
-                    labelText: 'Confirmar contraseña',
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscureConfirm
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () =>
-                          setState(() => _obscureConfirm = !_obscureConfirm),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _confirmController,
+                    decoration: InputDecoration(
+                      labelText: 'Confirmar contraseña',
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscureConfirm
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () =>
+                            setState(() => _obscureConfirm = !_obscureConfirm),
+                      ),
                     ),
+                    obscureText: _obscureConfirm,
+                    validator: (v) => v != _passwordController.text
+                        ? 'Las contraseñas no coinciden'
+                        : null,
                   ),
-                  obscureText: _obscureConfirm,
-                  validator: (v) => v != _passwordController.text
-                      ? 'Las contraseñas no coinciden'
-                      : null,
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _cambiarPassword,
-                  child: _isLoading
-                      ? const CircularProgressIndicator()
-                      : const Text('Confirmar'),
-                ),
-              ],
+                  const SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: _isLoading ? null : _cambiarPassword,
+                    child: _isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('Confirmar'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

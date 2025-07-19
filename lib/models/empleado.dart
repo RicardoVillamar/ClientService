@@ -47,6 +47,7 @@ class Empleado {
   final CargoEmpleado cargo;
   final DateTime fechaContratacion;
   final String fotoUrl;
+  final String password;
 
   Empleado({
     this.id,
@@ -59,6 +60,7 @@ class Empleado {
     required this.cargo,
     required this.fechaContratacion,
     this.fotoUrl = '',
+    required this.password,
   });
 
   Map<String, dynamic> toMap() {
@@ -72,6 +74,7 @@ class Empleado {
       'cargo': cargo.displayName,
       'fechaContratacion': fechaContratacion,
       'fotoUrl': fotoUrl,
+      'password': password,
     };
   }
 
@@ -87,6 +90,7 @@ class Empleado {
       cargo: CargoEmpleado.fromString(map['cargo'] ?? ''),
       fechaContratacion: (map['fechaContratacion'] as Timestamp).toDate(),
       fotoUrl: map['fotoUrl'] ?? '',
+      password: map['password'] ?? '',
     );
   }
 
