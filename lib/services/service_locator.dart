@@ -11,7 +11,6 @@ import '../viewmodel/instalacion_viewmodel.dart';
 import '../viewmodel/camara_viewmodel.dart';
 import '../viewmodel/vehiculo_viewmodel.dart';
 import '../viewmodel/factura_viewmodel.dart';
-import '../viewmodel/calendario_viewmodel.dart';
 import '../services/notificacion_service.dart';
 
 final GetIt sl = GetIt.instance;

@@ -186,8 +186,8 @@ class _AsistenciaScreenState extends State<AsistenciaScreen> {
                         },
                       )
                     else if (_entrada != null && _salida != null)
-                      Column(
-                        children: const [
+                      const Column(
+                        children: [
                           Icon(Icons.check_circle,
                               color: Colors.green, size: 48),
                           SizedBox(height: 12),
