@@ -32,17 +32,7 @@ void main() {
     expect(find.text('Teléfono*'), findsOneWidget);
     expect(find.text('Correo electronico*'), findsOneWidget);
 
-    final cliente = Cliente(
-      id: '1',
-      nombreComercial: 'Empresa Y',
-      ruc: '1234567890',
-      direccion: 'Calle 1',
-      telefono: '0999999999',
-      correo: 'cliente@email.com',
-      personaContacto: 'Juan Pérez',
-      cedula: '1234567890',
-    );
-    // Si tienes un widget de registro de cliente, reemplaza aquí. Si no, elimina esta línea.
+    // Eliminado objeto 'cliente' no usado en el test.
 
     await tester.enterText(
         find.widgetWithText(TextFormField, 'Nombre comercial*'), 'Empresa Y');
