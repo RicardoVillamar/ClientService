@@ -34,36 +34,41 @@ class EmpleadoViewmodel extends BaseViewModel {
   // Exportar empleados en excel
   Future<void> exportEmpleados() async {
     await handleAsyncOperation(() async {
-      await ExcelExportUtility.exportToExcel(
-          sheetName: 'Empleados',
-          collectionName: 'empleados',
-          fileName: 'reporte_empleados.xlsx',
-          headers: [
-            'Nombre',
-            'Apellido',
-            'Cédula',
-            'Dirección',
-            'Teléfono',
-            'Correo',
-            'Cargo',
-            'Fecha Contratación',
-            'Foto URL'
-          ],
-          mapper: (data) => [
-                data['nombre'] ?? '',
-                data['apellido'] ?? '',
-                data['cedula'] ?? '',
-                data['direccion'] ?? '',
-                data['telefono'] ?? '',
-                data['correo'] ?? '',
-                data['cargo'] ?? '',
-                data['fechaContratacion'] != null
-                    ? (data['fechaContratacion'] as Timestamp)
-                        .toDate()
-                        .toIso8601String()
-                    : '',
-                data['fotoUrl'] ?? ''
-              ]);
+      final empleados = await _repository.getAllForExport?.call() ?? [];
+      await ExcelExportUtility.exportMultipleSheets(
+        sheets: [
+          ExcelSheetData(
+            sheetName: 'Empleados',
+            headers: [
+              'Nombre',
+              'Apellido',
+              'Cédula',
+              'Dirección',
+              'Teléfono',
+              'Correo',
+              'Cargo',
+              'Fecha Contratación',
+              'Foto URL'
+            ],
+            rows: empleados.map<List<dynamic>>((data) => [
+              data['nombre'] ?? '',
+              data['apellido'] ?? '',
+              data['cedula'] ?? '',
+              data['direccion'] ?? '',
+              data['telefono'] ?? '',
+              data['correo'] ?? '',
+              data['cargo'] ?? '',
+              data['fechaContratacion'] != null
+                  ? (data['fechaContratacion'] as Timestamp)
+                      .toDate()
+                      .toIso8601String()
+                  : '',
+              data['fotoUrl'] ?? ''
+            ]).toList(),
+          ),
+        ],
+        fileName: 'reporte_empleados.xlsx',
+      );
     });
   }
 

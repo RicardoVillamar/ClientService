@@ -32,33 +32,38 @@ class AlquilerViewModel extends BaseViewModel {
         await handleAsyncOperation(() => _repository.getAllForExport());
 
     if (data != null) {
-      await ExcelExportUtility.exportToExcel(
-        collectionName: 'alquileres',
-        headers: [
-          'ID',
-          'Cliente',
-          'Fecha Registro Reserva',
-          'Fecha Trabajo',
-          'Correo Cliente',
-          'Teléfono Cliente',
-          'Dirección Cliente',
-          'Vehículo',
-          'Monto Total',
-          'Personal Asignado',
+      await ExcelExportUtility.exportMultipleSheets(
+        sheets: [
+          ExcelSheetData(
+            sheetName: 'Alquileres',
+            headers: [
+              'ID',
+              'Cliente',
+              'Fecha Registro Reserva',
+              'Fecha Trabajo',
+              'Correo Cliente',
+              'Teléfono Cliente',
+              'Dirección Cliente',
+              'Vehículo',
+              'Monto Total',
+              'Personal Asignado',
+            ],
+            rows: data
+                .map<List<dynamic>>((dataItem) => [
+                      dataItem['id'] ?? '',
+                      dataItem['nombreComercial'] ?? '',
+                      dataItem['fechaReserva']?.toDate()?.toString() ?? '',
+                      dataItem['fechaTrabajo']?.toDate()?.toString() ?? '',
+                      dataItem['correo'] ?? '',
+                      dataItem['telefono'] ?? '',
+                      dataItem['direccion'] ?? '',
+                      dataItem['tipoVehiculo'] ?? '',
+                      dataItem['montoAlquiler']?.toString() ?? '',
+                      dataItem['personalAsistio'] ?? '',
+                    ])
+                .toList(),
+          ),
         ],
-        mapper: (dataItem) => [
-          dataItem['id'] ?? '',
-          dataItem['nombreComercial'] ?? '',
-          dataItem['fechaReserva']?.toDate()?.toString() ?? '',
-          dataItem['fechaTrabajo']?.toDate()?.toString() ?? '',
-          dataItem['correo'] ?? '',
-          dataItem['telefono'] ?? '',
-          dataItem['direccion'] ?? '',
-          dataItem['tipoVehiculo'] ?? '',
-          dataItem['montoAlquiler']?.toString() ?? '',
-          dataItem['personalAsistio'] ?? '',
-        ],
-        sheetName: 'Alquileres',
         fileName: 'reporte_alquileres.xlsx',
       );
     }
@@ -179,33 +184,38 @@ class AlquilerViewModel extends BaseViewModel {
             ));
 
     if (data != null) {
-      await ExcelExportUtility.exportToExcel(
-        collectionName: 'alquileres_reserva',
-        headers: [
-          'ID',
-          'Nombre Comercial',
-          'Dirección',
-          'Teléfono',
-          'Correo',
-          'Tipo Vehículo',
-          'Fecha Reserva',
-          'Fecha Trabajo',
-          'Monto Alquiler',
-          'Personal Asistió',
+      await ExcelExportUtility.exportMultipleSheets(
+        sheets: [
+          ExcelSheetData(
+            sheetName: 'Alquileres por Reserva',
+            headers: [
+              'ID',
+              'Nombre Comercial',
+              'Dirección',
+              'Teléfono',
+              'Correo',
+              'Tipo Vehículo',
+              'Fecha Reserva',
+              'Fecha Trabajo',
+              'Monto Alquiler',
+              'Personal Asistió',
+            ],
+            rows: data
+                .map<List<dynamic>>((dataItem) => [
+                      dataItem['id'] ?? '',
+                      dataItem['nombreComercial'] ?? '',
+                      dataItem['direccion'] ?? '',
+                      dataItem['telefono'] ?? '',
+                      dataItem['correo'] ?? '',
+                      dataItem['tipoVehiculo'] ?? '',
+                      dataItem['fechaReserva'] ?? '',
+                      dataItem['fechaTrabajo'] ?? '',
+                      dataItem['montoAlquiler']?.toString() ?? '0',
+                      dataItem['personalAsistio'] ?? '',
+                    ])
+                .toList(),
+          ),
         ],
-        mapper: (dataItem) => [
-          dataItem['id'] ?? '',
-          dataItem['nombreComercial'] ?? '',
-          dataItem['direccion'] ?? '',
-          dataItem['telefono'] ?? '',
-          dataItem['correo'] ?? '',
-          dataItem['tipoVehiculo'] ?? '',
-          dataItem['fechaReserva'] ?? '',
-          dataItem['fechaTrabajo'] ?? '',
-          dataItem['montoAlquiler']?.toString() ?? '0',
-          dataItem['personalAsistio'] ?? '',
-        ],
-        sheetName: 'Alquileres por Reserva',
         fileName: 'reporte_alquileres_reserva_filtrado.xlsx',
       );
     }
@@ -223,33 +233,38 @@ class AlquilerViewModel extends BaseViewModel {
             ));
 
     if (data != null) {
-      await ExcelExportUtility.exportToExcel(
-        collectionName: 'alquileres_trabajo',
-        headers: [
-          'ID',
-          'Nombre Comercial',
-          'Dirección',
-          'Teléfono',
-          'Correo',
-          'Tipo Vehículo',
-          'Fecha Reserva',
-          'Fecha Trabajo',
-          'Monto Alquiler',
-          'Personal Asistió',
+      await ExcelExportUtility.exportMultipleSheets(
+        sheets: [
+          ExcelSheetData(
+            sheetName: 'Alquileres por Trabajo',
+            headers: [
+              'ID',
+              'Nombre Comercial',
+              'Dirección',
+              'Teléfono',
+              'Correo',
+              'Tipo Vehículo',
+              'Fecha Reserva',
+              'Fecha Trabajo',
+              'Monto Alquiler',
+              'Personal Asistió',
+            ],
+            rows: data
+                .map<List<dynamic>>((dataItem) => [
+                      dataItem['id'] ?? '',
+                      dataItem['nombreComercial'] ?? '',
+                      dataItem['direccion'] ?? '',
+                      dataItem['telefono'] ?? '',
+                      dataItem['correo'] ?? '',
+                      dataItem['tipoVehiculo'] ?? '',
+                      dataItem['fechaReserva'] ?? '',
+                      dataItem['fechaTrabajo'] ?? '',
+                      dataItem['montoAlquiler']?.toString() ?? '0',
+                      dataItem['personalAsistio'] ?? '',
+                    ])
+                .toList(),
+          ),
         ],
-        mapper: (dataItem) => [
-          dataItem['id'] ?? '',
-          dataItem['nombreComercial'] ?? '',
-          dataItem['direccion'] ?? '',
-          dataItem['telefono'] ?? '',
-          dataItem['correo'] ?? '',
-          dataItem['tipoVehiculo'] ?? '',
-          dataItem['fechaReserva'] ?? '',
-          dataItem['fechaTrabajo'] ?? '',
-          dataItem['montoAlquiler']?.toString() ?? '0',
-          dataItem['personalAsistio'] ?? '',
-        ],
-        sheetName: 'Alquileres por Trabajo',
         fileName: 'reporte_alquileres_trabajo_filtrado.xlsx',
       );
     }

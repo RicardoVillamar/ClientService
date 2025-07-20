@@ -55,27 +55,32 @@ class ClienteViewModel extends BaseViewModel {
         await handleAsyncOperation(() => _repository.getAllForExport());
 
     if (data != null) {
-      await ExcelExportUtility.exportToExcel(
-        collectionName: 'clientes',
-        headers: [
-          'ID',
-          'Nombre Comercial',
-          'Correo',
-          'Teléfono',
-          'Dirección',
-          'Persona de Contacto',
-          'Cédula',
+      await ExcelExportUtility.exportMultipleSheets(
+        sheets: [
+          ExcelSheetData(
+            sheetName: 'Clientes',
+            headers: [
+              'ID',
+              'Nombre Comercial',
+              'Correo',
+              'Teléfono',
+              'Dirección',
+              'Persona de Contacto',
+              'Cédula',
+            ],
+            rows: data
+                .map<List<dynamic>>((dataItem) => [
+                      dataItem['id'] ?? '',
+                      dataItem['nombreComercial'] ?? '',
+                      dataItem['correo'] ?? '',
+                      dataItem['telefono'] ?? '',
+                      dataItem['direccion'] ?? '',
+                      dataItem['personaContacto'] ?? '',
+                      dataItem['cedula'] ?? '',
+                    ])
+                .toList(),
+          ),
         ],
-        mapper: (dataItem) => [
-          dataItem['id'] ?? '',
-          dataItem['nombreComercial'] ?? '',
-          dataItem['correo'] ?? '',
-          dataItem['telefono'] ?? '',
-          dataItem['direccion'] ?? '',
-          dataItem['personaContacto'] ?? '',
-          dataItem['cedula'] ?? '',
-        ],
-        sheetName: 'Clientes',
         fileName: 'reporte_clientes.xlsx',
       );
     }
