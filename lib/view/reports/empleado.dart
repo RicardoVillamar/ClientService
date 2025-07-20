@@ -8,6 +8,8 @@ import 'package:client_service/utils/colors.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
+import 'package:client_service/view/registers/employet/edit_employet.dart';
+import 'package:client_service/view/reports/empleado_asistencia.dart';
 
 class AsistenciasAdminScreen extends StatefulWidget {
   const AsistenciasAdminScreen({super.key});
@@ -46,40 +48,60 @@ class _AsistenciasAdminScreenState extends State<AsistenciasAdminScreen> {
     await _fetchAsistencias();
   }
 
-  Future<void> _fetchAsistencias() async {
-    if (_empleadoSeleccionado == null) {
+  Future<void> _fetchAsistencias([Empleado? empleado]) async {
+    final empleadoActual = empleado ?? _empleadoSeleccionado;
+    // Validación robusta de empleado y cédula
+    if (empleadoActual == null || empleadoActual.cedula.trim().isEmpty) {
       setState(() {
         _asistencias = [];
         _loading = false;
       });
       return;
     }
+    final cedula = empleadoActual.cedula.trim();
     setState(() => _loading = true);
     final start = DateTime(_selectedMonth.year, _selectedMonth.month, 1);
     final end = DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
-    // Solo filtra por cedula en Firestore, el resto en memoria para evitar el índice compuesto
-    final query = await FirebaseFirestore.instance
-        .collection('asistencias')
-        .where('cedula', isEqualTo: _empleadoSeleccionado!.cedula)
-        .get();
-    final docsFiltrados = query.docs.where((doc) {
-      final ts = doc['timestamp'];
-      if (ts is Timestamp) {
-        final dt = ts.toDate();
-        return dt.isAfter(start.subtract(const Duration(seconds: 1))) &&
-            dt.isBefore(end);
+    try {
+      final query = await FirebaseFirestore.instance
+          .collection('asistencias')
+          .where('cedula', isEqualTo: cedula)
+          .get();
+      final docsFiltrados = query.docs.where((doc) {
+        final data = doc.data();
+        final ts = data['timestamp'];
+        if (ts is Timestamp) {
+          final dt = ts.toDate();
+          return dt.isAfter(start.subtract(const Duration(seconds: 1))) &&
+              dt.isBefore(end);
+        }
+        return false;
+      }).toList();
+      docsFiltrados.sort((a, b) {
+        final ta = a.data()['timestamp'] as Timestamp?;
+        final tb = b.data()['timestamp'] as Timestamp?;
+        if (ta == null || tb == null) return 0;
+        return tb.compareTo(ta); // descending
+      });
+      setState(() {
+        _asistencias = docsFiltrados;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _asistencias = [];
+        _loading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'No se pueden mostrar asistencias: el empleado no tiene cédula registrada.'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
-      return false;
-    }).toList();
-    docsFiltrados.sort((a, b) {
-      final ta = a['timestamp'] as Timestamp;
-      final tb = b['timestamp'] as Timestamp;
-      return tb.compareTo(ta); // descending
-    });
-    setState(() {
-      _asistencias = docsFiltrados;
-      _loading = false;
-    });
+    }
   }
 
   void _selectMonth(BuildContext context) async {
@@ -261,117 +283,41 @@ class _AsistenciasAdminScreenState extends State<AsistenciasAdminScreen> {
                                   icon: const Icon(Icons.more_vert),
                                   onSelected: (value) async {
                                     if (value == 'asistencias') {
-                                      setState(() {
-                                        _empleadoSeleccionado = empleado;
-                                      });
-                                      await _fetchAsistencias();
-                                      showModalBottomSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        backgroundColor: Colors.white,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(24)),
-                                        ),
-                                        builder: (context) {
-                                          return SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.6,
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      16.0),
-                                                  child: Text(
-                                                    'Asistencias de ${empleado.nombreCompleto}',
-                                                    style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.deepPurple,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: _asistencias.isEmpty
-                                                      ? const Center(
-                                                          child: Text(
-                                                              'No hay asistencias registradas para este mes.'),
-                                                        )
-                                                      : ListView(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  vertical: 8),
-                                                          children: _asistencias
-                                                              .map((doc) {
-                                                            final data =
-                                                                doc.data();
-                                                            final fecha =
-                                                                data['fecha'] ??
-                                                                    '';
-                                                            final entrada =
-                                                                data['horaEntrada'] ??
-                                                                    '-';
-                                                            final salida = data[
-                                                                    'horaSalida'] ??
-                                                                '-';
-                                                            return Card(
-                                                              margin:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          12,
-                                                                      vertical:
-                                                                          4),
-                                                              child: ListTile(
-                                                                title: Text(
-                                                                    'Fecha: $fecha'),
-                                                                subtitle: Row(
-                                                                  children: [
-                                                                    const Icon(
-                                                                        Icons
-                                                                            .login,
-                                                                        size:
-                                                                            16,
-                                                                        color: Colors
-                                                                            .green),
-                                                                    Text(
-                                                                        ' Entrada: $entrada'),
-                                                                    const SizedBox(
-                                                                        width:
-                                                                            16),
-                                                                    const Icon(
-                                                                        Icons
-                                                                            .logout,
-                                                                        size:
-                                                                            16,
-                                                                        color: Colors
-                                                                            .red),
-                                                                    Text(
-                                                                        ' Salida: $salida'),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            );
-                                                          }).toList(),
-                                                        ),
-                                                ),
-                                              ],
+                                      if (empleado.cedula.trim().isEmpty) {
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'No se pueden mostrar asistencias: el empleado no tiene cédula registrada.'),
+                                              backgroundColor: Colors.red,
                                             ),
                                           );
-                                        },
+                                        }
+                                        return;
+                                      }
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              EmpleadoAsistenciasPage(
+                                            empleado: empleado,
+                                            selectedMonth: _selectedMonth,
+                                          ),
+                                        ),
                                       );
                                     } else if (value == 'editar') {
-                                      // TODO: Navegar a pantalla de edición de empleado
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'Función editar no implementada')),
+                                      final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditEmpleadoPage(
+                                                  empleado: empleado),
+                                        ),
                                       );
+                                      if (result == true) {
+                                        await _fetchEmpleadosYAsistencias();
+                                      }
                                     } else if (value == 'eliminar') {
                                       final confirm = await showDialog<bool>(
                                         context: context,
@@ -397,15 +343,29 @@ class _AsistenciasAdminScreenState extends State<AsistenciasAdminScreen> {
                                         ),
                                       );
                                       if (confirm == true) {
+                                        if (empleado.id == null) {
+                                          if (mounted) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'No se puede eliminar: el empleado no tiene un ID válido.'),
+                                              ),
+                                            );
+                                          }
+                                          return;
+                                        }
                                         final repo = EmpleadoRepository();
                                         await repo.delete(empleado.id!);
                                         await _fetchEmpleadosYAsistencias();
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content:
-                                                  Text('Empleado eliminado')),
-                                        );
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content:
+                                                    Text('Empleado eliminado')),
+                                          );
+                                        }
                                       }
                                     }
                                   },

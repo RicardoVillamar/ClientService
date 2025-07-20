@@ -64,44 +64,48 @@ class InstalacionViewModel extends BaseViewModel {
   Future<void> exportarInstalaciones() async {
     await handleAsyncOperation(() async {
       final data = await _repository.getAllForExport();
-
-      await ExcelExportUtility.exportToExcel(
-        collectionName: 'instalaciones',
-        headers: [
-          'ID',
-          'Fecha Instalación',
-          'Cédula',
-          'Nombre Comercial',
-          'Dirección',
-          'Item',
-          'Descripción',
-          'Hora Inicio',
-          'Hora Fin',
-          'Tipo Trabajo',
-          'Cargo Puesto',
-          'Teléfono',
-          'Número Tarea'
+      await ExcelExportUtility.exportMultipleSheets(
+        sheets: [
+          ExcelSheetData(
+            sheetName: 'Instalaciones',
+            headers: [
+              'ID',
+              'Fecha Instalación',
+              'Cédula',
+              'Nombre Comercial',
+              'Dirección',
+              'Item',
+              'Descripción',
+              'Hora Inicio',
+              'Hora Fin',
+              'Tipo Trabajo',
+              'Cargo Puesto',
+              'Teléfono',
+              'Número Tarea'
+            ],
+            rows: data
+                .map<List<dynamic>>((data) => [
+                      data['id'] ?? '',
+                      data['fechaInstalacion'] is Timestamp
+                          ? (data['fechaInstalacion'] as Timestamp)
+                              .toDate()
+                              .toIso8601String()
+                          : data['fechaInstalacion']?.toString() ?? '',
+                      data['cedula'] ?? '',
+                      data['nombreComercial'] ?? '',
+                      data['direccion'] ?? '',
+                      data['item'] ?? '',
+                      data['descripcion'] ?? '',
+                      data['horaInicio'] ?? '',
+                      data['horaFin'] ?? '',
+                      data['tipoTrabajo'] ?? '',
+                      data['cargoPuesto'] ?? '',
+                      data['telefono'] ?? '',
+                      data['numeroTarea'] ?? ''
+                    ])
+                .toList(),
+          ),
         ],
-        mapper: (data) => [
-          data['id'] ?? '',
-          data['fechaInstalacion'] is Timestamp
-              ? (data['fechaInstalacion'] as Timestamp)
-                  .toDate()
-                  .toIso8601String()
-              : data['fechaInstalacion']?.toString() ?? '',
-          data['cedula'] ?? '',
-          data['nombreComercial'] ?? '',
-          data['direccion'] ?? '',
-          data['item'] ?? '',
-          data['descripcion'] ?? '',
-          data['horaInicio'] ?? '',
-          data['horaFin'] ?? '',
-          data['tipoTrabajo'] ?? '',
-          data['cargoPuesto'] ?? '',
-          data['telefono'] ?? '',
-          data['numeroTarea'] ?? ''
-        ],
-        sheetName: 'Instalaciones',
         fileName: 'reporte_instalaciones.xlsx',
       );
     });
@@ -131,39 +135,44 @@ class InstalacionViewModel extends BaseViewModel {
             ));
 
     if (data != null) {
-      await ExcelExportUtility.exportToExcel(
-        collectionName: 'instalaciones',
-        headers: [
-          'ID',
-          'Fecha Instalación',
-          'Cédula',
-          'Nombre Comercial',
-          'Dirección',
-          'Item',
-          'Descripción',
-          'Hora Inicio',
-          'Hora Fin',
-          'Tipo Trabajo',
-          'Cargo/Puesto',
-          'Teléfono',
-          'Número Tarea',
+      await ExcelExportUtility.exportMultipleSheets(
+        sheets: [
+          ExcelSheetData(
+            sheetName: 'Instalaciones',
+            headers: [
+              'ID',
+              'Fecha Instalación',
+              'Cédula',
+              'Nombre Comercial',
+              'Dirección',
+              'Item',
+              'Descripción',
+              'Hora Inicio',
+              'Hora Fin',
+              'Tipo Trabajo',
+              'Cargo/Puesto',
+              'Teléfono',
+              'Número Tarea',
+            ],
+            rows: data
+                .map<List<dynamic>>((dataItem) => [
+                      dataItem['id'] ?? '',
+                      dataItem['fechaInstalacion'] ?? '',
+                      dataItem['cedula'] ?? '',
+                      dataItem['nombreComercial'] ?? '',
+                      dataItem['direccion'] ?? '',
+                      dataItem['item'] ?? '',
+                      dataItem['descripcion'] ?? '',
+                      dataItem['horaInicio'] ?? '',
+                      dataItem['horaFin'] ?? '',
+                      dataItem['tipoTrabajo'] ?? '',
+                      dataItem['cargoPuesto'] ?? '',
+                      dataItem['telefono'] ?? '',
+                      dataItem['numeroTarea'] ?? '',
+                    ])
+                .toList(),
+          ),
         ],
-        mapper: (dataItem) => [
-          dataItem['id'] ?? '',
-          dataItem['fechaInstalacion'] ?? '',
-          dataItem['cedula'] ?? '',
-          dataItem['nombreComercial'] ?? '',
-          dataItem['direccion'] ?? '',
-          dataItem['item'] ?? '',
-          dataItem['descripcion'] ?? '',
-          dataItem['horaInicio'] ?? '',
-          dataItem['horaFin'] ?? '',
-          dataItem['tipoTrabajo'] ?? '',
-          dataItem['cargoPuesto'] ?? '',
-          dataItem['telefono'] ?? '',
-          dataItem['numeroTarea'] ?? '',
-        ],
-        sheetName: 'Instalaciones',
         fileName: 'reporte_instalaciones_filtrado.xlsx',
       );
     }

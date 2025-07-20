@@ -21,35 +21,24 @@ import 'package:client_service/view/auth/login_admin_screen.dart';
 import 'package:flutter/cupertino.dart';
 
 final Map<String, WidgetBuilder> routes = {
-  // Auth
   '/splash': (context) => const SplashScreen(),
   '/login': (context) => const LoginSelectionScreen(),
   '/login-empleado': (context) => const LoginEmpleadoScreen(),
   '/login-admin': (context) => const LoginAdminScreen(),
-  // Registros
   'Nuevos Empleados': (context) => const RegistroEmpleadoPage(),
   'Nuevos Clientes': (context) => const RegistroClientePage(),
-
-  // Servicios
   'Registro de instalación': (context) => const RegistroInstalacion(),
   'Mantenimiento de cámaras': (context) => const RegistroCamara(),
   'Alquiler vehículos': (context) => const RegistroAlquiler(),
-
-  // Facturación
   'Dashboard Facturación': (context) => const DashboardFacturacion(),
   'Nuevas Facturas': (context) => const CreateFactura(),
   'Reporte de Facturas': (context) => const FacturasListAvanzada(),
   'Anular Factura': (context) => const AnularFacturas(),
-
-  // Reportes
   'Empleados': (context) => const AsistenciasAdminScreen(),
   'Clientes': (context) => const ReportCliente(),
   'Reporte de instalaciones': (context) => const ReportInstalacion(),
   'Reporte de cámaras': (context) => const ReportCamara(),
   'Reporte vehículos': (context) => const ReportVehiculo(),
-
-  // Nuevas funcionalidades
-  // 'calendario': (context) => const CalendarioScreen(), // REMOVED: CalendarioScreen now requires Empleado
   'notificaciones': (context) => const NotificacionesScreen(),
   'configuracion': (context) => const ConfiguracionScreen(),
 };

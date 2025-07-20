@@ -124,7 +124,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                             // Título principal
                             Text(
-                              'LIGHT VITAE',
+                              'SIMEVEC',
                               style: TextStyle(
                                 fontSize: 42,
                                 fontWeight: FontWeight.bold,
@@ -186,7 +186,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                       // Footer
                       Text(
-                        '© 2025 Light Vitae',
+                        '© 2025 SIMEVEC',
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.white.withOpacity(0.8),

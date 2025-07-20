@@ -57,38 +57,45 @@ class CamaraViewModel extends BaseViewModel {
         await handleAsyncOperation(() => _repository.getAllForExport());
 
     if (data != null) {
-      await ExcelExportUtility.exportToExcel(
-        collectionName: 'camaras',
-        headers: [
-          'ID',
-          'Nombre Comercial',
-          'Fecha Mantenimiento',
-          'Dirección',
-          'Técnico',
-          'Tipo',
-          'Descripción',
-          'Costo',
+      await ExcelExportUtility.exportMultipleSheets(
+        sheets: [
+          ExcelSheetData(
+            sheetName: 'Cámaras',
+            headers: [
+              'ID',
+              'Nombre Comercial',
+              'Fecha Mantenimiento',
+              'Dirección',
+              'Técnico',
+              'Tipo',
+              'Descripción',
+              'Costo',
+            ],
+            rows: data
+                .map<List<dynamic>>((dataItem) => [
+                      dataItem['id'] ?? '',
+                      dataItem['nombreComercial'] ?? '',
+                      dataItem['fechaMantenimiento'] is Timestamp
+                          ? (dataItem['fechaMantenimiento'] as Timestamp)
+                              .toDate()
+                              .toIso8601String()
+                          : dataItem['fechaMantenimiento']?.toString() ?? '',
+                      dataItem['direccion'] ?? '',
+                      dataItem['tecnico'] ?? '',
+                      dataItem['tipo'] ?? '',
+                      dataItem['descripcion'] ?? '',
+                      (dataItem['costo'] is int
+                              ? (dataItem['costo'] as int).toDouble()
+                              : (dataItem['costo'] is double
+                                  ? dataItem['costo']
+                                  : double.tryParse(
+                                          dataItem['costo'].toString()) ??
+                                      0.0))
+                          .toString(),
+                    ])
+                .toList(),
+          ),
         ],
-        mapper: (dataItem) => [
-          dataItem['id'] ?? '',
-          dataItem['nombreComercial'] ?? '',
-          dataItem['fechaMantenimiento'] is Timestamp
-              ? (dataItem['fechaMantenimiento'] as Timestamp)
-                  .toDate()
-                  .toIso8601String()
-              : dataItem['fechaMantenimiento']?.toString() ?? '',
-          dataItem['direccion'] ?? '',
-          dataItem['tecnico'] ?? '',
-          dataItem['tipo'] ?? '',
-          dataItem['descripcion'] ?? '',
-          (dataItem['costo'] is int
-                  ? (dataItem['costo'] as int).toDouble()
-                  : (dataItem['costo'] is double
-                      ? dataItem['costo']
-                      : double.tryParse(dataItem['costo'].toString()) ?? 0.0))
-              .toString(),
-        ],
-        sheetName: 'Camaras',
         fileName: 'reporte_camaras.xlsx',
       );
     }
@@ -118,29 +125,34 @@ class CamaraViewModel extends BaseViewModel {
             ));
 
     if (data != null) {
-      await ExcelExportUtility.exportToExcel(
-        collectionName: 'camaras',
-        headers: [
-          'ID',
-          'Nombre Comercial',
-          'Fecha Mantenimiento',
-          'Dirección',
-          'Técnico',
-          'Tipo',
-          'Descripción',
-          'Costo',
+      await ExcelExportUtility.exportMultipleSheets(
+        sheets: [
+          ExcelSheetData(
+            sheetName: 'Cámaras',
+            headers: [
+              'ID',
+              'Nombre Comercial',
+              'Fecha Mantenimiento',
+              'Dirección',
+              'Técnico',
+              'Tipo',
+              'Descripción',
+              'Costo',
+            ],
+            rows: data
+                .map<List<dynamic>>((dataItem) => [
+                      dataItem['id'] ?? '',
+                      dataItem['nombreComercial'] ?? '',
+                      dataItem['fechaMantenimiento'] ?? '',
+                      dataItem['direccion'] ?? '',
+                      dataItem['tecnico'] ?? '',
+                      dataItem['tipo'] ?? '',
+                      dataItem['descripcion'] ?? '',
+                      dataItem['costo']?.toString() ?? '0',
+                    ])
+                .toList(),
+          ),
         ],
-        mapper: (dataItem) => [
-          dataItem['id'] ?? '',
-          dataItem['nombreComercial'] ?? '',
-          dataItem['fechaMantenimiento'] ?? '',
-          dataItem['direccion'] ?? '',
-          dataItem['tecnico'] ?? '',
-          dataItem['tipo'] ?? '',
-          dataItem['descripcion'] ?? '',
-          dataItem['costo']?.toString() ?? '0',
-        ],
-        sheetName: 'Cámaras',
         fileName: 'reporte_camaras_filtrado.xlsx',
       );
     }

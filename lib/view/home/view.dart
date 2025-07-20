@@ -41,7 +41,7 @@ class ContentPage extends StatefulWidget {
 }
 
 class _ContentPageState extends State<ContentPage> {
-  String selectedCategory = 'Registros';
+  String selectedCategory = 'Servicios';
 
   void updateCategory(String category) {
     setState(() {
@@ -51,14 +51,15 @@ class _ContentPageState extends State<ContentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: <Widget>[
-          // SearchBarPage eliminado
-          CategoryPage(onCategorySelected: updateCategory),
-          SectionPage(selectedCategory: selectedCategory),
-        ],
-      ),
+    return Column(
+      // Remove Expanded, use Column directly
+      children: <Widget>[
+        CategoryPage(onCategorySelected: updateCategory),
+        Expanded(
+          // Move Expanded here if SectionPage needs to fill remaining space
+          child: SectionPage(selectedCategory: selectedCategory),
+        ),
+      ],
     );
   }
 }
