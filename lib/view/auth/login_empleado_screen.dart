@@ -90,11 +90,6 @@ class _LoginEmpleadoScreenState extends State<LoginEmpleadoScreen> {
                 ),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(40),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
                   child: LoginCard(
                     userType: 'Empleado',
                     isLoading: _isLoading,

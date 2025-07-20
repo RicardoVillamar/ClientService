@@ -159,7 +159,7 @@ class _LoginCardState extends State<LoginCard> {
           children: [
             // Texto Bienvenido usuario
             Text(
-              'Bienvenido usuario',
+              'Iniciar Sesión',
               style: AppFonts.titleBold.copyWith(
                 color: Colors.black87,
                 fontSize: 22,
@@ -297,21 +297,6 @@ class _LoginCardState extends State<LoginCard> {
             ),
 
             const SizedBox(height: 30), // Aumenté el espaciado
-
-            // Texto de olvido de contraseña
-            TextButton(
-              onPressed: () {
-                // Acción para olvidé mi contraseña
-              },
-              child: Text(
-                'Olvidé mi contraseña',
-                style: AppFonts.text.copyWith(
-                  color: Colors.grey[600],
-                  fontSize: 14,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
 
             if (isAdmin) ...[
               const SizedBox(height: 25),
