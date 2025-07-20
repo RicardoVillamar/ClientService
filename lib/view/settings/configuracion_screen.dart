@@ -34,7 +34,7 @@ class ConfiguracionScreen extends StatelessWidget {
                 icon: Icons.person,
                 title: 'Cuenta',
                 subtitle: 'Administrar información de la cuenta',
-                onTap: () => _navegarA(context, 'cuenta'),
+                onTap: () => Navigator.pushNamed(context, 'profile_admin'),
               ),
               _buildSettingsItem(
                 icon: Icons.security,
@@ -237,7 +237,7 @@ class ConfiguracionScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'LightViate',
+                      'SIMEVEC',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -299,13 +299,9 @@ class ConfiguracionScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                // Aquí implementarías la lógica de cerrar sesión
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Sesión cerrada'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
+                // Lógica real de logout: navega a login y limpia la pila
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/login', (route) => false);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -337,13 +333,12 @@ class ConfiguracionScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                // Aquí implementarías la lógica para salir de la app
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Saliendo de la aplicación...'),
-                    backgroundColor: Colors.orange,
-                  ),
-                );
+                // Lógica real para cerrar la app
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  // Cierra la app (solo funciona en Android/iOS)
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                });
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,

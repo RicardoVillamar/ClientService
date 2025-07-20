@@ -18,7 +18,9 @@ import 'package:client_service/utils/events/splash_screen.dart';
 import 'package:client_service/view/auth/login_selection_screen.dart';
 import 'package:client_service/view/auth/login_empleado_screen.dart';
 import 'package:client_service/view/auth/login_admin_screen.dart';
-import 'package:flutter/cupertino.dart';
+
+import 'package:client_service/view/profile/profile_admin_view.dart';
+import 'package:flutter/material.dart';
 
 final Map<String, WidgetBuilder> routes = {
   '/splash': (context) => const SplashScreen(),
@@ -41,4 +43,5 @@ final Map<String, WidgetBuilder> routes = {
   'Reporte vehículos': (context) => const ReportVehiculo(),
   'notificaciones': (context) => const NotificacionesScreen(),
   'configuracion': (context) => const ConfiguracionScreen(),
+  'profile_admin': (context) => const ProfileAdminView(),
 };
