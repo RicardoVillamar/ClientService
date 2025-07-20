@@ -187,7 +187,7 @@ class _LoginAdminScreenBodyState extends State<_LoginAdminScreenBody> {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  '© 2025 Light Vitae',
+                  '© 2025 SIMEVEC',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.white70,

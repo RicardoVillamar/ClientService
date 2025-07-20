@@ -31,7 +31,7 @@ class LoginSelectionScreen extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          'Light Vitae',
+                          'SIMEVEC',
                           style: AppFonts.titleBold.copyWith(
                             fontSize: 48,
                             color: AppColors.primaryColor,
@@ -45,38 +45,46 @@ class LoginSelectionScreen extends StatelessWidget {
 
                     // Subtítulo
                     Text(
-                      'Sistema de Gestión Integral',
+                      'Sistema de servicios de instalación, mantenimiento de postes, Cámaras y préstamos de vehículos',
                       style: AppFonts.text.copyWith(
                         color: AppColors.whiteColor,
+                        fontWeight: FontWeight.w500,
+                        height: 1.4,
                         fontSize: 24,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black.withOpacity(0.2),
+                            offset: const Offset(0, 2),
+                            blurRadius: 12,
+                          ),
+                        ],
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
 
               const Spacer(),
-
               // Mensaje de selección
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 30),
                 padding: const EdgeInsets.all(10),
-                child: Text(
-                  'Selecciona tu tipo de acceso',
-                  style: AppFonts.subtitleBold.copyWith(
-                    color: AppColors.btnColor,
-                    fontSize: 24,
-                    letterSpacing: 1.2,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                // child: Text(
+                //   'Selecciona tu tipo de acceso',
+                //   style: AppFonts.subtitleBold.copyWith(
+                //     color: AppColors.btnColor,
+                //     fontSize: 24,
+                //     letterSpacing: 1.2,
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
               ),
 
               const SizedBox(height: 30),
-
-              // Botones de acceso
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 42, vertical: 20),
                 child: Column(
                   children: [
                     // Botón Administrador
@@ -115,7 +123,9 @@ class LoginSelectionScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Botón Usuario (Empleado)
+
+                    const SizedBox(height: 32),
+
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -161,7 +171,7 @@ class LoginSelectionScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  '© 2025 Light Vitae - Todos los derechos reservados',
+                  '© 2025 SIMEVEC - Todos los derechos reservados',
                   style: AppFonts.text.copyWith(
                     fontSize: 12,
                     color: Colors.white.withOpacity(0.8),

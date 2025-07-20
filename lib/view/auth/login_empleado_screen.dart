@@ -4,7 +4,6 @@ import 'package:client_service/viewmodel/auth_viewmodel.dart';
 import 'package:client_service/providers/empleado_provider.dart';
 import 'package:client_service/view/auth/cambiar_password_screen.dart';
 import 'package:client_service/view/panel_empleado/panel_empleado_screen.dart';
-import 'package:client_service/view/auth/login_selection_screen.dart';
 import 'package:client_service/view/widgets/auth/login_card.dart';
 
 class LoginEmpleadoScreen extends StatefulWidget {
@@ -64,12 +63,46 @@ class _LoginEmpleadoScreenState extends State<LoginEmpleadoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: LoginCard(
-            userType: 'Empleado',
-            isLoading: _isLoading,
-            onLogin: (correo, cedula) => _iniciarSesion(correo, cedula),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/bg.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(40),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: LoginCard(
+                    userType: 'Empleado',
+                    isLoading: _isLoading,
+                    onLogin: (correo, cedula) => _iniciarSesion(correo, cedula),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

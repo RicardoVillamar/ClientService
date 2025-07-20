@@ -3,7 +3,7 @@ import 'package:client_service/utils/colors.dart';
 import 'package:client_service/utils/font.dart';
 
 class LoginCard extends StatefulWidget {
-  final String userType; // 'Usuario' o 'Administrador'
+  final String userType;
   final Function(String email, String password) onLogin;
   final bool isLoading;
   final bool showHeaderOnly; // Nuevo parámetro para mostrar solo el header
@@ -71,46 +71,45 @@ class _LoginCardState extends State<LoginCard> {
       child: Column(
         children: [
           // Logo circular como en el mockup
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Icon(
-              isAdmin ? Icons.admin_panel_settings : Icons.person,
-              size: 60,
-              color: isAdmin ? AppColors.btnColor : AppColors.primaryColor,
-            ),
-          ),
+          // Container(
+          //   width: 120,
+          //   height: 120,
+          //   decoration: BoxDecoration(
+          //     color: Colors.white,
+          //     shape: BoxShape.circle,
+          //     boxShadow: [
+          //       BoxShadow(
+          //         color: Colors.black.withOpacity(0.2),
+          //         blurRadius: 15,
+          //         offset: const Offset(0, 8),
+          //       ),
+          //     ],
+          //   ),
+          //   child: Icon(
+          //     isAdmin ? Icons.admin_panel_settings : Icons.person,
+          //     size: 60,
+          //     color: isAdmin ? AppColors.btnColor : AppColors.primaryColor,
+          //   ),
+          // ),
 
           const SizedBox(height: 30),
 
-          // Título LIGHT VITAE como en el mockup
-          Text(
-            'LIGHT VITAE',
-            style: AppFonts.titleBold.copyWith(
-              fontSize: 32,
-              color: Colors.white,
-              letterSpacing: 2,
-              fontWeight: FontWeight.w900,
-              shadows: [
-                Shadow(
-                  color: Colors.black.withOpacity(0.5),
-                  offset: const Offset(2, 2),
-                  blurRadius: 4,
-                ),
-              ],
-            ),
-          ),
+          // Text(
+          //   'SIMEVEC',
+          //   style: AppFonts.titleBold.copyWith(
+          //     fontSize: 32,
+          //     color: Colors.white,
+          //     letterSpacing: 2,
+          //     fontWeight: FontWeight.w900,
+          //     shadows: [
+          //       Shadow(
+          //         color: Colors.black.withOpacity(0.5),
+          //         offset: const Offset(2, 2),
+          //         blurRadius: 4,
+          //       ),
+          //     ],
+          //   ),
+          // ),
 
           const SizedBox(height: 15),
 
@@ -140,8 +139,7 @@ class _LoginCardState extends State<LoginCard> {
       margin: widget.showFormOnly
           ? EdgeInsets.zero
           : const EdgeInsets.symmetric(horizontal: 25),
-      padding: const EdgeInsets.all(
-          40), // Aumenté el padding para hacer el formulario más alto
+      padding: const EdgeInsets.all(40),
       decoration: widget.showFormOnly
           ? null
           : BoxDecoration(

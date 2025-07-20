@@ -41,7 +41,7 @@ class ContentPage extends StatefulWidget {
 }
 
 class _ContentPageState extends State<ContentPage> {
-  String selectedCategory = 'Registros';
+  String selectedCategory = 'Servicios';
 
   void updateCategory(String category) {
     setState(() {
