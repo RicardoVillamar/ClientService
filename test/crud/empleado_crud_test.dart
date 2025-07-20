@@ -17,6 +17,7 @@ void main() {
         cargo: CargoEmpleado.tecnico,
         fechaContratacion: DateTime(2025, 6, 1),
         fotoUrl: 'user_foto.jpg',
+        password: '',
       );
       when(repository.create(any)).thenAnswer((_) async => 'emp-001');
       final result = await repository.create(empleado);
@@ -37,6 +38,7 @@ void main() {
         cargo: CargoEmpleado.electricista,
         fechaContratacion: DateTime(2025, 6, 1),
         fotoUrl: 'user_foto.jpg',
+        password: '',
       );
       when(repository.update(any, any)).thenAnswer((_) async {});
       await repository.update('emp-001', empleado);
@@ -62,6 +64,7 @@ void main() {
         cargo: CargoEmpleado.tecnico,
         fechaContratacion: DateTime(2025, 6, 1),
         fotoUrl: 'user_foto.jpg',
+        password: '',
       );
       when(repository.getAll()).thenAnswer((_) async => [empleado]);
       final result = await repository.getAll();
@@ -80,7 +83,9 @@ void main() {
         telefono: '0999999999',
         correo: 'admin@empresa.com',
         cargo: CargoEmpleado.administrador,
-        fechaContratacion: DateTime(2025, 1, 1),
+        fechaContratacion: DateTime(2025, 6, 1),
+        fotoUrl: 'admin_foto.jpg',
+        password: '',
       );
       expect(empleadoAdmin.esAdministrador, true);
       expect(empleadoAdmin.cargoDisplayName, 'Administrador');
