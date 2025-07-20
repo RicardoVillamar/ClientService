@@ -20,7 +20,7 @@ void main() {
 
   testWidgets('Registro de cliente - flujo básico',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(home: RegistroClientePage()));
+    await tester.pumpWidget(const MaterialApp(home: RegistroClientePage()));
     await tester.pumpAndSettle();
 
     // Verificar que la pantalla se carga con los elementos principales

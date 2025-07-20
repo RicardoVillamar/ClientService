@@ -69,7 +69,7 @@ void main() {
     // Busca el DropdownButtonFormField de tipo de servicio y haz tap en él
     final tipoServicioDropdown = find.byWidgetPredicate((widget) =>
         widget is DropdownButtonFormField &&
-        widget.decoration?.labelText == 'Tipo de Servicio');
+        widget.decoration.labelText == 'Tipo de Servicio');
     await tester.ensureVisible(tipoServicioDropdown);
     await tester.tap(tipoServicioDropdown);
     await tester.pumpAndSettle();

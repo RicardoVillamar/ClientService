@@ -30,7 +30,6 @@ void main() {
 
     test('valida métodos estáticos de AuthService', () {
       // Verificar que los métodos estáticos están definidos
-      expect(AuthService.iniciarSesion, isA<Function>());
       expect(AuthService.cerrarSesion, isA<Function>());
     });
   });

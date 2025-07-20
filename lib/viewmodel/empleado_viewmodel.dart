@@ -11,7 +11,7 @@ class EmpleadoViewmodel extends BaseViewModel {
   List<Empleado> _empleados = [];
   List<Empleado> get empleados => _empleados;
 
-  // Obtener todos los empleados
+  // Obtener todos los empleados3
   Future<void> fetchEmpleados() async {
     try {
       setLoading(true);

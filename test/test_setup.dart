@@ -17,8 +17,6 @@ import 'package:client_service/models/factura.dart';
 import 'package:client_service/models/camara.dart';
 import 'package:client_service/models/instalacion.dart';
 import 'package:client_service/models/vehiculo.dart';
-import 'package:mockito/mockito.dart';
-import 'package:mockito/annotations.dart';
 import 'mocks.mocks.dart';
 import 'firebase_test_setup.dart';
 
