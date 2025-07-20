@@ -1,4 +1,4 @@
-# Light Vitae
+# SIMEVEC
 
 This is a simple crud application built with Flutter and Firebase.
 

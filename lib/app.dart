@@ -11,11 +11,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Light Vitae',
+      title: 'SIMEVEC',
       navigatorKey: NavigationService.navigatorKey,
       home: const SplashScreen(),
       routes: routes,
-      // Add localization supportj
+      // Add localization support
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
