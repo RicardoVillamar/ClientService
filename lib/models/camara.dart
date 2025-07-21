@@ -25,7 +25,8 @@ enum EstadoCamara {
     }
   }
 
-  static List<String> get allDisplayNames => EstadoCamara.values.map((e) => e.displayName).toList();
+  static List<String> get allDisplayNames =>
+      EstadoCamara.values.map((e) => e.displayName).toList();
 }
 
 class Camara {
@@ -34,7 +35,6 @@ class Camara {
   final DateTime fechaMantenimiento;
   final String direccion;
   final String tecnico;
-  final String tipo;
   final String descripcion;
   final double costo;
   final EstadoCamara estado;
@@ -47,7 +47,6 @@ class Camara {
     required this.fechaMantenimiento,
     required this.direccion,
     required this.tecnico,
-    required this.tipo,
     required this.descripcion,
     required this.costo,
     this.estado = EstadoCamara.pendiente,
@@ -61,7 +60,6 @@ class Camara {
       'fechaMantenimiento': fechaMantenimiento.toIso8601String(),
       'direccion': direccion,
       'tecnico': tecnico,
-      'tipo': tipo,
       'descripcion': descripcion,
       'costo': costo,
       'estado': estado.displayName,
@@ -80,7 +78,6 @@ class Camara {
               DateTime.now(),
       direccion: map['direccion'] ?? '',
       tecnico: map['tecnico'] ?? '',
-      tipo: map['tipo'] ?? '',
       descripcion: map['descripcion'] ?? '',
       costo: map['costo'] is int
           ? (map['costo'] as int).toDouble()
@@ -111,7 +108,6 @@ class Camara {
       fechaMantenimiento: fechaMantenimiento,
       direccion: direccion,
       tecnico: tecnico,
-      tipo: tipo,
       descripcion: descripcion,
       costo: costo,
       estado: EstadoCamara.cancelado,
@@ -128,7 +124,6 @@ class Camara {
       fechaMantenimiento: fechaMantenimiento,
       direccion: direccion,
       tecnico: tecnico,
-      tipo: tipo,
       descripcion: descripcion,
       costo: costo,
       estado: EstadoCamara.pendiente,
