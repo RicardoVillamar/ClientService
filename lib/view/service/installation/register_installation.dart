@@ -13,6 +13,8 @@ import 'package:client_service/services/service_locator.dart';
 import 'package:client_service/view/widgets/flash_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:client_service/repositories/cliente_repository.dart';
+import 'package:client_service/models/cliente.dart';
 
 class RegistroInstalacion extends StatefulWidget {
   const RegistroInstalacion({super.key});
@@ -22,6 +24,7 @@ class RegistroInstalacion extends StatefulWidget {
 }
 
 class _RegistroInstalacionState extends State<RegistroInstalacion> {
+  String? cedulaClienteStatus; // For showing client found/not found
   double heightScreen = 0;
 
   // Date picker
@@ -86,7 +89,6 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
   final TextEditingController _item = TextEditingController();
   final TextEditingController _descripcion = TextEditingController();
   final TextEditingController _telefono = TextEditingController();
-  final TextEditingController _numeroTarea = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -97,7 +99,7 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
   List<Empleado> observaciones = [];
 
   String? selectValueDatosTrabajo;
-  String? selectValueObservaciones;
+  String? selectValueObservaciones; // This will now store the cedula
 
   late final InstalacionViewModel _instalacionViewModel;
   final EmpleadoViewmodel _empleadoViewModel = sl<EmpleadoViewmodel>();
@@ -112,6 +114,43 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
   void _loadEmpleados() async {
     observaciones = await _empleadoViewModel.obtenerEmpleados();
     setState(() {});
+  }
+
+  // Real client lookup in Firestore
+  Future<void> _buscarClientePorCedula(String cedula) async {
+    if (cedula.length == 10) {
+      try {
+        final repo = ClienteRepository();
+        final clientes = await repo.getAll();
+        Cliente? cliente;
+        try {
+          cliente = clientes.firstWhere((c) => c.cedula == cedula);
+        } catch (_) {
+          cliente = null;
+        }
+        setState(() {
+          if (cliente != null) {
+            cedulaClienteStatus =
+                'Cliente encontrado: ${cliente.nombreComercial}';
+            // Autocompletar si están vacíos
+            if (_nombreC.text.isEmpty) _nombreC.text = cliente.nombreComercial;
+            if (_direccion.text.isEmpty) _direccion.text = cliente.direccion;
+            if (_telefono.text.isEmpty) _telefono.text = cliente.telefono;
+          } else {
+            cedulaClienteStatus =
+                'No se encuentra un cliente con ese número de cédula.';
+          }
+        });
+      } catch (e) {
+        setState(() {
+          cedulaClienteStatus = 'Error buscando cliente: $e';
+        });
+      }
+    } else {
+      setState(() {
+        cedulaClienteStatus = null;
+      });
+    }
   }
 
   void _guardarInstalacion() async {
@@ -135,6 +174,9 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
       }
 
       try {
+        // Autogenerate numeroTarea (e.g., timestamp or UUID)
+        final autoNumeroTarea =
+            DateTime.now().millisecondsSinceEpoch.toString();
         final instalacion = Instalacion(
           id: null,
           fechaInstalacion:
@@ -149,7 +191,7 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
           tipoTrabajo: selectValueDatosTrabajo!,
           cargoPuesto: selectValueObservaciones!,
           telefono: _telefono.text.trim(),
-          numeroTarea: _numeroTarea.text.trim(),
+          numeroTarea: autoNumeroTarea,
         );
 
         await _instalacionViewModel.guardarInstalacion(instalacion);
@@ -214,25 +256,121 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
                                 border: OutlineInputBorder(),
                               ),
                               onTap: () => _selectDate(context),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Seleccione la fecha de instalación';
+                                }
+                                // Validate format dd/MM/yy
+                                final regex = RegExp(r'^\d{2}/\d{2}/\d{4}$');
+                                if (!regex.hasMatch(value)) {
+                                  return 'Formato de fecha inválido (dd/mm/aa)';
+                                }
+                                return null;
+                              },
                             ),
                             const SizedBox(height: 10),
-                            TxtFields(
-                              label: 'Numero de cedula*',
+                            // Cedula: numérica, máx 10 dígitos, feedback
+                            TextFormField(
                               controller: _cedula,
-                              screenWidth: screenWidth,
-                              showCounter: false,
+                              keyboardType: TextInputType.number,
+                              maxLength: 10,
+                              decoration: const InputDecoration(
+                                labelText: 'Cédula de cliente*',
+                                border: OutlineInputBorder(),
+                                counterText: '',
+                              ),
+                              onChanged: (value) {
+                                // Only allow digits
+                                final filtered =
+                                    value.replaceAll(RegExp(r'[^0-9]'), '');
+                                if (filtered != value) {
+                                  _cedula.text = filtered;
+                                  _cedula.selection =
+                                      TextSelection.fromPosition(TextPosition(
+                                          offset: filtered.length));
+                                }
+                                _buscarClientePorCedula(filtered);
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Ingrese la cédula';
+                                }
+                                if (value.length != 10) {
+                                  return 'La cédula debe tener 10 dígitos';
+                                }
+                                if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+                                  return 'Solo se permiten números';
+                                }
+                                return null;
+                              },
                             ),
-                            TxtFields(
-                              label: 'Nombre comercial*',
+                            if (cedulaClienteStatus != null)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 4, bottom: 8),
+                                child: Text(
+                                  cedulaClienteStatus!,
+                                  style: TextStyle(
+                                    color: cedulaClienteStatus!
+                                            .startsWith('Cliente encontrado')
+                                        ? Colors.green
+                                        : Colors.red,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            // Nombre comercial: solo letras y espacios, máx 50
+                            TextFormField(
                               controller: _nombreC,
-                              screenWidth: screenWidth,
-                              showCounter: false,
+                              maxLength: 50,
+                              decoration: const InputDecoration(
+                                labelText: 'Nombre comercial del cliente*',
+                                border: OutlineInputBorder(),
+                                counterText: '',
+                              ),
+                              onChanged: (value) {
+                                final filtered = value.replaceAll(
+                                    RegExp(r'[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]'), '');
+                                if (filtered != value) {
+                                  _nombreC.text = filtered;
+                                  _nombreC.selection =
+                                      TextSelection.fromPosition(TextPosition(
+                                          offset: filtered.length));
+                                }
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Ingrese el nombre comercial';
+                                }
+                                if (value.length > 50) {
+                                  return 'Máximo 50 caracteres';
+                                }
+                                if (!RegExp(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$')
+                                    .hasMatch(value)) {
+                                  return 'Solo letras y espacios';
+                                }
+                                return null;
+                              },
                             ),
-                            TxtFields(
-                              label: 'Direccion de instalacion*',
+                            // Dirección: máx 200, letras, números, caracteres especiales
+                            TextFormField(
                               controller: _direccion,
-                              screenWidth: screenWidth,
-                              showCounter: false,
+                              maxLength: 200,
+                              decoration: const InputDecoration(
+                                labelText: 'Dirección de instalación*',
+                                border: OutlineInputBorder(),
+                                counterText: '',
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Ingrese la dirección';
+                                }
+                                if (value.length > 200) {
+                                  return 'Máximo 200 caracteres';
+                                }
+                                // Allow any character
+                                return null;
+                              },
                             ),
                             const SizedBox(height: 10),
                             Container(
@@ -350,7 +488,7 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
                                     items:
                                         observaciones.map((Empleado empleado) {
                                       return DropdownMenuItem<String>(
-                                        value: empleado.nombreCompleto,
+                                        value: empleado.cedula,
                                         child: Text(
                                             empleado.nombreCompletoConCargo),
                                       );
@@ -362,12 +500,7 @@ class _RegistroInstalacionState extends State<RegistroInstalacion> {
                                     screenWidth: screenWidth,
                                     showCounter: false,
                                   ),
-                                  TxtFields(
-                                    label: 'Numero de tarea',
-                                    controller: _numeroTarea,
-                                    screenWidth: screenWidth,
-                                    showCounter: false,
-                                  )
+                                  // Numero de tarea is now auto-generated, not user input
                                 ],
                               ),
                             ),

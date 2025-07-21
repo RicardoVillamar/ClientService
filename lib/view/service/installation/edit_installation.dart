@@ -32,7 +32,7 @@ class _EditInstallationState extends State<EditInstallation> {
   String? selectHoraInicio;
   String? selectHoraFin;
   String? selectTipoTrabajo;
-  String? selectCargoPuesto;
+  String? selectCargoPuesto; // This will store the cedula
 
   List<String> horas = [
     '08:00',
@@ -236,31 +236,45 @@ class _EditInstallationState extends State<EditInstallation> {
           ),
         ),
         const SizedBox(height: 15),
-        _buildDropdown('Hora de Inicio', selectHoraInicio, horas, (value) {
-          setState(() {
-            selectHoraInicio = value;
-          });
-        }),
-        const SizedBox(height: 15),
-        _buildDropdown('Hora de Fin', selectHoraFin, horas, (value) {
-          setState(() {
-            selectHoraFin = value;
-          });
-        }),
-        const SizedBox(height: 15),
-        _buildDropdown('Tipo de Trabajo', selectTipoTrabajo, tiposTrabajo,
-            (value) {
-          setState(() {
-            selectTipoTrabajo = value;
-          });
-        }),
-        const SizedBox(height: 15),
-        _buildEmployeeDropdown('Cargo/Puesto', selectCargoPuesto, empleados,
-            (value) {
-          setState(() {
-            selectCargoPuesto = value;
-          });
-        }),
+        // Dropdown for Cargo/Puesto (employee cedula)
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Cargo/Puesto',
+              style: AppFonts.bodyNormal.copyWith(
+                color: AppColors.textColor,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: AppColors.backgroundColor,
+                border: Border.all(color: AppColors.greyColor),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: DropdownButton<String>(
+                isExpanded: true,
+                value: selectCargoPuesto,
+                hint: Text('Cargo o Puesto', style: AppFonts.inputtext),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectCargoPuesto = newValue;
+                  });
+                },
+                items: empleados.map((Empleado empleado) {
+                  return DropdownMenuItem<String>(
+                    value: empleado.cedula,
+                    child: Text(empleado.nombreCompletoConCargo),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -298,104 +312,6 @@ class _EditInstallationState extends State<EditInstallation> {
             ),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDropdown(String label, String? value, List<String> items,
-      ValueChanged<String?> onChanged) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppFonts.bodyNormal.copyWith(
-            color: AppColors.textColor,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.greyColor.withOpacity(0.3)),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: value,
-              isExpanded: true,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              hint: Text(
-                'Seleccione $label',
-                style: AppFonts.text.copyWith(
-                  color: AppColors.greyColor,
-                ),
-              ),
-              items: items.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: AppFonts.text.copyWith(
-                      color: AppColors.textColor,
-                    ),
-                  ),
-                );
-              }).toList(),
-              onChanged: onChanged,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEmployeeDropdown(String label, String? value,
-      List<Empleado> employees, ValueChanged<String?> onChanged) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppFonts.bodyNormal.copyWith(
-            color: AppColors.textColor,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.greyColor.withOpacity(0.3)),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: value,
-              isExpanded: true,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              hint: Text(
-                'Seleccione $label',
-                style: AppFonts.text.copyWith(
-                  color: AppColors.greyColor,
-                ),
-              ),
-              items: employees.map((Empleado empleado) {
-                return DropdownMenuItem<String>(
-                  value: empleado.nombreCompleto,
-                  child: Text(
-                    empleado.nombreCompletoConCargo,
-                    style: AppFonts.text.copyWith(
-                      color: AppColors.textColor,
-                    ),
-                  ),
-                );
-              }).toList(),
-              onChanged: onChanged,
-            ),
           ),
         ),
       ],
