@@ -1,3 +1,5 @@
+import 'package:client_service/repositories/cliente_repository.dart';
+import 'package:client_service/models/cliente.dart';
 import 'package:client_service/models/vehiculo.dart';
 import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
@@ -20,6 +22,15 @@ class EditVehicle extends StatefulWidget {
 }
 
 class _EditVehicleState extends State<EditVehicle> {
+  void _sanearTipoVehiculo() {
+    // Eliminar duplicados y asegurar que el valor seleccionado sea válido
+    tiposVehiculo = tiposVehiculo.toSet().toList();
+    if (selectTipoVehiculo != null &&
+        !tiposVehiculo.contains(selectTipoVehiculo)) {
+      selectTipoVehiculo = null;
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nombreComercial = TextEditingController();
   final TextEditingController _direccion = TextEditingController();
@@ -31,10 +42,10 @@ class _EditVehicleState extends State<EditVehicle> {
 
   String? selectTipoVehiculo;
   List<String> tiposVehiculo = [
-    'Camioneta',
-    'Camión',
-    'Auto',
-    'Van',
+    'Automóvil',
+    'Vehículo pesado',
+    'Grua',
+    'Vehículo grande',
   ];
 
   String? selectPersonalAsistio;
@@ -67,6 +78,10 @@ class _EditVehicleState extends State<EditVehicle> {
         DateFormat('dd/MM/yyyy').format(widget.vehiculo.fechaTrabajo);
     selectTipoVehiculo = widget.vehiculo.tipoVehiculo;
     selectPersonalAsistio = widget.vehiculo.personalAsistio;
+    // Si personalAsistio no está en la lista de empleados (por cédula), ponerlo en null
+    if (!empleados.any((e) => e.cedula == selectPersonalAsistio)) {
+      selectPersonalAsistio = null;
+    }
   }
 
   Future<void> _selectDate(BuildContext context,
@@ -134,6 +149,7 @@ class _EditVehicleState extends State<EditVehicle> {
 
   @override
   Widget build(BuildContext context) {
+    _sanearTipoVehiculo();
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
@@ -458,7 +474,6 @@ class _EditVehicleState extends State<EditVehicle> {
         Text(
           label,
           style: AppFonts.bodyNormal.copyWith(
-            color: AppColors.textColor,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -483,13 +498,8 @@ class _EditVehicleState extends State<EditVehicle> {
           ),
           items: employees.map((Empleado empleado) {
             return DropdownMenuItem<String>(
-              value: empleado.nombreCompleto,
-              child: Text(
-                empleado.nombreCompletoConCargo,
-                style: AppFonts.text.copyWith(
-                  color: AppColors.textColor,
-                ),
-              ),
+              value: empleado.cedula,
+              child: Text(empleado.nombreCompletoConCargo),
             );
           }).toList(),
           onChanged: onChanged,

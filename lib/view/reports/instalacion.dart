@@ -9,6 +9,7 @@ import 'package:client_service/viewmodel/instalacion_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:client_service/view/service/installation/edit_installation.dart';
 
 class ReportInstalacion extends StatefulWidget {
   const ReportInstalacion({super.key});
@@ -92,8 +93,16 @@ class _ReportInstalacionState extends State<ReportInstalacion> {
                               icon: const Icon(Icons.more_vert),
                               onSelected: (value) async {
                                 if (value == 'editar') {
-                                  print(
-                                      'Editar cliente: ${instalacion.nombreComercial}');
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditInstallation(
+                                          instalacion: instalacion),
+                                    ),
+                                  );
+                                  if (result == true) {
+                                    setState(() {});
+                                  }
                                 } else if (value == 'eliminar') {
                                   await viewModel
                                       .eliminarInstalacion(instalacion.id!);
