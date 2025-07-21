@@ -9,6 +9,7 @@ import 'package:client_service/viewmodel/camara_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:client_service/view/service/camara/edit_camara.dart';
 
 class ReportCamara extends StatefulWidget {
   const ReportCamara({super.key});
@@ -92,8 +93,16 @@ class _ReportCamaraState extends State<ReportCamara> {
                               icon: const Icon(Icons.more_vert),
                               onSelected: (value) async {
                                 if (value == 'editar') {
-                                  print(
-                                      'Editar cliente: ${camara.nombreComercial}');
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditCamara(camara: camara),
+                                    ),
+                                  );
+                                  if (result == true) {
+                                    setState(() {});
+                                  }
                                 } else if (value == 'eliminar') {
                                   await viewModel.eliminarCamara(camara.id!);
                                   setState(() {});
