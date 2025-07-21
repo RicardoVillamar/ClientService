@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:client_service/models/camara.dart';
 import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
@@ -5,14 +6,14 @@ import 'package:client_service/utils/font.dart';
 import 'package:client_service/utils/helpers/notificacion_helper.dart';
 import 'package:client_service/view/widgets/shared/apptitle.dart';
 import 'package:client_service/view/widgets/shared/button.dart';
-import 'package:client_service/view/widgets/shared/inputs.dart';
 import 'package:client_service/view/widgets/shared/toolbar.dart';
 import 'package:client_service/viewmodel/camara_viewmodel.dart';
 import 'package:client_service/viewmodel/empleado_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:client_service/view/widgets/flash_messages.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:client_service/repositories/cliente_repository.dart';
+import 'package:client_service/models/cliente.dart';
 
 class RegistroCamara extends StatefulWidget {
   const RegistroCamara({super.key});
@@ -22,13 +23,27 @@ class RegistroCamara extends StatefulWidget {
 }
 
 class _RegistroCamaraState extends State<RegistroCamara> {
-  final TextEditingController _nombreC = TextEditingController();
-  final TextEditingController _direccion = TextEditingController();
-  final TextEditingController _observaciones = TextEditingController();
-  final TextEditingController _costo = TextEditingController();
+  String? selectTecnico;
+  List<Empleado> tecnicos = [];
+  // Eliminado campo tipo
+  final CamaraViewModel _camaraViewModel = sl<CamaraViewModel>();
+  final EmpleadoViewmodel _empleadoViewModel = sl<EmpleadoViewmodel>();
 
-  // Date picker
-  final TextEditingController _dateController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _loadEmpleados();
+  }
+
+  void _loadEmpleados() async {
+    tecnicos = await _empleadoViewModel.obtenerEmpleados();
+    // Si el técnico seleccionado ya no está en la lista, resetear selectTecnico
+    if (selectTecnico != null &&
+        !tecnicos.any((e) => e.cedula == selectTecnico)) {
+      selectTecnico = null;
+    }
+    setState(() {});
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -45,38 +60,13 @@ class _RegistroCamaraState extends State<RegistroCamara> {
     }
   }
 
-  String? selectTecnico;
-  List<Empleado> tecnicos = [];
-
-  String? selectTipo;
-  List<String> tipo = [
-    'Tipo 1',
-    'Tipo 2',
-    'Tipo 3',
-    'Tipo 4',
-  ];
-  final CamaraViewModel _camaraViewModel = sl<CamaraViewModel>();
-  final EmpleadoViewmodel _empleadoViewModel = sl<EmpleadoViewmodel>();
-
-  @override
-  void initState() {
-    super.initState();
-    _loadEmpleados();
-  }
-
-  void _loadEmpleados() async {
-    tecnicos = await _empleadoViewModel.obtenerEmpleados();
-    setState(() {});
-  }
-
   void _registrarMantenimiento() async {
     if (_nombreC.text.isEmpty ||
         _direccion.text.isEmpty ||
         _dateController.text.isEmpty ||
         _observaciones.text.isEmpty ||
         _costo.text.isEmpty ||
-        selectTecnico == null ||
-        selectTipo == null) {
+        selectTecnico == null) {
       FlashMessages.showWarning(
         context: context,
         message: 'Por favor complete todos los campos',
@@ -90,7 +80,6 @@ class _RegistroCamaraState extends State<RegistroCamara> {
         nombreComercial: _nombreC.text.trim(),
         direccion: _direccion.text.trim(),
         tecnico: selectTecnico!,
-        tipo: selectTipo!,
         fechaMantenimiento:
             DateFormat('dd/MM/yyyy').parse(_dateController.text),
         descripcion: _observaciones.text.trim(),
@@ -121,10 +110,52 @@ class _RegistroCamaraState extends State<RegistroCamara> {
     }
   }
 
+  String? clienteStatus;
+  // Buscar cliente por nombre comercial y autocompletar dirección
+  Future<void> _buscarClientePorNombreComercial(String nombre) async {
+    if (nombre.trim().isEmpty) {
+      setState(() {
+        clienteStatus = null;
+      });
+      return;
+    }
+    try {
+      final repo = ClienteRepository();
+      final clientes = await repo.getAll();
+      Cliente? cliente;
+      try {
+        cliente = clientes.firstWhere((c) =>
+            c.nombreComercial.toLowerCase() == nombre.trim().toLowerCase());
+      } catch (_) {
+        cliente = null;
+      }
+      setState(() {
+        if (cliente != null) {
+          clienteStatus = 'Cliente encontrado: ${cliente.nombreComercial}';
+          if (_direccion.text.isEmpty) _direccion.text = cliente.direccion;
+        } else {
+          clienteStatus =
+              'No se encuentra un cliente con ese nombre comercial.';
+        }
+      });
+    } catch (e) {
+      setState(() {
+        clienteStatus = 'Error buscando cliente: $e';
+      });
+    }
+  }
+
+  final TextEditingController _nombreC = TextEditingController();
+  final TextEditingController _direccion = TextEditingController();
+  final TextEditingController _observaciones = TextEditingController();
+  final TextEditingController _costo = TextEditingController();
+
+  // Date picker
+  final TextEditingController _dateController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final heightScreen = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -148,12 +179,30 @@ class _RegistroCamaraState extends State<RegistroCamara> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        TxtFields(
-                          label: 'Nombre comercial del cliente*',
+                        TextFormField(
                           controller: _nombreC,
-                          screenWidth: screenWidth,
-                          showCounter: false,
+                          decoration: const InputDecoration(
+                            labelText: 'Nombre comercial del cliente*',
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            _buscarClientePorNombreComercial(value);
+                          },
                         ),
+                        if (clienteStatus != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4, bottom: 8),
+                            child: Text(
+                              clienteStatus!,
+                              style: TextStyle(
+                                color: clienteStatus!
+                                        .startsWith('Cliente encontrado')
+                                    ? Colors.green
+                                    : Colors.red,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
                         const SizedBox(height: 20),
                         TextFormField(
                           controller: _dateController,
@@ -166,17 +215,18 @@ class _RegistroCamaraState extends State<RegistroCamara> {
                           onTap: () => _selectDate(context),
                         ),
                         const SizedBox(height: 10),
-                        TxtFields(
-                          label: 'Dirección de instalación*',
+                        TextFormField(
                           controller: _direccion,
-                          screenWidth: screenWidth,
-                          showCounter: false,
+                          decoration: const InputDecoration(
+                            labelText: 'Dirección de instalación*',
+                            border: OutlineInputBorder(),
+                          ),
                         ),
                         const SizedBox(height: 15),
                         DropdownButton(
                           isExpanded: true,
                           hint: Text(
-                            'Tecnico',
+                            'Técnico',
                             style: AppFonts.inputtext,
                           ),
                           value: selectTecnico,
@@ -187,57 +237,36 @@ class _RegistroCamaraState extends State<RegistroCamara> {
                           },
                           items: tecnicos.map((Empleado empleado) {
                             return DropdownMenuItem<String>(
-                              value: empleado.nombreCompleto,
+                              value: empleado.cedula,
                               child: Text(empleado.nombreCompletoConCargo),
                             );
                           }).toList(),
                         ),
                         const SizedBox(height: 20),
-                        DropdownButton(
-                          isExpanded: true,
-                          hint: Text(
-                            'Tipo',
-                            style: AppFonts.inputtext,
-                          ),
-                          value: selectTipo,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectTipo = newValue;
-                            });
-                          },
-                          items: tipo.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(height: 20),
+                        // Eliminado DropdownButton de tipo
                         TextFormField(
                           controller: _observaciones,
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
                           decoration: const InputDecoration(
-                            labelText: 'Descripcion*',
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColors.greyColor,
-                              ),
-                            ),
+                            labelText: 'Observaciones',
                             alignLabelWithHint: true,
+                            border: OutlineInputBorder(),
                           ),
                         ),
                         const SizedBox(height: 10),
-                        TxtFields(
-                          label: 'Costo de mantenimiento*',
+                        TextFormField(
                           controller: _costo,
-                          screenWidth: screenWidth,
-                          showCounter: false,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            labelText: 'Costo*',
+                            border: OutlineInputBorder(),
+                          ),
                         ),
                         const SizedBox(height: 10),
                         BtnElevated(
-                            text: 'Registrar',
-                            onPressed: _registrarMantenimiento),
+                            onPressed: _registrarMantenimiento,
+                            text: 'Registrar'),
                         const SizedBox(height: 5),
                       ],
                     ),

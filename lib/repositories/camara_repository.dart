@@ -80,6 +80,7 @@ class CamaraRepository implements BaseRepository<Camara> {
       return snapshot.docs.map((doc) {
         final data = doc.data();
         data['id'] = doc.id;
+        data.remove('tipo'); // Eliminar campo tipo si existe
         return data;
       }).toList();
     } catch (e) {
@@ -140,6 +141,7 @@ class CamaraRepository implements BaseRepository<Camara> {
       return snapshot.docs.map((doc) {
         final data = doc.data();
         data['id'] = doc.id;
+        data.remove('tipo'); // Eliminar campo tipo si existe
         return data;
       }).toList();
     } catch (e) {

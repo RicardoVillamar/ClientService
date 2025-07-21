@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:client_service/providers/empleado_provider.dart';
 import 'package:client_service/view/calendar/calendario_screen.dart';
+import 'package:client_service/view/profile/profile_admin_view.dart';
 
 class Toolbar extends StatefulWidget {
   const Toolbar({super.key});
@@ -56,7 +57,14 @@ class _ToolbarState extends State<Toolbar> {
             color: AppColors.secondaryColor,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ProfileAdminView(),
+                ),
+              );
+            },
             icon: const Icon(Icons.person, size: 30),
             color: AppColors.secondaryColor,
           ),

@@ -33,7 +33,6 @@ class CamaraViewModel extends BaseViewModel {
         fechaMantenimiento: camara.fechaMantenimiento,
         direccion: camara.direccion,
         tecnico: camara.tecnico,
-        tipo: camara.tipo,
         descripcion: camara.descripcion,
         costo: camara.costo,
       );
@@ -67,7 +66,6 @@ class CamaraViewModel extends BaseViewModel {
               'Fecha Mantenimiento',
               'Dirección',
               'Técnico',
-              'Tipo',
               'Descripción',
               'Costo',
             ],
@@ -82,7 +80,6 @@ class CamaraViewModel extends BaseViewModel {
                           : dataItem['fechaMantenimiento']?.toString() ?? '',
                       dataItem['direccion'] ?? '',
                       dataItem['tecnico'] ?? '',
-                      dataItem['tipo'] ?? '',
                       dataItem['descripcion'] ?? '',
                       (dataItem['costo'] is int
                               ? (dataItem['costo'] as int).toDouble()
@@ -135,7 +132,6 @@ class CamaraViewModel extends BaseViewModel {
               'Fecha Mantenimiento',
               'Dirección',
               'Técnico',
-              'Tipo',
               'Descripción',
               'Costo',
             ],
@@ -146,7 +142,6 @@ class CamaraViewModel extends BaseViewModel {
                       dataItem['fechaMantenimiento'] ?? '',
                       dataItem['direccion'] ?? '',
                       dataItem['tecnico'] ?? '',
-                      dataItem['tipo'] ?? '',
                       dataItem['descripcion'] ?? '',
                       dataItem['costo']?.toString() ?? '0',
                     ])

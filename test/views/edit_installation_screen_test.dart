@@ -34,6 +34,7 @@ void main() {
         cargo: CargoEmpleado.tecnico,
         fechaContratacion: DateTime(2022, 1, 1),
         fotoUrl: '',
+        password: '',
       )
     ];
 

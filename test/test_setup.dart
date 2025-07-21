@@ -65,6 +65,7 @@ class TestEmpleadoViewmodel extends EmpleadoViewmodel {
       cargo: CargoEmpleado.tecnico,
       fechaContratacion: DateTime(2023, 1, 1),
       fotoUrl: '',
+      password: '',
     )
   ];
 

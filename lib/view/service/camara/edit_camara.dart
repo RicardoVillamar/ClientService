@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:client_service/models/camara.dart';
 import 'package:client_service/models/empleado.dart';
 import 'package:client_service/utils/colors.dart';
@@ -8,13 +9,11 @@ import 'package:client_service/viewmodel/camara_viewmodel.dart';
 import 'package:client_service/viewmodel/empleado_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:client_service/view/widgets/flash_messages.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EditCamara extends StatefulWidget {
   final Camara camara;
-
-  const EditCamara({super.key, required this.camara});
+  const EditCamara({Key? key, required this.camara}) : super(key: key);
 
   @override
   State<EditCamara> createState() => _EditCamaraState();
@@ -26,22 +25,10 @@ class _EditCamaraState extends State<EditCamara> {
   final TextEditingController _observaciones = TextEditingController();
   final TextEditingController _costo = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-
   String? selectTecnico;
   List<Empleado> tecnicos = [];
-
-  String? selectTipo;
-  List<String> tipo = [
-    'Tipo 1',
-    'Tipo 2',
-    'Tipo 3',
-    'Tipo 4',
-  ];
-
   final CamaraViewModel _camaraViewModel = sl<CamaraViewModel>();
   final EmpleadoViewmodel _empleadoViewModel = sl<EmpleadoViewmodel>();
-
-  @override
   void initState() {
     super.initState();
     _loadCamaraData();
@@ -61,7 +48,11 @@ class _EditCamaraState extends State<EditCamara> {
     _dateController.text =
         DateFormat('dd/MM/yyyy').format(widget.camara.fechaMantenimiento);
     selectTecnico = widget.camara.tecnico;
-    selectTipo = widget.camara.tipo;
+    // Si tecnico no está en la lista de empleados (por cédula), ponerlo en null
+    if (!tecnicos.any((e) => e.cedula == selectTecnico)) {
+      selectTecnico = null;
+    }
+    // Eliminado campo tipo
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -85,8 +76,7 @@ class _EditCamaraState extends State<EditCamara> {
         _dateController.text.isEmpty ||
         _observaciones.text.isEmpty ||
         _costo.text.isEmpty ||
-        selectTecnico == null ||
-        selectTipo == null) {
+        selectTecnico == null) {
       FlashMessages.showWarning(
         context: context,
         message: 'Por favor complete todos los campos',
@@ -100,7 +90,6 @@ class _EditCamaraState extends State<EditCamara> {
         nombreComercial: _nombreC.text.trim(),
         direccion: _direccion.text.trim(),
         tecnico: selectTecnico!,
-        tipo: selectTipo!,
         fechaMantenimiento:
             DateFormat('dd/MM/yyyy').parse(_dateController.text),
         descripcion: _observaciones.text.trim(),
@@ -292,12 +281,7 @@ class _EditCamaraState extends State<EditCamara> {
           });
         }),
         const SizedBox(height: 15),
-        _buildDropdown('Tipo', selectTipo, tipo, (value) {
-          setState(() {
-            selectTipo = value;
-          });
-        }),
-        const SizedBox(height: 15),
+        // Eliminado DropdownButton de tipo
         _buildTextField(
             'Observaciones', _observaciones, 'Ingrese las observaciones'),
         const SizedBox(height: 15),
@@ -426,7 +410,7 @@ class _EditCamaraState extends State<EditCamara> {
               ),
               items: employees.map((Empleado empleado) {
                 return DropdownMenuItem<String>(
-                  value: empleado.nombreCompleto,
+                  value: empleado.cedula,
                   child: Text(
                     empleado.nombreCompletoConCargo,
                     style: const TextStyle(fontSize: 12).copyWith(

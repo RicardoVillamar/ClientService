@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:client_service/models/empleado.dart';
 import 'package:client_service/viewmodel/calendario_viewmodel.dart';
 import 'package:client_service/utils/events/evento_calendario.dart';
 import '../mocks.mocks.dart';
@@ -14,8 +15,13 @@ void main() {
       camaraRepo = MockCamaraRepository();
       instalacionRepo = MockInstalacionRepository();
       vehiculoRepo = MockVehiculoRepository();
-      viewModel =
-          CalendarioViewModel(camaraRepo, instalacionRepo, vehiculoRepo);
+      viewModel = CalendarioViewModel(
+        camaraRepo,
+        instalacionRepo,
+        vehiculoRepo,
+        cedulaEmpleado: '123',
+        cargoEmpleado: CargoEmpleado.administrador,
+      );
     });
 
     test('Filtra eventos por técnico/empleado', () async {

@@ -12,6 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check for firebase_options.dart
+        run: |
+          if [ ! -f lib/firebase_options.dart ]; then
+            echo "firebase_options.dart is missing. Please run 'flutterfire configure' and commit the file."
+            exit 1
+          fi
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -21,19 +27,19 @@ jobs:
       - name: Run analyzer
         run: flutter analyze
       - name: Run CRUD tests
-        run: flutter test test/crud/
+        run: flutter test test/crud/ --exclude-tags=skip_ci
       - name: Run ViewModel tests
-        run: flutter test test/viewmodels/
+        run: flutter test test/viewmodels/ --exclude-tags=skip_ci
       - name: Run Utils tests
-        run: flutter test test/utils/
+        run: flutter test test/utils/ --exclude-tags=skip_ci
       - name: Run Services tests
-        run: flutter test test/services/
+        run: flutter test test/services/ --exclude-tags=skip_ci
       - name: Run Repositories tests
-        run: flutter test test/repositories/
+        run: flutter test test/repositories/ --exclude-tags=skip_ci
       - name: Run all tests with coverage
-        run: flutter test --coverage
+        run: flutter test --coverage --exclude-tags=skip_ci
       - name: Generate test report for SonarQube
-        run: flutter test --machine --coverage > tests.output
+        run: flutter test --machine --coverage --exclude-tags=skip_ci > tests.output
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
@@ -64,6 +70,12 @@ jobs:
     if: github.event_name == 'release'
     steps:
       - uses: actions/checkout@v4
+      - name: Check for firebase_options.dart
+        run: |
+          if [ ! -f lib/firebase_options.dart ]; then
+            echo "firebase_options.dart is missing. Please run 'flutterfire configure' and commit the file."
+            exit 1
+          fi
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
