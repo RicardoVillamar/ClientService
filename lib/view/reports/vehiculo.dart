@@ -9,6 +9,7 @@ import 'package:client_service/viewmodel/vehiculo_viewmodel.dart';
 import 'package:client_service/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:client_service/view/service/vehicle_rental/edit_vehicle.dart';
 
 class ReportVehiculo extends StatefulWidget {
   const ReportVehiculo({super.key});
@@ -95,8 +96,16 @@ class _ReportVehiculoState extends State<ReportVehiculo> {
                               icon: const Icon(Icons.more_vert),
                               onSelected: (value) async {
                                 if (value == 'editar') {
-                                  print(
-                                      'Editar cliente: ${alquiler.nombreComercial}');
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditVehicle(vehiculo: alquiler),
+                                    ),
+                                  );
+                                  if (result == true) {
+                                    setState(() {});
+                                  }
                                 } else if (value == 'eliminar') {
                                   await viewModel
                                       .eliminarAlquiler(alquiler.id!);
